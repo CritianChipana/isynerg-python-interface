@@ -17,18 +17,28 @@ class View(object):
         self.interface()
 
     def interface(self):
-        raiz = Tk()
+        self.raiz = Tk()
         # raiz.attributes('-fullscreen', True)
-        raiz.geometry("1200x700")
+        # self.raiz.geometry(str(self.raiz.winfo_screenwidth()) +'x' +  str(self.raiz.winfo_screenheight()) )
         # raiz.config(width="1200", height="800")
-        raiz.config(bg="blue")
+        self.raiz.geometry("1200x800")
+        self.raiz.config(bg="blue")
+        self.raiz.columnconfigure(1, weight=1)
+        self.raiz.rowconfigure(1, weight=1)
 
+        self.frame_padre = Frame(self.raiz, padx=10, pady=10, bg="yellow")
+        self.frame_padre.grid(row=1, column=1, sticky="nsew")
 
-        frame_login = Frame(bg="green")
-        frame_login.grid(row=1, column=1,sticky=W+E+N+S)
+        self.frame_padre.rowconfigure(1, weight=1)
+        self.frame_padre.columnconfigure(1, weight=1)
+        # self.frame_padre.rowconfigure(1, weight=1)
+        self.frame_padre.columnconfigure(2, weight=1)
+
+        frame_login = Frame( self.frame_padre,bg="green")
+        frame_login.grid(row=1, column=1, sticky="nsew")
 
         frame_session = Frame(frame_login, padx=20, pady=20, bg="red")
-        frame_session.grid(row=2, column=1, rowspan=2, sticky=W+E+N+S)
+        frame_session.grid(row=2, column=1, rowspan=2, sticky="nsew")
 
         # btn_start = Button(frame_login, text="Start", padx=100, pady=55, fg="white", bg="green", font=("Arial", 20), command=self.hola)
         self.btn_start = Button(frame_login, text="Start", state=DISABLED, padx=100, pady=55, fg="white", bg="green", font=("Arial", 20))
@@ -52,7 +62,7 @@ class View(object):
 
         # FRAME CALCULADORA
         frame_calculadora = Frame(frame_login, padx=20, pady=20, bg="pink")
-        frame_calculadora.grid(row=4, column=1)
+        frame_calculadora.grid(row=4, column=1, sticky="nsew")
 
         btn_uno = Button(frame_calculadora, text="7", command=lambda:self.escribir_numeros(7), padx=23, pady=1, font=("Arial", 12))
         btn_uno.grid(row=4, column=1, padx=5, pady=5)
@@ -79,17 +89,39 @@ class View(object):
         btn_igual = Button(frame_calculadora, text="✓", command=lambda:self.login(), padx=20, pady=1, font=("Arial", 12, "bold"), fg="white", bg="#097eeb")
         btn_igual.grid(row=7, column=3, padx=5, pady=5)
 
+        self.interface_contador()
 
+
+        self.frame_padre.mainloop()
+
+    def interface_contador(self):
         # SEGUNDA COLUMNA
-        frame_contador = Frame( padx=0, pady=0, bg="#0052b2")
-        frame_contador.grid(row=1, column=2, sticky=W+E+N+S)
-        btn_ejemplo = Button(frame_contador, text="Ejemplo", command=lambda:self.hide_label_error(), padx=100, pady=55, fg="white", bg="green", font=("Arial", 20))
-        btn_ejemplo.grid(row=1, column=1, padx=100, pady=100)
+        # frame contador
+        frame_contador = Frame( self.frame_padre, padx=0, pady=0, bg="pink")
+        frame_contador.grid(row=1, column=2)
+        # frame_contador.grid(row=1, column=2, sticky=W+E+N+S)
 
-        raiz.mainloop()
+        frame_cronometro = Frame(frame_contador, padx=0, pady=0, bg="black")
+        frame_cronometro.grid(row=1, column=1, rowspan=5, padx=10, pady=10)
 
-    def display(self):
-        print('a')
+        label_contador = Label(frame_cronometro, text="00:00:15", font=("Arial", 100),fg="white", bg="#00b248")
+        label_contador.grid(row=1, column=1, rowspan=5, padx=50, pady=250)
+
+        #BTN_COLORES:
+        btn_azul = Button(frame_contador, text="", command=lambda:self.hide_label_error(), padx=30, pady=10, fg="white", bg="#00b248", font=("Arial", 20))
+        btn_azul.grid(row=1, column=2, padx=10, pady=10)
+
+        btn_verde = Button(frame_contador, text="", command=lambda:self.hide_label_error(), padx=30, pady=10, fg="white", bg="#0052b2", font=("Arial", 20))
+        btn_verde.grid(row=2, column=2, padx=10, pady=10)
+
+        btn_rojo = Button(frame_contador, text="", command=lambda:self.hide_label_error(), padx=30, pady=10, fg="white", bg="#ff0905", font=("Arial", 20))
+        btn_rojo.grid(row=3, column=2, padx=10, pady=10)
+
+        btn_naranja = Button(frame_contador, text="", command=lambda:self.hide_label_error(), padx=30, pady=10, fg="white", bg="#ffca0a", font=("Arial", 20))
+        btn_naranja.grid(row=4, column=2, padx=10, pady=10)
+
+        btn_morado = Button(frame_contador, text="", command=lambda:self.hide_label_error(), padx=30, pady=10, fg="white", bg="#7b00cb", font=("Arial", 20))
+        btn_morado.grid(row=5, column=2, padx=10, pady=10)
 
     def escribir_numeros(self, numero):
         self.contador_numeros_dni = self.contador_numeros_dni + 1
