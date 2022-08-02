@@ -13,6 +13,33 @@ class View(object):
     contador_numeros_dni = 0
     arreglo_usuarios = []
     user = ()
+    contador = 0
+    indicador_color_btn = "verde"
+
+    # hora_inicio = datetime.now()
+    inicio_verde = datetime.now()
+    inicio_azul = datetime.now()
+    inicio_rojo = datetime.now()
+    inicio_amarillo = datetime.now()
+    inicio_morado = datetime.now()
+
+    contador_verde = 0
+    contador_azul = 0
+    contador_rojo = 0
+    contador_amarillo = 0
+    contador_morado = 0
+
+    aux_contador_verde = 0
+    aux_contador_azul = 0
+    aux_contador_rojo = 0
+    aux_contador_amarillo = 0
+    aux_contador_morado = 0
+
+    click_btn_verde = 1
+    click_btn_azul = 1
+    click_btn_rojo = 1
+    click_btn_amarillo = 1
+    click_btn_morado = 1
 
     azul_horas = 0
     azul_minutos = 0
@@ -123,10 +150,10 @@ class View(object):
         btn_igual = Button(frame_calculadora, text="✓", command=lambda:self.login(), padx=20, pady=1, font=("Arial", 12, "bold"), fg="white", bg="#097eeb")
         btn_igual.grid(row=4, column=3, padx=5, pady=5, sticky="nsew")
 
-        # cronometro
-        self.variable_hora_actual = StringVar(self.raiz, value=self.obtener_tiempo_transcurrido_formateado())
-        self.raiz.etiqueta = Label(self.raiz, textvariable=self.variable_hora_actual, font=f"Consolas 60")
-        self.raiz.etiqueta.grid( row=1, column=1)
+        # CRONOMETRO
+        # self.variable_hora_actual = StringVar(self.raiz, value=self.obtener_tiempo_transcurrido_formateado())
+        # self.etiqueta = Label(self.raiz, textvariable=self.variable_hora_actual, font=f"Consolas 60")
+        # self.etiqueta.grid( row=1, column=1)
 
         self.interface_contador()
 
@@ -163,19 +190,19 @@ class View(object):
         self.frame_btn_cronometro.rowconfigure(5, weight=1)
         self.frame_btn_cronometro.columnconfigure(1, weight=1)
         #BTN_COLORES:
-        btn_azul = Button(self.frame_btn_cronometro, text="", command=lambda:self.hide_label_error(), padx=30, pady=10, fg="white", bg="#00b248", font=("Arial", 20))
+        btn_azul = Button(self.frame_btn_cronometro, text="", command=lambda:self.btn_azul('azul'), padx=30, pady=10, fg="white", bg="#0052b2", font=("Arial", 20))
         btn_azul.grid(row=1, column=1, padx=10, pady=10)
 
-        btn_verde = Button(self.frame_btn_cronometro, text="", command=lambda:self.hide_label_error(), padx=30, pady=10, fg="white", bg="#0052b2", font=("Arial", 20))
+        btn_verde = Button(self.frame_btn_cronometro, text="", command=lambda:self.btn_verde('verde'), padx=30, pady=10, fg="white", bg="#00b248", font=("Arial", 20))
         btn_verde.grid(row=2, column=1, padx=10, pady=10)
 
-        btn_rojo = Button(self.frame_btn_cronometro, text="", command=lambda:self.hide_label_error(), padx=30, pady=10, fg="white", bg="#ff0905", font=("Arial", 20))
+        btn_rojo = Button(self.frame_btn_cronometro, text="", command=lambda:self.btn_rojo('rojo'), padx=30, pady=10, fg="white", bg="#ff0905", font=("Arial", 20))
         btn_rojo.grid(row=3, column=1, padx=10, pady=10)
 
-        btn_naranja = Button(self.frame_btn_cronometro, text="", command=lambda:self.hide_label_error(), padx=30, pady=10, fg="white", bg="#ffca0a", font=("Arial", 20))
+        btn_naranja = Button(self.frame_btn_cronometro, text="", command=lambda:self.btn_amarillo('amarillo'), padx=30, pady=10, fg="white", bg="#ffca0a", font=("Arial", 20))
         btn_naranja.grid(row=4, column=1, padx=10, pady=10)
 
-        btn_morado = Button(self.frame_btn_cronometro, text="", command=lambda:self.hide_label_error(), padx=30, pady=10, fg="white", bg="#7b00cb", font=("Arial", 20))
+        btn_morado = Button(self.frame_btn_cronometro, text="", command=lambda:self.btn_morado('morado'), padx=30, pady=10, fg="white", bg="#7b00cb", font=("Arial", 20))
         btn_morado.grid(row=5, column=1, padx=10, pady=10)
 
     def escribir_numeros(self, numero):
@@ -251,16 +278,6 @@ class View(object):
             self.input_dni.config(show='*')
 
     def start(self):
-        # for hora in range(24):
-        #     for minuto in range(60):
-        #         for segundo in range(60):
-        #             os.system('cls')
-        #             print(f'{hora}:{minuto}:{segundo}')
-        #             hora_completa = str(hora) + ':' + str(minuto) + ':' + str(segundo)
-        #             self.label_contador.config(text='hola')
-        #             self.azul_segundos = segundo
-        #             time.sleep(1)
-        self.label_contador.config(text='hola')
         self.refrescar_tiempo_transcurrido()
 
     def segundos_a_segundos_minutos_y_horas(self, segundos):
@@ -271,13 +288,140 @@ class View(object):
         return f"{horas:02d}:{minutos:02d}:{segundos:02d}"
 
     def obtener_tiempo_transcurrido_formateado(self):
-        hora_inicio = datetime.now()
-        segundos_transcurridos= (datetime.now() - hora_inicio).total_seconds()
-        return self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
+        print('====================================================')
+        print('contador verde: ' + str(self.contador_verde))
+        print('contador azul: ' + str(self.contador_azul))
+        print('contador rojo: ' + str(self.contador_rojo))
+        print('contador amarillo: ' + str(self.contador_amarillo))
+        print('contador morado: ' + str(self.contador_morado))
+        print('====================================================')
 
+        if self.indicador_color_btn == 'verde':
+            print('verde')
+            if (self.contador_verde == 0):
+                self.inicio_verde = datetime.now()
+            if  self.click_btn_verde > 1:
+                ahora = datetime.strptime('00:00:00', '%H:%M:%S')
+                ahora2 = datetime.strptime(self.aux_contador_verde, '%H:%M:%S')
+                segundos_transcurridos = (datetime.now() - self.inicio_verde + (ahora2 - ahora)).total_seconds()
+                tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
+                self.contador_verde = tiempo_trancurrido
+                return tiempo_trancurrido
+            else:
+                segundos_transcurridos= (datetime.now() - self.inicio_verde).total_seconds()
+                tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
+                self.contador_verde = tiempo_trancurrido
+                return tiempo_trancurrido
+        if self.indicador_color_btn == 'azul':
+            print('azul')
+            if (self.contador_azul == 0):
+                self.inicio_azul = datetime.now()
+            if  self.click_btn_azul > 2:
+                ahora = datetime.strptime('00:00:00', '%H:%M:%S')
+                ahora2 = datetime.strptime(self.aux_contador_azul, '%H:%M:%S')
+                segundos_transcurridos = (datetime.now() - self.inicio_azul + (ahora2 - ahora)).total_seconds()
+                tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
+                self.contador_azul = tiempo_trancurrido
+                return tiempo_trancurrido
+            else:
+                segundos_transcurridos= (datetime.now() - self.inicio_azul).total_seconds()
+                tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
+                self.contador_azul = tiempo_trancurrido
+                return tiempo_trancurrido
+        if self.indicador_color_btn == 'rojo':
+            print('rojo')
+            if (self.contador_rojo == 0):
+                self.inicio_rojo = datetime.now()
+            if  self.click_btn_rojo > 2:
+                ahora = datetime.strptime('00:00:00', '%H:%M:%S')
+                ahora2 = datetime.strptime(self.aux_contador_rojo, '%H:%M:%S')
+                segundos_transcurridos = (datetime.now() - self.inicio_rojo + (ahora2 - ahora)).total_seconds()
+                tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
+                self.contador_rojo = tiempo_trancurrido
+                return tiempo_trancurrido
+            else:
+                segundos_transcurridos= (datetime.now() - self.inicio_rojo).total_seconds()
+                tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
+                self.contador_rojo = tiempo_trancurrido
+                return tiempo_trancurrido
+        if self.indicador_color_btn == 'amarillo':
+            print('amarillo')
+            if (self.contador_amarillo == 0):
+                self.inicio_amarillo = datetime.now()
+
+            if  self.click_btn_amarillo > 2:
+                ahora = datetime.strptime('00:00:00', '%H:%M:%S')
+                ahora2 = datetime.strptime(self.aux_contador_amarillo, '%H:%M:%S')
+                segundos_transcurridos = (datetime.now() - self.inicio_amarillo + (ahora2 - ahora)).total_seconds()
+                tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
+                self.contador_amarillo = tiempo_trancurrido
+                return tiempo_trancurrido
+            else:
+                segundos_transcurridos= (datetime.now() - self.inicio_amarillo).total_seconds()
+                tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
+                self.contador_amarillo = tiempo_trancurrido
+                return tiempo_trancurrido
+        if self.indicador_color_btn == 'morado':
+            print('morado')
+            if (self.contador_morado == 0):
+                self.inicio_morado = datetime.now()
+
+            if  self.click_btn_morado > 2:
+                ahora = datetime.strptime('00:00:00', '%H:%M:%S')
+                ahora2 = datetime.strptime(self.aux_contador_morado, '%H:%M:%S')
+                segundos_transcurridos = (datetime.now() - self.inicio_morado + (ahora2 - ahora)).total_seconds()
+                tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
+                self.contador_morado = tiempo_trancurrido
+                return tiempo_trancurrido
+            else:
+                segundos_transcurridos = (datetime.now() - self.inicio_morado).total_seconds()
+                tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
+                self.contador_morado = tiempo_trancurrido
+                return tiempo_trancurrido
 
     def refrescar_tiempo_transcurrido(self):
         print("Refrescando!")
-        self.variable_hora_actual.set(self.obtener_tiempo_transcurrido_formateado())
-        # self.raiz.after(self.INTERVALO_REFRESCO, self.refrescar_tiempo_transcurrido)
+        nueva_hora = self.obtener_tiempo_transcurrido_formateado()
+        print(nueva_hora)
+        self.label_contador.config(text=nueva_hora)
         self.raiz.after(500, self.refrescar_tiempo_transcurrido)
+
+    def btn_verde(self, verde):
+        print('start_timer -> ' + verde)
+        self.indicador_color_btn = verde
+        self.click_btn_verde = self.click_btn_verde + 1
+        # if  self.click_btn_verde > 1:
+        self.inicio_verde = datetime.now()
+        self.aux_contador_verde = self.contador_verde
+    
+    def btn_azul(self, azul):
+        print('start_timer -> ' + azul)
+        self.indicador_color_btn = azul
+        self.click_btn_azul = self.click_btn_azul + 1
+        if  self.click_btn_azul > 2:
+            self.inicio_azul = datetime.now()
+            self.aux_contador_azul = self.contador_azul
+    
+    def btn_rojo(self, rojo):
+        print('start_timer -> ' + rojo)
+        self.indicador_color_btn = rojo
+        self.click_btn_rojo = self.click_btn_rojo + 1
+        if  self.click_btn_rojo > 2:
+            self.inicio_rojo = datetime.now()
+            self.aux_contador_rojo = self.contador_rojo
+    
+    def btn_amarillo(self, amarillo):
+        print('start_timer -> ' + amarillo)
+        self.indicador_color_btn = amarillo
+        self.click_btn_amarillo = self.click_btn_amarillo + 1
+        if  self.click_btn_amarillo > 2:
+            self.inicio_amarillo = datetime.now()
+            self.aux_contador_amarillo = self.contador_amarillo
+
+    def btn_morado(self, morado):
+        print('start_timer -> ' + morado)
+        self.indicador_color_btn = morado
+        self.click_btn_morado = self.click_btn_morado + 1
+        if  self.click_btn_morado > 2:
+            self.inicio_morado = datetime.now()
+            self.aux_contador_morado = self.contador_morado
