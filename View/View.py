@@ -49,6 +49,14 @@ class View(object):
     azul_minutos = 0
     azul_segundos = 0
 
+    # variables para los graficos
+    tamano_lineal = []
+    tamano_circular = []
+    nombres_lineal = [1,2,3,4,5,6,7]
+    nombres_circular = ['','','','','']
+    colores_circular = ['#00b248', '#0052b2', '#ff0905', '#ffca0a', '#7b00cb']
+    explotar_circular = [0.01, 0.01, 0.01, 0.01, 0.01]
+
 
     def __init__(self):
         self.controller = Controller()
@@ -60,9 +68,9 @@ class View(object):
 
     def interface(self):
         self.raiz = Tk()
-        self.raiz.attributes('-fullscreen', True)
+        # self.raiz.attributes('-fullscreen', True)
         # self.raiz.geometry(str(self.raiz.winfo_screenwidth()) +'x' +  str(self.raiz.winfo_screenheight()) )
-        # self.raiz.config(width="1200", height="700")
+        self.raiz.config(width="1200", height="700")
         # self.raiz.geometry("1200x800")
         self.raiz.config(bg="blue")
         self.raiz.columnconfigure(1, weight=1)
@@ -258,15 +266,15 @@ class View(object):
         self.frame_dashboard_graficos.columnconfigure(1, weight=1)
 
         # GRAFICO LINEAL
-        nombres_lineal = [1,2,3,4,5,6,7]
+        self.nombres_lineal = [1,2,3,4,5,6,7]
         # colores_lineal = ['blue', 'red', 'red', 'red', 'black']
-        tamano_lineal = ['0%', '20%', '40%', '20%', '80%', '20%', '120%']
+        self.tamano_lineal = ['0%', '20%', '40%', '20%', '80%', '20%', '120%']
 
         fig, axs = plt.subplots(dpi=80, figsize=(3,3), sharey=True)
 
         fig.suptitle('OEE')
 
-        axs.plot(nombres_lineal, tamano_lineal, color='m')
+        axs.plot(self.nombres_lineal, self.tamano_lineal, color='m')
 
         canvas = FigureCanvasTkAgg(fig, master=self.frame_dashboard_graficos)
         canvas.get_tk_widget().grid(row=1, column=1, sticky="nsew")
@@ -274,17 +282,17 @@ class View(object):
         
         # GRAFICO DE CIRCULAR
 
-        nombres_circular = ['','','','','']
+        self.nombres_circular = ['','','','','']
         # nombres = ['Q Utilizada','Q Ociosa','Paradas Mtto','Parades LOG','Paradas rr']
-        colores_circular = ['#00b248', '#0052b2', '#ff0905', '#ffca0a', '#7b00cb']
-        tamano_circular = [20, 26, 30, 70, 10]
-        explotar_circular = [0.01, 0.01, 0.01, 0.01, 0.01]
+        self.colores_circular = ['#00b248', '#0052b2', '#ff0905', '#ffca0a', '#7b00cb']
+        self.tamano_circular = [20, 26, 30, 70, 10]
+        self.explotar_circular = [0.01, 0.01, 0.01, 0.01, 0.01]
 
         fig, axs = plt.subplots(dpi=100, figsize=(3,3), sharey=True)
 
         # fig.suptitle('OEE')
 
-        axs.pie(tamano_circular, explode=explotar_circular, labels=nombres_circular ,colors=colores_circular, autopct='%1.1f%%', pctdistance=0.6, shadow=False, startangle=90, radius=0.7, labeldistance=0.3)
+        axs.pie(self.tamano_circular, explode=self.explotar_circular, labels=self.nombres_circular ,colors=self.colores_circular, autopct='%1.1f%%', pctdistance=0.6, shadow=False, startangle=90, radius=0.7, labeldistance=0.3)
         axs.axis('equal')
 
         canvas = FigureCanvasTkAgg(fig, master=self.frame_dashboard_graficos)
@@ -525,6 +533,7 @@ class View(object):
             self.contador_rojo = 0
             self.contador_amarillo = 0
             self.contador_morado = 0
+            self.click_btn_verde = 0
             self.click_btn_azul = 1
             self.click_btn_rojo = 1
             self.click_btn_amarillo = 1
