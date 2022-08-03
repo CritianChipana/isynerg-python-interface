@@ -60,9 +60,9 @@ class View(object):
 
     def interface(self):
         self.raiz = Tk()
-        # raiz.attributes('-fullscreen', True)
-        self.raiz.geometry(str(self.raiz.winfo_screenwidth()) +'x' +  str(self.raiz.winfo_screenheight()) )
-        # raiz.config(width="1200", height="800")
+        self.raiz.attributes('-fullscreen', True)
+        # self.raiz.geometry(str(self.raiz.winfo_screenwidth()) +'x' +  str(self.raiz.winfo_screenheight()) )
+        # self.raiz.config(width="1200", height="700")
         # self.raiz.geometry("1200x800")
         self.raiz.config(bg="blue")
         self.raiz.columnconfigure(1, weight=1)
@@ -216,11 +216,13 @@ class View(object):
         self.frame_dashboard = Frame( self.frame_padre, padx=0, pady=0, bg="pink")
         # self.frame_dashboard.grid(row=1, column=1, sticky="nsew")
         self.frame_dashboard.rowconfigure(1, weight=1)
+        self.frame_dashboard.rowconfigure(2, weight=10)
         self.frame_dashboard.columnconfigure(1, weight=1)
 
         self.frame_btn_dashboard = Frame(self.frame_dashboard, padx=0, pady=0, bg="black")
-        self.frame_btn_dashboard.grid(row=1, column=1, rowspan=5, padx=10, pady=9, sticky="nsew")
+        self.frame_btn_dashboard.grid(row=1, column=1, padx=10, pady=9, sticky="nsew")
 
+        #FRAME DASHBOARD DE LOS BOTONOES
         self.frame_btn_dashboard.rowconfigure(1, weight=1)
         self.frame_btn_dashboard.rowconfigure(2, weight=1)
         self.frame_btn_dashboard.columnconfigure(1, weight=1)
@@ -244,6 +246,85 @@ class View(object):
 
         self.btn_calidad = Button(self.frame_btn_dashboard, text="Calidad", padx=30, pady=5, font=("Arial", 9, "bold"), justify="center")
         self.btn_calidad.grid(row=2, column=3, padx=5, pady=5, sticky=W+E+N+S)
+
+        # FRAME DE LOS GRAFICOS
+
+        self.frame_dashboard_graficos = Frame(self.frame_dashboard, padx=0, pady=0, bg="white")
+        self.frame_dashboard_graficos.grid(row=2, column=1, padx=10, pady=9, sticky="nsew")
+
+        self.frame_dashboard_graficos.rowconfigure(1, weight=4)
+        self.frame_dashboard_graficos.rowconfigure(2, weight=4)
+        self.frame_dashboard_graficos.rowconfigure(3, weight=1)
+        self.frame_dashboard_graficos.columnconfigure(1, weight=1)
+
+        # GRAFICO LINEAL
+        nombres_lineal = [1,2,3,4,5,6,7]
+        # colores_lineal = ['blue', 'red', 'red', 'red', 'black']
+        tamano_lineal = ['0%', '20%', '40%', '20%', '80%', '20%', '120%']
+
+        fig, axs = plt.subplots(dpi=80, figsize=(3,3), sharey=True)
+
+        fig.suptitle('OEE')
+
+        axs.plot(nombres_lineal, tamano_lineal, color='m')
+
+        canvas = FigureCanvasTkAgg(fig, master=self.frame_dashboard_graficos)
+        canvas.get_tk_widget().grid(row=1, column=1, sticky="nsew")
+        canvas.draw()
+        
+        # GRAFICO DE CIRCULAR
+
+        nombres_circular = ['','','','','']
+        # nombres = ['Q Utilizada','Q Ociosa','Paradas Mtto','Parades LOG','Paradas rr']
+        colores_circular = ['#00b248', '#0052b2', '#ff0905', '#ffca0a', '#7b00cb']
+        tamano_circular = [20, 26, 30, 70, 10]
+        explotar_circular = [0.01, 0.01, 0.01, 0.01, 0.01]
+
+        fig, axs = plt.subplots(dpi=100, figsize=(3,3), sharey=True)
+
+        # fig.suptitle('OEE')
+
+        axs.pie(tamano_circular, explode=explotar_circular, labels=nombres_circular ,colors=colores_circular, autopct='%1.1f%%', pctdistance=0.6, shadow=False, startangle=90, radius=0.7, labeldistance=0.3)
+        axs.axis('equal')
+
+        canvas = FigureCanvasTkAgg(fig, master=self.frame_dashboard_graficos)
+        canvas.get_tk_widget().grid(row=2, column=1, sticky="nsew")
+        canvas.draw()
+
+        #FRAME LEYENDA
+        self.frame_dashboard_graficos_leyenda = Frame(self.frame_dashboard_graficos, padx=0, pady=0, bg="white")
+        self.frame_dashboard_graficos_leyenda.grid(row=3, column=1, padx=10, pady=9, sticky="nsew")
+
+        self.label_color_leyenda_verde = Label(self.frame_dashboard_graficos_leyenda, text="", padx=5, pady=3, font=("Arial", 6, "bold"), bg="#00b248", fg="white")
+        self.label_color_leyenda_verde.grid(row=1, column=1, padx=5, pady=3, sticky="nsew")
+
+        self.label_letra_leyenda_verde = Label(self.frame_dashboard_graficos_leyenda, text="Q Utilizada", padx=5, pady=5, font=("Arial", 6, "bold"),  bg="white")
+        self.label_letra_leyenda_verde.grid(row=1, column=2, padx=5, pady=5, sticky="nsew")
+
+        self.label_color_leyenda_azul = Label(self.frame_dashboard_graficos_leyenda, text="", padx=5, pady=5, font=("Arial", 6, "bold"), bg="#0052b2", fg="white")
+        self.label_color_leyenda_azul.grid(row=1, column=3, padx=5, pady=5, sticky="nsew")
+
+        self.label_letra_leyenda_azul = Label(self.frame_dashboard_graficos_leyenda, text="Q Ociosa", padx=5, pady=5, font=("Arial", 6, "bold"),  bg="white")
+        self.label_letra_leyenda_azul.grid(row=1, column=4, padx=5, pady=5, sticky="nsew")
+
+        self.label_color_leyenda_rojo = Label(self.frame_dashboard_graficos_leyenda, text="", padx=5, pady=5, font=("Arial", 6, "bold"), bg="#ff0905", fg="white")
+        self.label_color_leyenda_rojo.grid(row=1, column=5, padx=5, pady=5, sticky="nsew")
+
+        self.label_letra_leyenda_rojo = Label(self.frame_dashboard_graficos_leyenda, text="Paradas MTTO", padx=5, pady=5, font=("Arial", 6, "bold"),  bg="white")
+        self.label_letra_leyenda_rojo.grid(row=1, column=6, padx=5, pady=5, sticky="nsew")
+
+        self.label_color_leyenda_amarillo = Label(self.frame_dashboard_graficos_leyenda, text="", padx=5, pady=5, font=("Arial", 6, "bold"), bg="#ffca0a", fg="white")
+        self.label_color_leyenda_amarillo.grid(row=1, column=7, padx=5, pady=5, sticky="nsew")
+
+        self.label_letra_leyenda_amarillo = Label(self.frame_dashboard_graficos_leyenda, text="Paradas LOG", padx=5, pady=5, font=("Arial", 6, "bold"),  bg="white")
+        self.label_letra_leyenda_amarillo.grid(row=1, column=8, padx=5, pady=5, sticky="nsew")
+
+        self.label_color_leyenda_morado = Label(self.frame_dashboard_graficos_leyenda, text="", padx=5, pady=5, font=("Arial", 6, "bold"), bg="#7b00cb", fg="white")
+        self.label_color_leyenda_morado.grid(row=1, column=9, padx=5, pady=5, sticky="nsew")
+
+        self.label_letra_leyenda_morado = Label(self.frame_dashboard_graficos_leyenda, text="Parada RR", padx=5, pady=5, font=("Arial", 6, "bold"),  bg="white")
+        self.label_letra_leyenda_morado.grid(row=1, column=10, padx=5, pady=5, sticky="nsew")
+
 
 ############################################################### INTERFECE ############################################################################
 
