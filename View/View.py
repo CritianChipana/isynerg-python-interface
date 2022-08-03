@@ -3,6 +3,8 @@ from tkinter.ttk import Combobox
 import os
 import time
 from datetime import datetime
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 
 from Controller.Controller import Controller
@@ -40,6 +42,8 @@ class View(object):
     click_btn_rojo = 1
     click_btn_amarillo = 1
     click_btn_morado = 1
+
+    click_btn_stop = 1
 
     azul_horas = 0
     azul_minutos = 0
@@ -79,7 +83,7 @@ class View(object):
         self.frame_login.columnconfigure(1, weight=1)
         self.frame_login.rowconfigure(2, weight=1)
 
-        frame_session = Frame(self.frame_login, padx=20, pady=20, bg="red")
+        frame_session = Frame(self.frame_login, padx=20, pady=20, bg="Purple")
         frame_session.grid(row=1, column=1, sticky="nsew")
 
         frame_session.rowconfigure(1, weight=1)
@@ -89,11 +93,14 @@ class View(object):
         frame_session.columnconfigure(2, weight=1)
 
 
-        # btn_start = Button(frame_login, text="Start", padx=100, pady=55, fg="white", bg="green", font=("Arial", 20), command=self.hola)
+        # BTN START
         # state=DISABLED,
         self.btn_start = Button(frame_session, text="Start",command=lambda:self.start(), padx=100, pady=55, fg="white", bg="green", font=("Arial", 20))
         self.btn_start.grid(row=1, column=1, columnspan=4, padx=50, pady=50, sticky="nsew")
 
+        # BTN STOP
+        self.btn_stop = Button(frame_session, text="Stop",command=lambda:self.stop(), padx=100, pady=55, fg="white", bg="red", font=("Arial", 20))
+        # self.btn_stop.grid(row=1, column=1, columnspan=4, padx=50, pady=50, sticky="nsew")
 
 
         #input NOMBRE
@@ -101,7 +108,7 @@ class View(object):
         label_operador.grid(row=2, column=1, padx=1, sticky="w")
         self.combo_operario = Combobox(frame_session, width=20, font=("Arial", 16), values=self.get_usuarios())
         self.combo_operario.bind("<<ComboboxSelected>>", self.selection_changed)
-        self.combo_operario.grid(row=2, column=2, padx=1, sticky="we", padx=10, ipady=5)
+        self.combo_operario.grid(row=2, column=2, padx=1, sticky="we", ipadx=10, ipady=5)
 
         # #INPUT CONTRASEÑA
         self.label_dni = Label(frame_session, text="Contraseña:", font=("Arial", 16))
@@ -156,7 +163,7 @@ class View(object):
         # self.etiqueta.grid( row=1, column=1)
 
         self.interface_contador()
-
+        self.interface_dashboard()
 
         self.frame_padre.mainloop()
 
@@ -171,12 +178,12 @@ class View(object):
         self.frame_contador.columnconfigure(2, weight=1)
 
         ##* FRAME CONTADOR
-        frame_cronometro = Frame(self.frame_contador, padx=0, pady=0, bg="black")
-        frame_cronometro.grid(row=1, column=1, rowspan=5, padx=10, pady=10, sticky="nsew")
-        frame_cronometro.columnconfigure(1, weight=1)
-        frame_cronometro.rowconfigure(1, weight=1)
+        self.frame_cronometro = Frame(self.frame_contador, padx=0, pady=0, bg="#00b248")
+        self.frame_cronometro.grid(row=1, column=1, rowspan=5, padx=10, pady=10, sticky="nsew")
+        self.frame_cronometro.columnconfigure(1, weight=1)
+        self.frame_cronometro.rowconfigure(1, weight=1)
 
-        self.label_contador = Label(frame_cronometro, text="00:00:00", font=("Arial", 100),fg="white", bg="#00b248")
+        self.label_contador = Label(self.frame_cronometro, text="00:00:00", font=("Arial", 100),fg="white", bg="#00b248")
         self.label_contador.grid(row=1, column=1, rowspan=5, padx=50, sticky="nsew")
 
         # FRAME BTN CONTADOR
@@ -190,20 +197,55 @@ class View(object):
         self.frame_btn_cronometro.rowconfigure(5, weight=1)
         self.frame_btn_cronometro.columnconfigure(1, weight=1)
         #BTN_COLORES:
-        btn_azul = Button(self.frame_btn_cronometro, text="", command=lambda:self.btn_azul('azul'), padx=30, pady=10, fg="white", bg="#0052b2", font=("Arial", 20))
-        btn_azul.grid(row=1, column=1, padx=10, pady=10)
+        self.btn_azul = Button(self.frame_btn_cronometro, text="", command=lambda:self.open_azul('azul'),state=DISABLED, padx=30, pady=10, fg="white", bg="#0052b2", font=("Arial", 20))
+        self.btn_azul.grid(row=1, column=1, padx=10, pady=10)
 
-        btn_verde = Button(self.frame_btn_cronometro, text="", command=lambda:self.btn_verde('verde'), padx=30, pady=10, fg="white", bg="#00b248", font=("Arial", 20))
-        btn_verde.grid(row=2, column=1, padx=10, pady=10)
+        self.btn_verde = Button(self.frame_btn_cronometro, text="", command=lambda:self.open_verde('verde'),state=DISABLED, padx=30, pady=10, fg="white", bg="#00b248", font=("Arial", 20))
+        self.btn_verde.grid(row=2, column=1, padx=10, pady=10)
 
-        btn_rojo = Button(self.frame_btn_cronometro, text="", command=lambda:self.btn_rojo('rojo'), padx=30, pady=10, fg="white", bg="#ff0905", font=("Arial", 20))
-        btn_rojo.grid(row=3, column=1, padx=10, pady=10)
+        self.btn_rojo = Button(self.frame_btn_cronometro, text="", command=lambda:self.open_rojo('rojo'),state=DISABLED, padx=30, pady=10, fg="white", bg="#ff0905", font=("Arial", 20))
+        self.btn_rojo.grid(row=3, column=1, padx=10, pady=10)
 
-        btn_naranja = Button(self.frame_btn_cronometro, text="", command=lambda:self.btn_amarillo('amarillo'), padx=30, pady=10, fg="white", bg="#ffca0a", font=("Arial", 20))
-        btn_naranja.grid(row=4, column=1, padx=10, pady=10)
+        self.btn_amarillo = Button(self.frame_btn_cronometro, text="", command=lambda:self.open_amarillo('amarillo'),state=DISABLED, padx=30, pady=10, fg="white", bg="#ffca0a", font=("Arial", 20))
+        self.btn_amarillo.grid(row=4, column=1, padx=10, pady=10)
 
-        btn_morado = Button(self.frame_btn_cronometro, text="", command=lambda:self.btn_morado('morado'), padx=30, pady=10, fg="white", bg="#7b00cb", font=("Arial", 20))
-        btn_morado.grid(row=5, column=1, padx=10, pady=10)
+        self.btn_morado = Button(self.frame_btn_cronometro, text="", command=lambda:self.open_morado('morado'),state=DISABLED, padx=30, pady=10, fg="white", bg="#7b00cb", font=("Arial", 20))
+        self.btn_morado.grid(row=5, column=1, padx=10, pady=10)
+
+    def interface_dashboard(self):
+        self.frame_dashboard = Frame( self.frame_padre, padx=0, pady=0, bg="pink")
+        # self.frame_dashboard.grid(row=1, column=1, sticky="nsew")
+        self.frame_dashboard.rowconfigure(1, weight=1)
+        self.frame_dashboard.columnconfigure(1, weight=1)
+
+        self.frame_btn_dashboard = Frame(self.frame_dashboard, padx=0, pady=0, bg="black")
+        self.frame_btn_dashboard.grid(row=1, column=1, rowspan=5, padx=10, pady=9, sticky="nsew")
+
+        self.frame_btn_dashboard.rowconfigure(1, weight=1)
+        self.frame_btn_dashboard.rowconfigure(2, weight=1)
+        self.frame_btn_dashboard.columnconfigure(1, weight=1)
+        self.frame_btn_dashboard.columnconfigure(2, weight=1)
+        self.frame_btn_dashboard.columnconfigure(3, weight=1)
+
+        self.btn_oee = Button(self.frame_btn_dashboard, text="OEE", padx=30, pady=13, font=("Arial", 9, "bold"))
+        self.btn_oee.grid(row=1, column=1, padx=5, pady=5, sticky=W+E+N+S)
+
+        self.btn_disponibilidad_maquina = Button(self.frame_btn_dashboard, text="Disponibilidad de\n Maquina", padx=30, pady=5, font=("Arial", 9, "bold"), justify="center")
+        self.btn_disponibilidad_maquina.grid(row=1, column=2, padx=5, pady=5, sticky="nsew")
+
+        self.btn_disponibilidad_materiales = Button(self.frame_btn_dashboard, text="Disponibilidad de\n Materiales", padx=30, pady=5, font=("Arial", 9, "bold"), justify="center")
+        self.btn_disponibilidad_materiales.grid(row=1, column=3, padx=5, pady=5, sticky="nsew")
+
+        self.btn_disponibilidad_operario = Button(self.frame_btn_dashboard, text="Disponibilidad de\n Operario", padx=30, pady=13, font=("Arial", 9, "bold"))
+        self.btn_disponibilidad_operario.grid(row=2, column=1, padx=5, pady=5, sticky="nsew")
+
+        self.btn_rendimiento = Button(self.frame_btn_dashboard, text="Rendimiento", padx=30, pady=5, font=("Arial", 9, "bold"), justify="center")
+        self.btn_rendimiento.grid(row=2, column=2, padx=5, pady=5, sticky=W+E+N+S)
+
+        self.btn_calidad = Button(self.frame_btn_dashboard, text="Calidad", padx=30, pady=5, font=("Arial", 9, "bold"), justify="center")
+        self.btn_calidad.grid(row=2, column=3, padx=5, pady=5, sticky=W+E+N+S)
+
+############################################################### INTERFECE ############################################################################
 
     def escribir_numeros(self, numero):
         self.contador_numeros_dni = self.contador_numeros_dni + 1
@@ -278,6 +320,14 @@ class View(object):
             self.input_dni.config(show='*')
 
     def start(self):
+        self.btn_start.grid_forget()
+        self.btn_azul.config(state=NORMAL)
+        self.btn_verde.config(state=NORMAL)
+        self.btn_rojo.config(state=NORMAL)
+        self.btn_amarillo.config(state=NORMAL)
+        self.btn_morado.config(state=NORMAL)
+        self.btn_stop.grid(row=1, column=1, columnspan=4, padx=50, pady=50, sticky="nsew")
+
         self.refrescar_tiempo_transcurrido()
 
     def segundos_a_segundos_minutos_y_horas(self, segundos):
@@ -384,44 +434,113 @@ class View(object):
         nueva_hora = self.obtener_tiempo_transcurrido_formateado()
         print(nueva_hora)
         self.label_contador.config(text=nueva_hora)
-        self.raiz.after(500, self.refrescar_tiempo_transcurrido)
+        
+        tarea = self.raiz.after(500, self.refrescar_tiempo_transcurrido)
+        if self.click_btn_stop == 2 :
+            self.raiz.after_cancel(tarea)
+            self.label_contador.config(text="00:00:00")
+            self.contador_verde = 0
+            self.contador_azul = 0
+            self.contador_rojo = 0
+            self.contador_amarillo = 0
+            self.contador_morado = 0
+            self.click_btn_azul = 1
+            self.click_btn_rojo = 1
+            self.click_btn_amarillo = 1
+            self.click_btn_morado = 1
+            self.indicador_color_btn = 'verde'
+            self.aux_contador_verde = ''
+            self.aux_contador_azul = ''
+            self.aux_contador_rojo = ''
+            self.aux_contador_amarillo = ''
+            self.aux_contador_morado = ''
+            self.click_btn_stop = 1
+            self.btn_stop.grid_forget()
+            self.btn_start.grid(row=1, column=1, columnspan=4, padx=50, pady=50, sticky="nsew")
+            self.frame_cronometro.config(bg='#00b248')
+            self.label_contador.config(bg='#00b248')
 
-    def btn_verde(self, verde):
+
+    def open_verde(self, verde):
+
+        #OPEN LOGIN
+        self.frame_dashboard.grid_forget()
+        self.frame_login.grid(row=1, column=1, sticky="nsew")
+
         print('start_timer -> ' + verde)
+        self.frame_cronometro.config(bg='#00b248')
+        self.label_contador.config(bg='#00b248')
+
         self.indicador_color_btn = verde
         self.click_btn_verde = self.click_btn_verde + 1
         # if  self.click_btn_verde > 1:
         self.inicio_verde = datetime.now()
         self.aux_contador_verde = self.contador_verde
     
-    def btn_azul(self, azul):
+    def open_azul(self, azul):
+
+        #open dashboard
+        self.frame_login.grid_forget()
+        self.frame_dashboard.grid(row=1, column=1, sticky="nsew")
+
         print('start_timer -> ' + azul)
+        self.frame_cronometro.config(bg='#0052b2')
+        self.label_contador.config(bg='#0052b2')
+
         self.indicador_color_btn = azul
         self.click_btn_azul = self.click_btn_azul + 1
         if  self.click_btn_azul > 2:
             self.inicio_azul = datetime.now()
             self.aux_contador_azul = self.contador_azul
     
-    def btn_rojo(self, rojo):
+    def open_rojo(self, rojo):
+
+        #open dashboard
+        self.frame_login.grid_forget()
+        self.frame_dashboard.grid(row=1, column=1, sticky="nsew")
+
         print('start_timer -> ' + rojo)
+        self.frame_cronometro.config(bg='#ff0905')
+        self.label_contador.config(bg='#ff0905')
+
         self.indicador_color_btn = rojo
         self.click_btn_rojo = self.click_btn_rojo + 1
         if  self.click_btn_rojo > 2:
             self.inicio_rojo = datetime.now()
             self.aux_contador_rojo = self.contador_rojo
     
-    def btn_amarillo(self, amarillo):
+    def open_amarillo(self, amarillo):
+
+        #open dashboard
+        self.frame_login.grid_forget()
+        self.frame_dashboard.grid(row=1, column=1, sticky="nsew")
+
         print('start_timer -> ' + amarillo)
+        self.frame_cronometro.config(bg='#ffca0a')
+        self.label_contador.config(bg='#ffca0a')
+
         self.indicador_color_btn = amarillo
         self.click_btn_amarillo = self.click_btn_amarillo + 1
         if  self.click_btn_amarillo > 2:
             self.inicio_amarillo = datetime.now()
             self.aux_contador_amarillo = self.contador_amarillo
 
-    def btn_morado(self, morado):
+    def open_morado(self, morado):
+        #open dashboard
+        self.frame_login.grid_forget()
+        self.frame_dashboard.grid(row=1, column=1, sticky="nsew")
+
         print('start_timer -> ' + morado)
+        self.frame_cronometro.config(bg='#7b00cb')
+        self.label_contador.config(bg='#7b00cb')
+
         self.indicador_color_btn = morado
         self.click_btn_morado = self.click_btn_morado + 1
         if  self.click_btn_morado > 2:
             self.inicio_morado = datetime.now()
             self.aux_contador_morado = self.contador_morado
+
+    def stop(self):
+        print('stop_timer')
+        self.click_btn_stop = 2
+        # self.raiz.after_(self.refrescar_tiempo_transcurrido)
