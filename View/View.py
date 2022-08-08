@@ -723,7 +723,10 @@ class View(object):
         print('open_rendimiento')
 
     def open_calidad(self):
-        self.tamano_lineal = ['20%', '20%', '20%', '20%', '20%', '20%', '20%']
-        print('open_calidad')
+        self.axs_lineal.clear()
+        self.tamano_lineal = self.controller.dashboard_calidad(self.maquina_id)
         print(self.tamano_lineal)
+        self.axs_lineal.plot(self.nombres_lineal,self.tamano_lineal, color='m')
+        self.canvas_lineal.draw()
+        print('open calidad')
 

@@ -170,3 +170,54 @@ class Controller:
 
         lista_para_bashboard_reverse = lista_para_bashboard[::-1]
         return lista_para_bashboard_reverse
+
+    def dashboard_capacidad_ociosa(self, maquina_id):
+        # # LO QUE SE QUIERE RETORNAR
+        # # ['0%', '20%', '40%', '20%', '80%', '20%', '120%']
+        lista_para_bashboard = []
+        lista_actividades = self.get_actividad_user_siete_ultimos_dias(maquina_id)
+
+        for i in range(len(lista_actividades)):
+            total = lista_actividades[i][2] + lista_actividades[i][3] + lista_actividades[i][4] + lista_actividades[i][5] + lista_actividades[i][6] + lista_actividades[i][7]
+            lista_para_bashboard.append(round(((lista_actividades[i][6]/(lista_actividades[i][6] + lista_actividades[i][7]))*100)))
+
+        for i in range( 7 - len(lista_para_bashboard)):
+            lista_para_bashboard.append(0)
+
+        lista_para_bashboard_reverse = lista_para_bashboard[::-1]
+        return lista_para_bashboard_reverse
+
+def dashboard_capacidad_disponibilidad(self, maquina_id):
+        # # LO QUE SE QUIERE RETORNAR
+        # # ['0%', '20%', '40%', '20%', '80%', '20%', '120%']
+
+        print('calidad')
+        lista_para_bashboard = []
+        lista_actividades = self.get_actividad_user_siete_ultimos_dias(maquina_id)
+
+        for i in range(len(lista_actividades)):
+            lista_para_bashboard.append(round(((lista_actividades[i][6]/(lista_actividades[i][6] + lista_actividades[i][7]))*100)))
+
+        for i in range( 7 - len(lista_para_bashboard)):
+            lista_para_bashboard.append(0)
+
+        lista_para_bashboard_reverse = lista_para_bashboard[::-1]
+        return lista_para_bashboard_reverse
+
+def dashboard_capacidad_oee(self, maquina_id):
+        # # LO QUE SE QUIERE RETORNAR
+        # # ['0%', '20%', '40%', '20%', '80%', '20%', '120%']
+
+        print('calidad')
+        lista_para_bashboard = []
+        lista_actividades = self.get_actividad_user_siete_ultimos_dias(maquina_id)
+
+        for i in range(len(lista_actividades)):
+            lista_para_bashboard.append(round(((lista_actividades[i][6]/(lista_actividades[i][6] + lista_actividades[i][7]))*100)))
+
+        for i in range( 7 - len(lista_para_bashboard)):
+            lista_para_bashboard.append(0)
+
+        lista_para_bashboard_reverse = lista_para_bashboard[::-1]
+        return lista_para_bashboard_reverse
+
