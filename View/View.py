@@ -2,7 +2,9 @@ from tkinter import *
 from tkinter.ttk import Combobox
 import os
 import time
-from datetime import datetime
+import datetime
+from datetime import datetime, date
+from turtle import color
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
@@ -15,6 +17,7 @@ class View(object):
     contador_numeros_dni = 0
     arreglo_usuarios = []
     user = ()
+    maquina_id = 1
     contador = 0
     indicador_color_btn = "verde"
 
@@ -43,16 +46,18 @@ class View(object):
     click_btn_amarillo = 1
     click_btn_morado = 1
 
-    click_btn_stop = 1
+    click_btn_stop = False
+    click_btn_start = False
 
     azul_horas = 0
     azul_minutos = 0
     azul_segundos = 0
 
+
     # variables para los graficos
     tamano_lineal = []
-    tamano_circular = []
     nombres_lineal = [1,2,3,4,5,6,7]
+    tamano_circular = []
     nombres_circular = ['','','','','']
     colores_circular = ['#00b248', '#0052b2', '#ff0905', '#ffca0a', '#7b00cb']
     explotar_circular = [0.01, 0.01, 0.01, 0.01, 0.01]
@@ -69,14 +74,14 @@ class View(object):
     def interface(self):
         self.raiz = Tk()
         # self.raiz.attributes('-fullscreen', True)
-        # self.raiz.geometry(str(self.raiz.winfo_screenwidth()) +'x' +  str(self.raiz.winfo_screenheight()) )
-        self.raiz.config(width="1200", height="700")
+        self.raiz.geometry(str(self.raiz.winfo_screenwidth()) +'x' +  str(self.raiz.winfo_screenheight()) )
+        # self.raiz.config(width="1200", height="700")
         # self.raiz.geometry("1200x800")
         self.raiz.config(bg="blue")
         self.raiz.columnconfigure(1, weight=1)
         self.raiz.rowconfigure(1, weight=1)
 
-        self.frame_padre = Frame(self.raiz, padx=10, pady=10, bg="yellow")
+        self.frame_padre = Frame(self.raiz, padx=10, pady=10, bg="white")
         self.frame_padre.grid(row=1, column=1, sticky="nsew")
 
         self.frame_padre.rowconfigure(1, weight=1)
@@ -84,14 +89,14 @@ class View(object):
         self.frame_padre.columnconfigure(2, weight=1)
 
         ######################################### PRIMERA COLUMNA #########################################
-        self.frame_login = Frame( self.frame_padre,bg="purple", padx=10, pady=10)
+        self.frame_login = Frame( self.frame_padre,bg="white", padx=10, pady=10)
         self.frame_login.grid(row=1, column=1, sticky="nsew")
 
         self.frame_login.rowconfigure(1, weight=1)
         self.frame_login.columnconfigure(1, weight=1)
         self.frame_login.rowconfigure(2, weight=1)
 
-        frame_session = Frame(self.frame_login, padx=20, pady=20, bg="Purple")
+        frame_session = Frame(self.frame_login, padx=20, pady=20, bg="white")
         frame_session.grid(row=1, column=1, sticky="nsew")
 
         frame_session.rowconfigure(1, weight=1)
@@ -103,7 +108,7 @@ class View(object):
 
         # BTN START
         # state=DISABLED,
-        self.btn_start = Button(frame_session, text="Start",command=lambda:self.start(), padx=100, pady=55, fg="white", bg="green", font=("Arial", 20))
+        self.btn_start = Button(frame_session, text="Start", command=lambda:self.start(), state=DISABLED, padx=100, pady=55, fg="white", bg="green", font=("Arial", 20))
         self.btn_start.grid(row=1, column=1, columnspan=4, padx=50, pady=50, sticky="nsew")
 
         # BTN STOP
@@ -124,11 +129,11 @@ class View(object):
         self.input_dni = Entry(frame_session, show="*", width=20, font=("Arial", 16))
         self.input_dni.grid(row=3, column=2, sticky="we", padx=10, ipady=5)
         # #INPUT PASSWORD INCORRECTO
-        self.label_password_icorecto = Label(frame_session, text="", fg='red', font=("Arial", 13))
+        self.label_password_icorecto = Label(frame_session, text="", fg='red', font=("Arial", 13), bg="white")
         self.label_password_icorecto.grid(row=4, column=2, sticky="nsew", padx=10, ipady=5)
 
         # FRAME CALCULADORA
-        frame_calculadora = Frame(self.frame_login, padx=20, pady=20, bg="pink")
+        frame_calculadora = Frame(self.frame_login, padx=20, pady=20, bg="white")
         frame_calculadora.grid(row=2, column=1, sticky="nsew")
 
         frame_calculadora.rowconfigure(1, weight=1)
@@ -178,7 +183,7 @@ class View(object):
     def interface_contador(self):
         # SEGUNDA COLUMNA
         # frame contador
-        self.frame_contador = Frame( self.frame_padre, padx=0, pady=0, bg="pink")
+        self.frame_contador = Frame( self.frame_padre, padx=0, pady=0, bg="white")
         self.frame_contador.grid(row=1, column=2, sticky="nsew")
         # frame_contador.grid(row=1, column=2, sticky=W+E+N+S)
         self.frame_contador.rowconfigure(1, weight=1)
@@ -195,7 +200,7 @@ class View(object):
         self.label_contador.grid(row=1, column=1, rowspan=5, padx=50, sticky="nsew")
 
         # FRAME BTN CONTADOR
-        self.frame_btn_cronometro = Frame(self.frame_contador, padx=0, pady=0, bg="#097eeb")
+        self.frame_btn_cronometro = Frame(self.frame_contador, padx=0, pady=0, bg="white")
         self.frame_btn_cronometro.grid(row=1, column=2, rowspan=5, padx=10, pady=10, sticky="nsew")
 
         self.frame_btn_cronometro.rowconfigure(1, weight=1)
@@ -205,19 +210,19 @@ class View(object):
         self.frame_btn_cronometro.rowconfigure(5, weight=1)
         self.frame_btn_cronometro.columnconfigure(1, weight=1)
         #BTN_COLORES:
-        self.btn_azul = Button(self.frame_btn_cronometro, text="", command=lambda:self.open_azul('azul'),state=DISABLED, padx=30, pady=10, fg="white", bg="#0052b2", font=("Arial", 20))
+        self.btn_azul = Button(self.frame_btn_cronometro, text="", command=lambda:self.open_azul('azul'), padx=30, pady=10, fg="white", bg="#0052b2", font=("Arial", 20))
         self.btn_azul.grid(row=1, column=1, padx=10, pady=10)
 
-        self.btn_verde = Button(self.frame_btn_cronometro, text="", command=lambda:self.open_verde('verde'),state=DISABLED, padx=30, pady=10, fg="white", bg="#00b248", font=("Arial", 20))
+        self.btn_verde = Button(self.frame_btn_cronometro, text="", command=lambda:self.open_verde('verde'), padx=30, pady=10, fg="white", bg="#00b248", font=("Arial", 20))
         self.btn_verde.grid(row=2, column=1, padx=10, pady=10)
 
-        self.btn_rojo = Button(self.frame_btn_cronometro, text="", command=lambda:self.open_rojo('rojo'),state=DISABLED, padx=30, pady=10, fg="white", bg="#ff0905", font=("Arial", 20))
+        self.btn_rojo = Button(self.frame_btn_cronometro, text="", command=lambda:self.open_rojo('rojo'), padx=30, pady=10, fg="white", bg="#ff0905", font=("Arial", 20))
         self.btn_rojo.grid(row=3, column=1, padx=10, pady=10)
 
-        self.btn_amarillo = Button(self.frame_btn_cronometro, text="", command=lambda:self.open_amarillo('amarillo'),state=DISABLED, padx=30, pady=10, fg="white", bg="#ffca0a", font=("Arial", 20))
+        self.btn_amarillo = Button(self.frame_btn_cronometro, text="", command=lambda:self.open_amarillo('amarillo'), padx=30, pady=10, fg="white", bg="#ffca0a", font=("Arial", 20))
         self.btn_amarillo.grid(row=4, column=1, padx=10, pady=10)
 
-        self.btn_morado = Button(self.frame_btn_cronometro, text="", command=lambda:self.open_morado('morado'),state=DISABLED, padx=30, pady=10, fg="white", bg="#7b00cb", font=("Arial", 20))
+        self.btn_morado = Button(self.frame_btn_cronometro, text="", command=lambda:self.open_morado('morado'), padx=30, pady=10, fg="white", bg="#7b00cb", font=("Arial", 20))
         self.btn_morado.grid(row=5, column=1, padx=10, pady=10)
 
     def interface_dashboard(self):
@@ -237,22 +242,22 @@ class View(object):
         self.frame_btn_dashboard.columnconfigure(2, weight=1)
         self.frame_btn_dashboard.columnconfigure(3, weight=1)
 
-        self.btn_oee = Button(self.frame_btn_dashboard, text="OEE", padx=30, pady=13, font=("Arial", 9, "bold"))
+        self.btn_oee = Button(self.frame_btn_dashboard, text="OEE", padx=30, command=lambda:self.open_oee(), pady=13, font=("Arial", 9, "bold"))
         self.btn_oee.grid(row=1, column=1, padx=5, pady=5, sticky=W+E+N+S)
 
-        self.btn_disponibilidad_maquina = Button(self.frame_btn_dashboard, text="Disponibilidad de\n Maquina", padx=30, pady=5, font=("Arial", 9, "bold"), justify="center")
+        self.btn_disponibilidad_maquina = Button(self.frame_btn_dashboard, text="Disponibilidad de\n Maquina", padx=30, command=lambda:self.open_disponibilidad_maquina(), pady=5, font=("Arial", 9, "bold"), justify="center")
         self.btn_disponibilidad_maquina.grid(row=1, column=2, padx=5, pady=5, sticky="nsew")
 
-        self.btn_disponibilidad_materiales = Button(self.frame_btn_dashboard, text="Disponibilidad de\n Materiales", padx=30, pady=5, font=("Arial", 9, "bold"), justify="center")
+        self.btn_disponibilidad_materiales = Button(self.frame_btn_dashboard, text="Disponibilidad de\n Materiales", padx=30, command=lambda:self.open_disponibilidad_materiales(), pady=5, font=("Arial", 9, "bold"), justify="center")
         self.btn_disponibilidad_materiales.grid(row=1, column=3, padx=5, pady=5, sticky="nsew")
 
-        self.btn_disponibilidad_operario = Button(self.frame_btn_dashboard, text="Disponibilidad de\n Operario", padx=30, pady=13, font=("Arial", 9, "bold"))
+        self.btn_disponibilidad_operario = Button(self.frame_btn_dashboard, text="Disponibilidad de\n Operario", padx=30, command=lambda:self.open_disponibilidad_materiales (), pady=13, font=("Arial", 9, "bold"))
         self.btn_disponibilidad_operario.grid(row=2, column=1, padx=5, pady=5, sticky="nsew")
 
-        self.btn_rendimiento = Button(self.frame_btn_dashboard, text="Rendimiento", padx=30, pady=5, font=("Arial", 9, "bold"), justify="center")
+        self.btn_rendimiento = Button(self.frame_btn_dashboard, text="Rendimiento", padx=30, pady=5, command=lambda:self.open_rendimiento(), font=("Arial", 9, "bold"), justify="center")
         self.btn_rendimiento.grid(row=2, column=2, padx=5, pady=5, sticky=W+E+N+S)
 
-        self.btn_calidad = Button(self.frame_btn_dashboard, text="Calidad", padx=30, pady=5, font=("Arial", 9, "bold"), justify="center")
+        self.btn_calidad = Button(self.frame_btn_dashboard, text="Calidad", padx=30, command=lambda:self.open_calidad(), pady=5, font=("Arial", 9, "bold"), justify="center")
         self.btn_calidad.grid(row=2, column=3, padx=5, pady=5, sticky=W+E+N+S)
 
         # FRAME DE LOS GRAFICOS
@@ -267,19 +272,14 @@ class View(object):
 
         # GRAFICO LINEAL
         self.nombres_lineal = [1,2,3,4,5,6,7]
-        # colores_lineal = ['blue', 'red', 'red', 'red', 'black']
-        self.tamano_lineal = ['0%', '20%', '40%', '20%', '80%', '20%', '120%']
-
-        fig, axs = plt.subplots(dpi=80, figsize=(3,3), sharey=True)
-
+        self.tamano_lineal = ['0%', '20%', '40%', '20%', '80%', '20%', '12%']
+        fig, self.axs_lineal = plt.subplots(dpi=80, figsize=(3,3), sharey=True)
         fig.suptitle('OEE')
+        self.axs_lineal.plot(self.nombres_lineal, self.tamano_lineal, color='m')
+        self.canvas_lineal = FigureCanvasTkAgg(fig, master=self.frame_dashboard_graficos)
+        self.canvas_lineal.get_tk_widget().grid(row=1, column=1, sticky="nsew")
+        self.canvas_lineal.draw()
 
-        axs.plot(self.nombres_lineal, self.tamano_lineal, color='m')
-
-        canvas = FigureCanvasTkAgg(fig, master=self.frame_dashboard_graficos)
-        canvas.get_tk_widget().grid(row=1, column=1, sticky="nsew")
-        canvas.draw()
-        
         # GRAFICO DE CIRCULAR
 
         self.nombres_circular = ['','','','','']
@@ -288,16 +288,14 @@ class View(object):
         self.tamano_circular = [20, 26, 30, 70, 10]
         self.explotar_circular = [0.01, 0.01, 0.01, 0.01, 0.01]
 
-        fig, axs = plt.subplots(dpi=100, figsize=(3,3), sharey=True)
+        fig, self.axs_circular = plt.subplots(dpi=100, figsize=(3,3), sharey=True)
 
-        # fig.suptitle('OEE')
+        self.axs_circular.pie(self.tamano_circular, explode=self.explotar_circular, labels=self.nombres_circular ,colors=self.colores_circular, autopct='%1.1f%%', pctdistance=0.6, shadow=False, startangle=90, radius=0.7, labeldistance=0.3)
+        self.axs_circular.axis('equal')
 
-        axs.pie(self.tamano_circular, explode=self.explotar_circular, labels=self.nombres_circular ,colors=self.colores_circular, autopct='%1.1f%%', pctdistance=0.6, shadow=False, startangle=90, radius=0.7, labeldistance=0.3)
-        axs.axis('equal')
-
-        canvas = FigureCanvasTkAgg(fig, master=self.frame_dashboard_graficos)
-        canvas.get_tk_widget().grid(row=2, column=1, sticky="nsew")
-        canvas.draw()
+        self.canvas_circular = FigureCanvasTkAgg(fig, master=self.frame_dashboard_graficos)
+        self.canvas_circular.get_tk_widget().grid(row=2, column=1, sticky="nsew")
+        self.canvas_circular.draw()
 
         #FRAME LEYENDA
         self.frame_dashboard_graficos_leyenda = Frame(self.frame_dashboard_graficos, padx=0, pady=0, bg="white")
@@ -360,8 +358,13 @@ class View(object):
         if self.nombre_operario == 'CON DNI':
             if len(password) > 0:
                 usuario_con_dni = self.controller.crear_usuario_by_dni(password)
+                print('666666666666666666666')
+                print(usuario_con_dni)
+                print('666666666666666666666')
                 if usuario_con_dni:
+                    self.user = usuario_con_dni
                     self.hide_label_error()
+                    self.controller.create_session(self.user[0])
                     self.habilitar_btn_start()
                     self.input_dni.config(state=DISABLED)
                     self.combo_operario.config(state=DISABLED)
@@ -373,6 +376,8 @@ class View(object):
             self.user = self.controller.login(nombre,password)
             if self.user != False:
                 self.hide_label_error()
+                self.controller.create_session(self.user[0])
+
                 self.habilitar_btn_start()
                 self.input_dni.config(state=DISABLED)
                 self.combo_operario.config(state=DISABLED)
@@ -415,6 +420,7 @@ class View(object):
         self.btn_rojo.config(state=NORMAL)
         self.btn_amarillo.config(state=NORMAL)
         self.btn_morado.config(state=NORMAL)
+        self.click_btn_start = True
         self.btn_stop.grid(row=1, column=1, columnspan=4, padx=50, pady=50, sticky="nsew")
 
         self.refrescar_tiempo_transcurrido()
@@ -525,7 +531,7 @@ class View(object):
         self.label_contador.config(text=nueva_hora)
         
         tarea = self.raiz.after(500, self.refrescar_tiempo_transcurrido)
-        if self.click_btn_stop == 2 :
+        if self.click_btn_stop == True :
             self.raiz.after_cancel(tarea)
             self.label_contador.config(text="00:00:00")
             self.contador_verde = 0
@@ -544,7 +550,8 @@ class View(object):
             self.aux_contador_rojo = ''
             self.aux_contador_amarillo = ''
             self.aux_contador_morado = ''
-            self.click_btn_stop = 1
+            self.click_btn_stop = False
+            self.click_btn_start = False
             self.btn_stop.grid_forget()
             self.btn_start.grid(row=1, column=1, columnspan=4, padx=50, pady=50, sticky="nsew")
             self.frame_cronometro.config(bg='#00b248')
@@ -562,10 +569,12 @@ class View(object):
         self.label_contador.config(bg='#00b248')
 
         self.indicador_color_btn = verde
-        self.click_btn_verde = self.click_btn_verde + 1
-        # if  self.click_btn_verde > 1:
-        self.inicio_verde = datetime.now()
-        self.aux_contador_verde = self.contador_verde
+
+        if(self.click_btn_start):
+            self.click_btn_verde = self.click_btn_verde + 1
+            # if  self.click_btn_verde > 1:
+            self.inicio_verde = datetime.now()
+            self.aux_contador_verde = self.contador_verde
     
     def open_azul(self, azul):
 
@@ -576,12 +585,14 @@ class View(object):
         print('start_timer -> ' + azul)
         self.frame_cronometro.config(bg='#0052b2')
         self.label_contador.config(bg='#0052b2')
-
+        
         self.indicador_color_btn = azul
-        self.click_btn_azul = self.click_btn_azul + 1
-        if  self.click_btn_azul > 2:
-            self.inicio_azul = datetime.now()
-            self.aux_contador_azul = self.contador_azul
+
+        if(self.click_btn_start):
+            self.click_btn_azul = self.click_btn_azul + 1
+            if  self.click_btn_azul > 2:
+                self.inicio_azul = datetime.now()
+                self.aux_contador_azul = self.contador_azul
     
     def open_rojo(self, rojo):
 
@@ -594,10 +605,11 @@ class View(object):
         self.label_contador.config(bg='#ff0905')
 
         self.indicador_color_btn = rojo
-        self.click_btn_rojo = self.click_btn_rojo + 1
-        if  self.click_btn_rojo > 2:
-            self.inicio_rojo = datetime.now()
-            self.aux_contador_rojo = self.contador_rojo
+        if(self.click_btn_start):
+            self.click_btn_rojo = self.click_btn_rojo + 1
+            if  self.click_btn_rojo > 2:
+                self.inicio_rojo = datetime.now()
+                self.aux_contador_rojo = self.contador_rojo
     
     def open_amarillo(self, amarillo):
 
@@ -610,10 +622,12 @@ class View(object):
         self.label_contador.config(bg='#ffca0a')
 
         self.indicador_color_btn = amarillo
-        self.click_btn_amarillo = self.click_btn_amarillo + 1
-        if  self.click_btn_amarillo > 2:
-            self.inicio_amarillo = datetime.now()
-            self.aux_contador_amarillo = self.contador_amarillo
+
+        if(self.click_btn_start):
+            self.click_btn_amarillo = self.click_btn_amarillo + 1
+            if  self.click_btn_amarillo > 2:
+                self.inicio_amarillo = datetime.now()
+                self.aux_contador_amarillo = self.contador_amarillo
 
     def open_morado(self, morado):
         #open dashboard
@@ -625,12 +639,91 @@ class View(object):
         self.label_contador.config(bg='#7b00cb')
 
         self.indicador_color_btn = morado
-        self.click_btn_morado = self.click_btn_morado + 1
-        if  self.click_btn_morado > 2:
-            self.inicio_morado = datetime.now()
-            self.aux_contador_morado = self.contador_morado
+
+        if(self.click_btn_start):
+            self.click_btn_morado = self.click_btn_morado + 1
+            if  self.click_btn_morado > 2:
+                self.inicio_morado = datetime.now()
+                self.aux_contador_morado = self.contador_morado
 
     def stop(self):
         print('stop_timer')
-        self.click_btn_stop = 2
+        print('????????????????????????????????')
+        print(self.user)
+        print(self.user[0])
+        print('????????????????????????????????')
+        # ahora_verde = datetime.strptime(0, '%H:%M:%S')
+        # ahora2_verde = datetime.strptime(self.contador_verde, '%H:%M:%S')
+        if self.contador_verde != 0:
+            segundos_transcurridos_verde = (datetime.strptime(self.contador_verde, '%H:%M:%S') - datetime.strptime('00:00:00', '%H:%M:%S')).total_seconds()
+        else:
+            segundos_transcurridos_verde = 0
+        
+        if self.contador_azul != 0:
+            segundos_transcurridos_azul = (datetime.strptime(self.contador_azul, '%H:%M:%S') - datetime.strptime('00:00:00', '%H:%M:%S')).total_seconds()
+        else:
+            segundos_transcurridos_azul = 0
+
+        if self.contador_rojo != 0:
+            segundos_transcurridos_rojo = (datetime.strptime(self.contador_rojo, '%H:%M:%S') - datetime.strptime('00:00:00', '%H:%M:%S')).total_seconds()
+        else:
+            segundos_transcurridos_rojo = 0
+        
+        if self.contador_morado != 0:
+            segundos_transcurridos_morado = (datetime.strptime(self.contador_morado, '%H:%M:%S') - datetime.strptime('00:00:00', '%H:%M:%S')).total_seconds()
+        else:
+            segundos_transcurridos_morado = 0
+
+        if self.contador_amarillo != 0:
+            segundos_transcurridos_amarillo = (datetime.strptime(self.contador_amarillo, '%H:%M:%S') - datetime.strptime('00:00:00', '%H:%M:%S')).total_seconds()
+        else:
+            segundos_transcurridos_amarillo = 0
+
+        data = {
+            'verde': int(segundos_transcurridos_verde),
+            'azul': int(segundos_transcurridos_azul),
+            'rojo': int(segundos_transcurridos_amarillo),
+            'amarillo': int(segundos_transcurridos_rojo),
+            'morado': int(segundos_transcurridos_morado),
+            'produccion_real' : 11,
+            'piezas_malas' : 11
+        }
+
+        print(data)
+        response =  self.controller.crear_actividad_user(self.user[0], self.maquina_id, data)
+        if response:
+            self.click_btn_stop = True
+        else :
+            print('Error al guardar la actividad de usuario')
         # self.raiz.after_(self.refrescar_tiempo_transcurrido)
+
+    def open_oee(self):
+        print('open_oee')
+        self.tamano_lineal = ['0%', '20%', '40%', '20%', '80%', '20%', '120%']
+        print(self.tamano_lineal)
+        # print('semana pasada: ',semana_anterior)
+
+        # self.controller.get_actividad_user_siete_ultimos_dias(self.maquina_id)
+
+    def open_disponibilidad_maquina(self):
+        print('open_disponibilidad_maquina')
+
+    def open_disponibilidad_materiales(self):
+        print('open_disponibilidad_materiales')
+
+    def open_disponibilidad_materiales(self):
+        print('open_disponibilidad_materiales')
+
+    def open_rendimiento(self):
+        self.axs_lineal.clear()
+        self.tamano_lineal = self.controller.dashboard_rendimiento(self.maquina_id)
+        print(self.tamano_lineal)
+        self.axs_lineal.plot(self.nombres_lineal,self.tamano_lineal, color='m')
+        self.canvas_lineal.draw()
+        print('open_rendimiento')
+
+    def open_calidad(self):
+        self.tamano_lineal = ['20%', '20%', '20%', '20%', '20%', '20%', '20%']
+        print('open_calidad')
+        print(self.tamano_lineal)
+
