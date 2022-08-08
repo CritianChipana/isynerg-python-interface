@@ -698,17 +698,27 @@ class View(object):
         # self.raiz.after_(self.refrescar_tiempo_transcurrido)
 
     def open_oee(self):
-        print('open_oee')
-        self.tamano_lineal = ['0%', '20%', '40%', '20%', '80%', '20%', '120%']
+        self.axs_lineal.clear()
+        self.tamano_lineal = self.controller.dashboard_capacidad_oee(self.maquina_id)
         print(self.tamano_lineal)
+        self.axs_lineal.plot(self.nombres_lineal,self.tamano_lineal, color='m')
+        self.canvas_lineal.draw()
+        print('oee')
         # print('semana pasada: ',semana_anterior)
 
         # self.controller.get_actividad_user_siete_ultimos_dias(self.maquina_id)
 
     def open_disponibilidad_maquina(self):
+        self.axs_lineal.clear()
+        self.tamano_lineal = self.controller.dashboard_capacidad_disponibilidad(self.maquina_id)
+        print(self.tamano_lineal)
+        self.axs_lineal.plot(self.nombres_lineal,self.tamano_lineal, color='m')
+        self.canvas_lineal.draw()
+        print('open_rendimiento')
         print('open_disponibilidad_maquina')
 
     def open_disponibilidad_materiales(self):
+        self.canvas_lineal.draw()
         print('open_disponibilidad_materiales')
 
     def open_disponibilidad_materiales(self):

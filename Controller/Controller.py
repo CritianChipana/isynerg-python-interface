@@ -4,7 +4,8 @@ from datetime import datetime
 
 class Controller:
 
-    prodcuccion_teorica = 14400
+    produccion_teorica = 14400
+    minutos_totales_por_dia = 1440
 
     def __init__(selft):
         selft.model = Model()
@@ -71,7 +72,6 @@ class Controller:
 
     def get_actividad_user_siete_ultimos_dias(self, maquina_id):
         lista_actividades = []
-        lista_actividades_auxiliar = []
         try:
             actividades = self.model.get_actividad_user_siete_ultimos_dias(maquina_id)
             if actividades:
@@ -122,6 +122,14 @@ class Controller:
                 # # rojo : 5
                 # # producto_Real = 6
                 # #piezas_malas = 7
+
+                #PASAR DE SEGUNDOS A MINUTOS
+                for i in range(len(lista_final)):
+                    lista_final[i][2] = self.segundos_a_minutos(lista_final[i][2])
+                    lista_final[i][3] = self.segundos_a_minutos(lista_final[i][3])
+                    lista_final[i][4] = self.segundos_a_minutos(lista_final[i][4])
+                    lista_final[i][5] = self.segundos_a_minutos(lista_final[i][5])
+
                 return lista_final
             else:
                 return False
@@ -143,16 +151,14 @@ class Controller:
         # print(lista_actividades)
 
         for i in range(len(lista_actividades)):
-            lista_para_bashboard.append(round((lista_actividades[i][6]/self.prodcuccion_teorica)*100))
+            lista_para_bashboard.append(round((lista_actividades[i][6]/self.produccion_teorica)*100))
 
         for i in range( 7 - len(lista_para_bashboard)):
             lista_para_bashboard.append(0)
         # print('rendimiento')
         print(lista_para_bashboard)
-        a = lista_para_bashboard[::-1]
-        print(a)
-        print('rendimiento')
-        return a
+        lista_para_bashboard_inverso = lista_para_bashboard[::-1]
+        return lista_para_bashboard_inverso
 
     def dashboard_calidad(self, maquina_id):
         # # LO QUE SE QUIERE RETORNAR
@@ -178,8 +184,9 @@ class Controller:
         lista_actividades = self.get_actividad_user_siete_ultimos_dias(maquina_id)
 
         for i in range(len(lista_actividades)):
+            total_colores = lista_actividades[i][2] + lista_actividades[i][3] + lista_actividades[i][4] + lista_actividades[i][5]
             total = lista_actividades[i][2] + lista_actividades[i][3] + lista_actividades[i][4] + lista_actividades[i][5] + lista_actividades[i][6] + lista_actividades[i][7]
-            lista_para_bashboard.append(round(((lista_actividades[i][6]/(lista_actividades[i][6] + lista_actividades[i][7]))*100)))
+            lista_para_bashboard.append(round(((1440 - total_colores)/(total))*100))
 
         for i in range( 7 - len(lista_para_bashboard)):
             lista_para_bashboard.append(0)
@@ -187,37 +194,55 @@ class Controller:
         lista_para_bashboard_reverse = lista_para_bashboard[::-1]
         return lista_para_bashboard_reverse
 
-def dashboard_capacidad_disponibilidad(self, maquina_id):
-        # # LO QUE SE QUIERE RETORNAR
-        # # ['0%', '20%', '40%', '20%', '80%', '20%', '120%']
+    def dashboard_capacidad_disponibilidad(self, maquina_id):
+            # # LO QUE SE QUIERE RETORNAR
+            # # ['0%', '20%', '40%', '20%', '80%', '20%', '120%']
 
-        print('calidad')
-        lista_para_bashboard = []
-        lista_actividades = self.get_actividad_user_siete_ultimos_dias(maquina_id)
+            print('disponibilidad')
+            lista_para_bashboard = []
+            lista_actividades = self.get_actividad_user_siete_ultimos_dias(maquina_id)
 
-        for i in range(len(lista_actividades)):
-            lista_para_bashboard.append(round(((lista_actividades[i][6]/(lista_actividades[i][6] + lista_actividades[i][7]))*100)))
+            for i in range(len(lista_actividades)):
+                total_colores = lista_actividades[i][2] + lista_actividades[i][3] + lista_actividades[i][4] + lista_actividades[i][5]
+                total = lista_actividades[i][2] + lista_actividades[i][3] + lista_actividades[i][4] + lista_actividades[i][5] + lista_actividades[i][6] + lista_actividades[i][7]
+                
+                lista_para_bashboard.append(round(((lista_actividades[i][2])/(total - (1440 - total_colores)))*100))
+                print(7777777777777777777777)
+                print((lista_actividades[i][2]))
+                print((total - (1440 - total_colores)))
+                print(7777777777777777777777)
 
-        for i in range( 7 - len(lista_para_bashboard)):
-            lista_para_bashboard.append(0)
+            print('aaaaaaaaaaaaaaaaaaaaaaaa')
+            print(lista_para_bashboard)
 
-        lista_para_bashboard_reverse = lista_para_bashboard[::-1]
-        return lista_para_bashboard_reverse
+            for i in range( 7 - len(lista_para_bashboard)):
+                lista_para_bashboard.append(0)
 
-def dashboard_capacidad_oee(self, maquina_id):
-        # # LO QUE SE QUIERE RETORNAR
-        # # ['0%', '20%', '40%', '20%', '80%', '20%', '120%']
+            lista_para_bashboard_reverse = lista_para_bashboard[::-1]
+            return lista_para_bashboard_reverse
 
-        print('calidad')
-        lista_para_bashboard = []
-        lista_actividades = self.get_actividad_user_siete_ultimos_dias(maquina_id)
+    def dashboard_capacidad_oee(self, maquina_id):
+            # # LO QUE SE QUIERE RETORNAR
+            # # ['0%', '20%', '40%', '20%', '80%', '20%', '120%']
+            disponibilidad = self.dashboard_capacidad_disponibilidad(maquina_id)
+            rendimiento = self.dashboard_rendimiento(maquina_id)
+            calidad = self.dashboard_calidad(maquina_id)
+            print('ttttttttttttttttt')
+            print(disponibilidad)
+            print(rendimiento)
+            print(calidad)
+            print('ttttttttttttttttt')
 
-        for i in range(len(lista_actividades)):
-            lista_para_bashboard.append(round(((lista_actividades[i][6]/(lista_actividades[i][6] + lista_actividades[i][7]))*100)))
+            print('oee')
+            lista_para_bashboard = []
 
-        for i in range( 7 - len(lista_para_bashboard)):
-            lista_para_bashboard.append(0)
+            for i in range(len(rendimiento)):
+                lista_para_bashboard.append(round((disponibilidad[i]*rendimiento[i]*calidad[i]*100)))
+                print('ttttttttttttttttt')
+                print(disponibilidad[i])
+                print(rendimiento[i])
+                print(calidad[i])
 
-        lista_para_bashboard_reverse = lista_para_bashboard[::-1]
-        return lista_para_bashboard_reverse
+
+            return lista_para_bashboard
 
