@@ -4,7 +4,6 @@ import os
 import time
 import datetime
 from datetime import datetime, date
-from turtle import color
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
@@ -15,6 +14,11 @@ from Model.Model import Model
 class View(object):
 
     contador_numeros_dni = 0
+    contador_productos_producidos = 0
+    contador_piezas_malas = 0
+
+    click_siguiente = True
+
     arreglo_usuarios = []
     user = ()
     maquina_id = 1
@@ -177,6 +181,7 @@ class View(object):
 
         self.interface_contador()
         self.interface_dashboard()
+        self.interface_formulario()
 
         self.frame_padre.mainloop()
 
@@ -331,6 +336,46 @@ class View(object):
         self.label_letra_leyenda_morado = Label(self.frame_dashboard_graficos_leyenda, text="Parada RR", padx=5, pady=5, font=("Arial", 6, "bold"),  bg="white")
         self.label_letra_leyenda_morado.grid(row=1, column=10, padx=5, pady=5, sticky="nsew")
 
+    def interface_formulario(self):
+        self.frame_formulario = Frame(self.frame_padre, padx=0, pady=0, bg="white")
+        # self.frame_formulario.grid(row=1, column=1, padx=10, pady=9, sticky="nsew")
+
+        self.label_formulario_produccion_real = Label(self.frame_formulario, text="Pruduccion real", padx=5, pady=5, font=("Arial", 12, "bold"),  bg="white")
+        self.label_formulario_produccion_real.grid(row=1, column=1, columnspan=3, padx=5, pady=5, sticky="nsew")
+
+        self.input_produccion_real = Entry(self.frame_formulario, width=10, font=("Arial", 10, "bold"))
+        self.input_produccion_real.grid(row=2, column=1, columnspan=3, padx=5, pady=5, sticky="nsew")
+
+        self.label_formulario_piezas_malas = Label(self.frame_formulario, text="Piezas Malas", padx=5, pady=5, font=("Arial", 10, "bold"),  bg="white")
+        # self.label_formulario_piezas_malas.grid(row=3, column=1, columnspan=3, padx=5, pady=5, sticky="nsew")
+
+        self.input_piezas_malas = Entry(self.frame_formulario, width=10, font=("Arial", 10, "bold"))
+        # self.input_piezas_malas.grid(row=4, column=1, columnspan=3, padx=5, pady=5, sticky="nsew")
+
+        btn_uno = Button(self.frame_formulario, text="7", command=lambda:self.escribir_numeros_produccion_total(7), padx=23, pady=1, font=("Arial", 12))
+        btn_uno.grid(row=5, column=1, padx=5, pady=5, sticky="nsew")
+        btn_dos = Button(self.frame_formulario, text="8", command=lambda:self.escribir_numeros_produccion_total(8),padx=23, pady=1, font=("Arial", 12))
+        btn_dos.grid(row=5, column=2, padx=5, pady=5, sticky="nsew")
+        btn_tres = Button(self.frame_formulario, text="9", command=lambda:self.escribir_numeros_produccion_total(9), padx=23, pady=1, font=("Arial", 12))
+        btn_tres.grid(row=5, column=3, padx=5, pady=5, sticky="nsew")
+        btn_cuatro = Button(self.frame_formulario, text="4", command=lambda:self.escribir_numeros_produccion_total(4), padx=23, pady=1, font=("Arial", 12))
+        btn_cuatro.grid(row=6, column=1, padx=5, pady=5, sticky="nsew")
+        btn_cinco = Button(self.frame_formulario, text="5", command=lambda:self.escribir_numeros_produccion_total(5), padx=23, pady=1, font=("Arial", 12))
+        btn_cinco.grid(row=6, column=2, padx=5, pady=5, sticky="nsew")
+        btn_seis = Button(self.frame_formulario, text="6", command=lambda:self.escribir_numeros_produccion_total(6), padx=23, pady=1, font=("Arial", 12))
+        btn_seis.grid(row=6, column=3, padx=5, pady=5, sticky="nsew")
+        btn_siete = Button(self.frame_formulario, text="1", command=lambda:self.escribir_numeros_produccion_total(1), padx=23, pady=1, font=("Arial", 12))
+        btn_siete.grid(row=7, column=1, padx=5, pady=5, sticky="nsew")
+        btn_ocho = Button(self.frame_formulario, text="2", command=lambda:self.escribir_numeros_produccion_total(2), padx=23, pady=1, font=("Arial", 12))
+        btn_ocho.grid(row=7, column=2, padx=5, pady=5, sticky="nsew")
+        btn_nueve = Button(self.frame_formulario, text="3", command=lambda:self.escribir_numeros_produccion_total(3), padx=23, pady=1, font=("Arial", 12))
+        btn_nueve.grid(row=7, column=3, padx=5, pady=5, sticky="nsew")
+        btn_cero = Button(self.frame_formulario, text="0", command=lambda:self.escribir_numeros_produccion_total(0), padx=23, pady=1, font=("Arial", 12))
+        btn_cero.grid(row=8, column=1, padx=5, pady=5, sticky="nsew")
+        btn_punto = Button(self.frame_formulario, text="←", command=lambda:self.borrar_numero_produccion_real(), padx=20, pady=1, font=("Arial", 12, "bold"))
+        btn_punto.grid(row=8, column=2, padx=5, pady=5, sticky="nsew")
+        btn_igual = Button(self.frame_formulario, text="next", command=lambda:self.change_input_produccion_a_piezas(), padx=20, pady=1, font=("Arial", 12, "bold"), fg="white", bg="#097eeb")
+        btn_igual.grid(row=8, column=3, padx=5, pady=5, sticky="nsew")
 
 ############################################################### INTERFECE ############################################################################
 
@@ -343,6 +388,50 @@ class View(object):
         if len(tiene_numero) > 0:
             self.input_dni.delete(len(tiene_numero)-1, END)
             self.contador_numeros_dni = self.contador_numeros_dni - 1
+    
+    def escribir_numeros_produccion_total(self, numero):
+        if self.click_siguiente:
+            self.contador_productos_producidos = self.contador_productos_producidos + 1
+            self.input_produccion_real.insert(self.contador_productos_producidos, numero)
+        else: 
+            self.contador_piezas_malas = self.contador_piezas_malas + 1
+            self.input_piezas_malas.insert(self.contador_piezas_malas, numero)
+
+    def borrar_numero_produccion_real(self):
+        if self.click_siguiente:
+            tiene_numero = self.input_produccion_real.get()
+            if len(tiene_numero) > 0:
+                self.input_produccion_real.delete(len(tiene_numero)-1, END)
+                self.contador_productos_producidos = self.contador_productos_producidos - 1
+        else:
+            tiene_numero = self.input_piezas_malas.get()
+            if len(tiene_numero) > 0:
+                self.input_piezas_malas.delete(len(tiene_numero)-1, END)
+                self.contador_piezas_malas = self.contador_piezas_malas - 1
+    
+    
+    def change_input_produccion_a_piezas(self):
+        if len(self.input_produccion_real.get()) > 0:
+            self.click_siguiente = False
+            self.label_formulario_produccion_real.grid_forget()
+            self.input_produccion_real.grid_forget()
+            
+            self.label_formulario_piezas_malas.grid(row=3, column=1, columnspan=3, padx=5, pady=5, sticky="nsew")
+            self.input_piezas_malas.grid(row=4, column=1, columnspan=3, padx=5, pady=5, sticky="nsew")
+
+            if len(self.input_piezas_malas.get()) > 0:
+                print('guardar actividad')
+
+
+    # def escribir_numeros_piezas_malas(self, numero):
+    #     self.contador_numeros_dni = self.contador_numeros_dni + 1
+    #     self.input_dni.insert(self.contador_numeros_dni, numero)
+
+    # def borrar_numero_piezas_malas(self):
+    #     tiene_numero = self.input_dni.get()
+    #     if len(tiene_numero) > 0:
+    #         self.input_dni.delete(len(tiene_numero)-1, END)
+    #         self.contador_numeros_dni = self.contador_numeros_dni - 1
 
     def get_usuarios(self):
         print('get_usuarios')
@@ -381,6 +470,14 @@ class View(object):
                 self.habilitar_btn_start()
                 self.input_dni.config(state=DISABLED)
                 self.combo_operario.config(state=DISABLED)
+
+                #MOSTRAR EK DASHBOARD
+                self.frame_login.grid_forget()
+                self.frame_dashboard.grid(row=1, column=1, sticky="nsew")
+                print('start_timer -> ' + 'verde')
+                self.frame_cronometro.config(bg='#0052b2')
+                self.label_contador.config(bg='#0052b2')
+                self.indicador_color_btn = 'verde'
                 # self.controller.set_user(self.user)
                 # self.controller.show_frame("Menu")
                 print('login')
@@ -560,9 +657,11 @@ class View(object):
 
     def open_verde(self, verde):
 
+        self.refrescar_tiempo_transcurrido()
+
         #OPEN LOGIN
-        self.frame_dashboard.grid_forget()
-        self.frame_login.grid(row=1, column=1, sticky="nsew")
+        # self.frame_dashboard.grid_forget()
+        # self.frame_login.grid(row=1, column=1, sticky="nsew")
 
         print('start_timer -> ' + verde)
         self.frame_cronometro.config(bg='#00b248')
