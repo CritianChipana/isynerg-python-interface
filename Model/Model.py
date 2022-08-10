@@ -91,11 +91,16 @@ class Model:
             print(e)
             return False
 
+    # SELECT * FROM actividades_usuario WHERE maquina_id = 1 AND created_at > (CURDATE() - INTERVAL 6 DAY) ORDER BY `created_at` ASC
+
     def get_actividad_user_siete_ultimos_dias(self, maquina_id):
-        sql = "SELECT * FROM actividades_usuario WHERE maquina_id = {} AND created_at > (CURDATE() - INTERVAL 7 DAY)".format(maquina_id)
+        sql = "SELECT * FROM actividades_usuario WHERE maquina_id = {} AND created_at > (CURDATE() - INTERVAL 6 DAY) ORDER BY `created_at` ASC".format(maquina_id)
         try:
             self.cursor.execute(sql)
             actividad = self.cursor.fetchall()
+            print('mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm')
+            print(actividad)
+            print('mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm')
             return actividad
         except Exception as e:
             print(e)

@@ -279,7 +279,9 @@ class View(object):
 
         # GRAFICO LINEAL
         self.nombres_lineal = [1,2,3,4,5,6,7]
-        self.tamano_lineal = ['0%', '20%', '40%', '20%', '80%', '20%', '12%']
+        # traer valores para el grafico lineal
+        # self.tamano_lineal = ['0%', '20%', '40%', '20%', '80%', '20%', '12%']
+        self.tamano_lineal = self.controller.dashboard_capacidad_oee(self.maquina_id)
         fig, self.axs_lineal = plt.subplots(dpi=80, figsize=(3,3), sharey=True)
         fig.suptitle('OEE')
         self.axs_lineal.plot(self.nombres_lineal, self.tamano_lineal, color='m')
@@ -290,9 +292,12 @@ class View(object):
         # GRAFICO DE CIRCULAR
 
         self.nombres_circular = ['','','','','']
-        # nombres = ['Q Utilizada','Q Ociosa','Paradas Mtto','Parades LOG','Paradas rr']
+        # verde, azul, rojo, amarillo, morado
         self.colores_circular = ['#00b248', '#0052b2', '#ff0905', '#ffca0a', '#7b00cb']
-        self.tamano_circular = [20, 26, 30, 70, 10]
+        # traer datos del pie
+        # self.tamano_circular = [5, 10, 20, 30, 35]
+        self.tamano_circular = self.controller.dashboard_pie(self.maquina_id)
+
         self.explotar_circular = [0.01, 0.01, 0.01, 0.01, 0.01]
 
         fig, self.axs_circular = plt.subplots(dpi=100, figsize=(3,3), sharey=True)
@@ -886,45 +891,91 @@ class View(object):
 
 
     def open_oee(self):
+        # grafica lineal
         self.axs_lineal.clear()
         self.tamano_lineal = self.controller.dashboard_capacidad_oee(self.maquina_id)
         print(self.tamano_lineal)
         self.axs_lineal.plot(self.nombres_lineal,self.tamano_lineal, color='m')
         self.canvas_lineal.draw()
+
+        # grafica circular
+        self.axs_circular.clear()
+        self.tamano_circular = self.controller.dashboard_pie(self.maquina_id)
+        print(self.tamano_circular)
+        self.axs_circular.pie(self.tamano_circular, explode=self.explotar_circular, labels=self.nombres_circular ,colors=self.colores_circular, autopct='%1.1f%%', pctdistance=0.6, shadow=False, startangle=90, radius=0.7, labeldistance=0.3)
+        self.canvas_circular.draw()
+
         print('oee')
         # print('semana pasada: ',semana_anterior)
 
         # self.controller.get_actividad_user_siete_ultimos_dias(self.maquina_id)
 
     def open_disponibilidad_maquina(self):
+        # grafico lineal
         self.axs_lineal.clear()
         self.tamano_lineal = self.controller.dashboard_capacidad_disponibilidad(self.maquina_id)
         print(self.tamano_lineal)
         self.axs_lineal.plot(self.nombres_lineal,self.tamano_lineal, color='m')
         self.canvas_lineal.draw()
-        print('open_rendimiento')
+
+        # grafica circular
+        self.axs_circular.clear()
+        self.tamano_circular = self.controller.dashboard_pie(self.maquina_id)
+        print(self.tamano_circular)
+        self.axs_circular.pie(self.tamano_circular, explode=self.explotar_circular, labels=self.nombres_circular ,colors=self.colores_circular, autopct='%1.1f%%', pctdistance=0.6, shadow=False, startangle=90, radius=0.7, labeldistance=0.3)
+        self.canvas_circular.draw()
         print('open_disponibilidad_maquina')
 
     def open_disponibilidad_materiales(self):
         self.canvas_lineal.draw()
+
+        # grafica circular
+        self.axs_circular.clear()
+        self.tamano_circular = self.controller.dashboard_pie(self.maquina_id)
+        print(self.tamano_circular)
+        self.axs_circular.pie(self.tamano_circular, explode=self.explotar_circular, labels=self.nombres_circular ,colors=self.colores_circular, autopct='%1.1f%%', pctdistance=0.6, shadow=False, startangle=90, radius=0.7, labeldistance=0.3)
+        self.canvas_circular.draw()
         print('open_disponibilidad_materiales')
 
     def open_disponibilidad_materiales(self):
+        
+        # grafica circular
+        self.axs_circular.clear()
+        self.tamano_circular = self.controller.dashboard_pie(self.maquina_id)
+        print(self.tamano_circular)
+        self.axs_circular.pie(self.tamano_circular, explode=self.explotar_circular, labels=self.nombres_circular ,colors=self.colores_circular, autopct='%1.1f%%', pctdistance=0.6, shadow=False, startangle=90, radius=0.7, labeldistance=0.3)
+        self.canvas_circular.draw()
         print('open_disponibilidad_materiales')
 
     def open_rendimiento(self):
+        # grafico lineal
         self.axs_lineal.clear()
         self.tamano_lineal = self.controller.dashboard_rendimiento(self.maquina_id)
         print(self.tamano_lineal)
         self.axs_lineal.plot(self.nombres_lineal,self.tamano_lineal, color='m')
         self.canvas_lineal.draw()
+
+        # grafica circular
+        self.axs_circular.clear()
+        self.tamano_circular = self.controller.dashboard_pie(self.maquina_id)
+        print(self.tamano_circular)
+        self.axs_circular.pie(self.tamano_circular, explode=self.explotar_circular, labels=self.nombres_circular ,colors=self.colores_circular, autopct='%1.1f%%', pctdistance=0.6, shadow=False, startangle=90, radius=0.7, labeldistance=0.3)
+        self.canvas_circular.draw() 
         print('open_rendimiento')
 
     def open_calidad(self):
+        # grafico lineal
         self.axs_lineal.clear()
         self.tamano_lineal = self.controller.dashboard_calidad(self.maquina_id)
         print(self.tamano_lineal)
         self.axs_lineal.plot(self.nombres_lineal,self.tamano_lineal, color='m')
         self.canvas_lineal.draw()
+
+        # grafica circular
+        self.axs_circular.clear()
+        self.tamano_circular = self.controller.dashboard_pie(self.maquina_id)
+        print(self.tamano_circular)
+        self.axs_circular.pie(self.tamano_circular, explode=self.explotar_circular, labels=self.nombres_circular ,colors=self.colores_circular, autopct='%1.1f%%', pctdistance=0.6, shadow=False, startangle=90, radius=0.7, labeldistance=0.3)
+        self.canvas_circular.draw()
         print('open calidad')
 
