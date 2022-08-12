@@ -180,7 +180,9 @@ class Controller:
         print('disponibilidad')
         lista_para_bashboard = []
         lista_actividades = self.get_actividad_user_siete_ultimos_dias(maquina_id)
-
+        print('lista de actividad controller')
+        print(lista_actividades)
+        print('lista de actividad controller')
         for i in range(len(lista_actividades)):
             total_colores = lista_actividades[i][2] + lista_actividades[i][3] + lista_actividades[i][4] + lista_actividades[i][5]
             total = lista_actividades[i][2] + lista_actividades[i][3] + lista_actividades[i][4] + lista_actividades[i][5] + lista_actividades[i][6] + lista_actividades[i][7]
