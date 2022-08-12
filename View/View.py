@@ -102,7 +102,7 @@ class View(object):
         self.frame_login.columnconfigure(1, weight=1)
         self.frame_login.rowconfigure(2, weight=1)
 
-        frame_session = Frame(self.frame_login, padx=20, pady=20, bg="white")
+        frame_session = Frame(self.frame_login, padx=5, pady=20, bg="white")
         frame_session.grid(row=1, column=1, sticky="nsew")
 
         frame_session.rowconfigure(1, weight=1)
@@ -123,18 +123,18 @@ class View(object):
 
 
         #input NOMBRE
-        label_operador = Label(frame_session, text="Nombre:", font=("Arial", 16), bg="white")
-        label_operador.grid(row=2, column=1, padx=1, sticky="w")
-        self.combo_operario = Combobox(frame_session, width=20, font=("Arial", 16), values=self.get_usuarios(), cursor="hand2")
+        label_operador = Label(frame_session, text="Nombre:", font=("Arial", 20), bg="white")
+        label_operador.grid(row=2, column=1, padx=0, sticky="w")
+        self.combo_operario = Combobox(frame_session, width=20, font=("Arial", 22), values=self.get_usuarios(), cursor="hand2")
         self.combo_operario.bind("<<ComboboxSelected>>", self.selection_changed)
-        self.combo_operario.grid(row=2, column=2, sticky="we", ipadx=10, ipady=5)
+        self.combo_operario.grid(row=2, column=2, sticky="we", ipadx=0, ipady=5)
 
         # #INPUT CONTRASEÑA
-        self.label_dni = Label(frame_session, text="Contraseña:", font=("Arial", 16), bg="white")
-        self.label_dni.grid(row=3, column=1, sticky="w")
+        self.label_dni = Label(frame_session, text="Contraseña:", font=("Arial", 20), bg="white")
+        self.label_dni.grid(row=3, column=1, padx=0, sticky="w")
         
-        self.input_dni = Entry(frame_session, show="*", width=20, font=("Arial", 16), borderwidth=1, relief="solid")
-        self.input_dni.grid(row=3, column=2, sticky="we", ipadx=10, ipady=5)
+        self.input_dni = Entry(frame_session, show="*", width=20, font=("Arial", 22), borderwidth=1, relief="solid")
+        self.input_dni.grid(row=3, column=2, sticky="we", ipadx=0, ipady=5)
 
         # #INPUT PASSWORD INCORRECTO
         self.label_password_icorecto = Label(frame_session, text="", fg='red', font=("Arial", 13), bg="white")
@@ -363,16 +363,16 @@ class View(object):
         self.frame_formulario.columnconfigure(2, weight=1)
         self.frame_formulario.columnconfigure(3, weight=1)
 
-        self.label_formulario_produccion_real = Label(self.frame_formulario, text="Pruduccion real", padx=5, pady=5, font=("Arial", 12, "bold"),  bg="white")
+        self.label_formulario_produccion_real = Label(self.frame_formulario, text="Pruduccion real", padx=5, pady=5, font=("Arial", 24, "bold"),  bg="white")
         self.label_formulario_produccion_real.grid(row=1, column=1, columnspan=3, padx=5, pady=5, sticky="nsew")
 
-        self.input_produccion_real = Entry(self.frame_formulario, width=10, font=("Arial", 16, "bold"))
+        self.input_produccion_real = Entry(self.frame_formulario, width=10, font=("Arial", 24, "bold"),  borderwidth=1, relief="solid")
         self.input_produccion_real.grid(row=2, column=1, columnspan=3, padx=5, pady=5, sticky="nsew")
 
-        self.label_formulario_piezas_malas = Label(self.frame_formulario, text="Piezas Malas", padx=5, pady=5, font=("Arial", 10, "bold"),  bg="white")
+        self.label_formulario_piezas_malas = Label(self.frame_formulario, text="Piezas Malas", padx=5, pady=5, font=("Arial", 24, "bold"),  bg="white")
         # self.label_formulario_piezas_malas.grid(row=3, column=1, columnspan=3, padx=5, pady=5, sticky="nsew")
 
-        self.input_piezas_malas = Entry(self.frame_formulario, width=10, font=("Arial", 10, "bold"))
+        self.input_piezas_malas = Entry(self.frame_formulario, width=10, font=("Arial", 24, "bold"),  borderwidth=1, relief="solid")
         # self.input_piezas_malas.grid(row=4, column=1, columnspan=3, padx=5, pady=5, sticky="nsew")
 
         btn_uno = Button(self.frame_formulario, text="7", command=lambda:self.escribir_numeros_produccion_total(7), padx=23, pady=1, font=("Arial", 12))
@@ -941,16 +941,23 @@ class View(object):
         self.canvas_lineal.draw()
 
         # grafica circular
+        # self.axs_circular.clear()
+        # self.tamano_circular = self.controller.dashboard_pie(self.maquina_id)
+        # print(self.tamano_circular)
+        # self.axs_circular.pie(self.tamano_circular, explode=self.explotar_circular, labels=self.nombres_circular ,colors=self.colores_circular, autopct='%1.1f%%', pctdistance=0.6, shadow=False, startangle=90, radius=0.7, labeldistance=0.3)
+        # self.canvas_circular.draw()
         self.axs_circular.clear()
         self.tamano_circular = self.controller.dashboard_pie(self.maquina_id)
-        print(self.tamano_circular)
+        fig, self.axs_circular = plt.subplots(dpi=100, figsize=(3,3), sharey=True)
         self.axs_circular.pie(self.tamano_circular, explode=self.explotar_circular, labels=self.nombres_circular ,colors=self.colores_circular, autopct='%1.1f%%', pctdistance=0.6, shadow=False, startangle=90, radius=0.7, labeldistance=0.3)
+        self.axs_circular.axis('equal')
+
+        self.canvas_circular = FigureCanvasTkAgg(fig, master=self.frame_dashboard_graficos)
+        self.canvas_circular.get_tk_widget().grid(row=2, column=1, sticky="nsew")
         self.canvas_circular.draw()
 
         print('oee')
-        # print('semana pasada: ',semana_anterior)
 
-        # self.controller.get_actividad_user_siete_ultimos_dias(self.maquina_id)
 
     def open_disponibilidad_maquina(self):
         # grafico lineal
@@ -961,10 +968,19 @@ class View(object):
         self.canvas_lineal.draw()
 
         # grafica circular
+        # self.axs_circular.clear()
+        # self.tamano_circular = self.controller.dashboard_pie(self.maquina_id)
+        # print(self.tamano_circular)
+        # self.axs_circular.pie(self.tamano_circular, explode=self.explotar_circular, labels=self.nombres_circular ,colors=self.colores_circular, autopct='%1.1f%%', pctdistance=0.6, shadow=False, startangle=90, radius=0.7, labeldistance=0.3)
+        # self.canvas_circular.draw()
         self.axs_circular.clear()
         self.tamano_circular = self.controller.dashboard_pie(self.maquina_id)
-        print(self.tamano_circular)
+        fig, self.axs_circular = plt.subplots(dpi=100, figsize=(3,3), sharey=True)
         self.axs_circular.pie(self.tamano_circular, explode=self.explotar_circular, labels=self.nombres_circular ,colors=self.colores_circular, autopct='%1.1f%%', pctdistance=0.6, shadow=False, startangle=90, radius=0.7, labeldistance=0.3)
+        self.axs_circular.axis('equal')
+
+        self.canvas_circular = FigureCanvasTkAgg(fig, master=self.frame_dashboard_graficos)
+        self.canvas_circular.get_tk_widget().grid(row=2, column=1, sticky="nsew")
         self.canvas_circular.draw()
         print('open_disponibilidad_maquina')
 
@@ -972,20 +988,38 @@ class View(object):
         self.canvas_lineal.draw()
 
         # grafica circular
+        # self.axs_circular.clear()
+        # self.tamano_circular = self.controller.dashboard_pie(self.maquina_id)
+        # print(self.tamano_circular)
+        # self.axs_circular.pie(self.tamano_circular, explode=self.explotar_circular, labels=self.nombres_circular ,colors=self.colores_circular, autopct='%1.1f%%', pctdistance=0.6, shadow=False, startangle=90, radius=0.7, labeldistance=0.3)
+        # self.canvas_circular.draw()
         self.axs_circular.clear()
         self.tamano_circular = self.controller.dashboard_pie(self.maquina_id)
-        print(self.tamano_circular)
+        fig, self.axs_circular = plt.subplots(dpi=100, figsize=(3,3), sharey=True)
         self.axs_circular.pie(self.tamano_circular, explode=self.explotar_circular, labels=self.nombres_circular ,colors=self.colores_circular, autopct='%1.1f%%', pctdistance=0.6, shadow=False, startangle=90, radius=0.7, labeldistance=0.3)
+        self.axs_circular.axis('equal')
+
+        self.canvas_circular = FigureCanvasTkAgg(fig, master=self.frame_dashboard_graficos)
+        self.canvas_circular.get_tk_widget().grid(row=2, column=1, sticky="nsew")
         self.canvas_circular.draw()
         print('open_disponibilidad_materiales')
 
     def open_disponibilidad_materiales(self):
         
         # grafica circular
+        # self.axs_circular.clear()
+        # self.tamano_circular = self.controller.dashboard_pie(self.maquina_id)
+        # print(self.tamano_circular)
+        # self.axs_circular.pie(self.tamano_circular, explode=self.explotar_circular, labels=self.nombres_circular ,colors=self.colores_circular, autopct='%1.1f%%', pctdistance=0.6, shadow=False, startangle=90, radius=0.7, labeldistance=0.3)
+        # self.canvas_circular.draw()
         self.axs_circular.clear()
         self.tamano_circular = self.controller.dashboard_pie(self.maquina_id)
-        print(self.tamano_circular)
+        fig, self.axs_circular = plt.subplots(dpi=100, figsize=(3,3), sharey=True)
         self.axs_circular.pie(self.tamano_circular, explode=self.explotar_circular, labels=self.nombres_circular ,colors=self.colores_circular, autopct='%1.1f%%', pctdistance=0.6, shadow=False, startangle=90, radius=0.7, labeldistance=0.3)
+        self.axs_circular.axis('equal')
+
+        self.canvas_circular = FigureCanvasTkAgg(fig, master=self.frame_dashboard_graficos)
+        self.canvas_circular.get_tk_widget().grid(row=2, column=1, sticky="nsew")
         self.canvas_circular.draw()
         print('open_disponibilidad_materiales')
 
@@ -998,11 +1032,20 @@ class View(object):
         self.canvas_lineal.draw()
 
         # grafica circular
+        # self.axs_circular.clear()
+        # self.tamano_circular = self.controller.dashboard_pie(self.maquina_id)
+        # print(self.tamano_circular)
+        # self.axs_circular.pie(self.tamano_circular, explode=self.explotar_circular, labels=self.nombres_circular ,colors=self.colores_circular, autopct='%1.1f%%', pctdistance=0.6, shadow=False, startangle=90, radius=0.7, labeldistance=0.3)
+        # self.canvas_circular.draw() 
         self.axs_circular.clear()
         self.tamano_circular = self.controller.dashboard_pie(self.maquina_id)
-        print(self.tamano_circular)
+        fig, self.axs_circular = plt.subplots(dpi=100, figsize=(3,3), sharey=True)
         self.axs_circular.pie(self.tamano_circular, explode=self.explotar_circular, labels=self.nombres_circular ,colors=self.colores_circular, autopct='%1.1f%%', pctdistance=0.6, shadow=False, startangle=90, radius=0.7, labeldistance=0.3)
-        self.canvas_circular.draw() 
+        self.axs_circular.axis('equal')
+
+        self.canvas_circular = FigureCanvasTkAgg(fig, master=self.frame_dashboard_graficos)
+        self.canvas_circular.get_tk_widget().grid(row=2, column=1, sticky="nsew")
+        self.canvas_circular.draw()
         print('open_rendimiento')
 
     def open_calidad(self):
@@ -1014,10 +1057,19 @@ class View(object):
         self.canvas_lineal.draw()
 
         # grafica circular
+        # self.axs_circular.clear()
+        # self.tamano_circular = self.controller.dashboard_pie(self.maquina_id)
+        # print(self.tamano_circular)
+        # self.axs_circular.pie(self.tamano_circular, explode=self.explotar_circular, labels=self.nombres_circular ,colors=self.colores_circular, autopct='%1.1f%%', pctdistance=0.6, shadow=False, startangle=90, radius=0.7, labeldistance=0.3)
+        # self.canvas_circular.draw()
         self.axs_circular.clear()
         self.tamano_circular = self.controller.dashboard_pie(self.maquina_id)
-        print(self.tamano_circular)
+        fig, self.axs_circular = plt.subplots(dpi=100, figsize=(3,3), sharey=True)
         self.axs_circular.pie(self.tamano_circular, explode=self.explotar_circular, labels=self.nombres_circular ,colors=self.colores_circular, autopct='%1.1f%%', pctdistance=0.6, shadow=False, startangle=90, radius=0.7, labeldistance=0.3)
+        self.axs_circular.axis('equal')
+
+        self.canvas_circular = FigureCanvasTkAgg(fig, master=self.frame_dashboard_graficos)
+        self.canvas_circular.get_tk_widget().grid(row=2, column=1, sticky="nsew")
         self.canvas_circular.draw()
         print('open calidad')
 
