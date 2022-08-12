@@ -98,6 +98,9 @@ class Model:
         try:
             self.cursor.execute(sql)
             actividad = self.cursor.fetchall()
+            print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+            print(actividad)
+            print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
             return actividad
         except Exception as e:
             print(e)
