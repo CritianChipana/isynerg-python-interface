@@ -114,29 +114,31 @@ class View(object):
 
         # BTN START
         # state=DISABLED,
-        self.btn_start = Button(frame_session, text="Start", command=lambda:self.start(), state=DISABLED, padx=100, pady=55, fg="white", bg="green", font=("Arial", 20))
-        self.btn_start.grid(row=1, column=1, columnspan=4, padx=50, pady=50, sticky="nsew")
+        # self.btn_start = Button(frame_session, text="Start", command=lambda:self.start(), state=DISABLED, padx=100, pady=55, fg="white", bg="green", font=("Arial", 20))
+        # self.btn_start.grid(row=1, column=1, columnspan=4, padx=50, pady=50, sticky="nsew")
 
         # BTN STOP
-        self.btn_stop = Button(frame_session, text="Stop",command=lambda:self.stop(), padx=100, pady=55, fg="white", bg="red", font=("Arial", 20))
+        # self.btn_stop = Button(frame_session, text="Stop",command=lambda:self.stop(), padx=100, pady=55, fg="white", bg="red", font=("Arial", 20))
         # self.btn_stop.grid(row=1, column=1, columnspan=4, padx=50, pady=50, sticky="nsew")
 
 
         #input NOMBRE
-        label_operador = Label(frame_session, text="Nombre:", font=("Arial", 16))
+        label_operador = Label(frame_session, text="Nombre:", font=("Arial", 16), bg="white")
         label_operador.grid(row=2, column=1, padx=1, sticky="w")
-        self.combo_operario = Combobox(frame_session, width=20, font=("Arial", 16), values=self.get_usuarios())
+        self.combo_operario = Combobox(frame_session, width=20, font=("Arial", 16), values=self.get_usuarios(), cursor="hand2")
         self.combo_operario.bind("<<ComboboxSelected>>", self.selection_changed)
-        self.combo_operario.grid(row=2, column=2, padx=1, sticky="we", ipadx=10, ipady=5)
+        self.combo_operario.grid(row=2, column=2, sticky="we", ipadx=10, ipady=5)
 
         # #INPUT CONTRASEÑA
-        self.label_dni = Label(frame_session, text="Contraseña:", font=("Arial", 16))
+        self.label_dni = Label(frame_session, text="Contraseña:", font=("Arial", 16), bg="white")
         self.label_dni.grid(row=3, column=1, sticky="w")
-        self.input_dni = Entry(frame_session, show="*", width=20, font=("Arial", 16))
-        self.input_dni.grid(row=3, column=2, sticky="we", padx=10, ipady=5)
+        
+        self.input_dni = Entry(frame_session, show="*", width=20, font=("Arial", 16), borderwidth=1, relief="solid")
+        self.input_dni.grid(row=3, column=2, sticky="we", ipadx=10, ipady=5)
+
         # #INPUT PASSWORD INCORRECTO
         self.label_password_icorecto = Label(frame_session, text="", fg='red', font=("Arial", 13), bg="white")
-        self.label_password_icorecto.grid(row=4, column=2, sticky="nsew", padx=10, ipady=5)
+        self.label_password_icorecto.grid(row=4, column=2, sticky="new")
 
         # FRAME CALCULADORA
         frame_calculadora = Frame(self.frame_login, padx=20, pady=20, bg="white")
@@ -349,11 +351,22 @@ class View(object):
     def interface_formulario(self):
         self.frame_formulario = Frame(self.frame_padre, padx=0, pady=0, bg="white")
         # self.frame_formulario.grid(row=1, column=1, padx=10, pady=9, sticky="nsew")
+        self.frame_formulario.rowconfigure(1, weight=4)
+        # self.frame_formulario.rowconfigure(2, weight=4)
+        self.frame_formulario.rowconfigure(3, weight=1)
+        self.frame_formulario.rowconfigure(4, weight=1)
+        self.frame_formulario.rowconfigure(5, weight=1)
+        self.frame_formulario.rowconfigure(6, weight=1)
+        self.frame_formulario.rowconfigure(7, weight=1)
+        self.frame_formulario.rowconfigure(8, weight=1)
+        self.frame_formulario.columnconfigure(1, weight=1)
+        self.frame_formulario.columnconfigure(2, weight=1)
+        self.frame_formulario.columnconfigure(3, weight=1)
 
         self.label_formulario_produccion_real = Label(self.frame_formulario, text="Pruduccion real", padx=5, pady=5, font=("Arial", 12, "bold"),  bg="white")
         self.label_formulario_produccion_real.grid(row=1, column=1, columnspan=3, padx=5, pady=5, sticky="nsew")
 
-        self.input_produccion_real = Entry(self.frame_formulario, width=10, font=("Arial", 10, "bold"))
+        self.input_produccion_real = Entry(self.frame_formulario, width=10, font=("Arial", 16, "bold"))
         self.input_produccion_real.grid(row=2, column=1, columnspan=3, padx=5, pady=5, sticky="nsew")
 
         self.label_formulario_piezas_malas = Label(self.frame_formulario, text="Piezas Malas", padx=5, pady=5, font=("Arial", 10, "bold"),  bg="white")
@@ -427,8 +440,8 @@ class View(object):
             self.label_formulario_produccion_real.grid_forget()
             self.input_produccion_real.grid_forget()
             
-            self.label_formulario_piezas_malas.grid(row=3, column=1, columnspan=3, padx=5, pady=5, sticky="nsew")
-            self.input_piezas_malas.grid(row=4, column=1, columnspan=3, padx=5, pady=5, sticky="nsew")
+            self.label_formulario_piezas_malas.grid(row=1, column=1, columnspan=3, padx=5, pady=5, sticky="nsew")
+            self.input_piezas_malas.grid(row=2, column=1, columnspan=3, padx=5, pady=5, sticky="nsew")
 
             if len(self.input_piezas_malas.get()) > 0:
                 print('guardar actividad')
@@ -452,8 +465,8 @@ class View(object):
                 self.frame_login.grid(row=1, column=1, sticky="nsew")
 
                 # MOSTRAR FORMULARIO AGAIN
-                self.label_formulario_produccion_real.grid(row=3, column=1, columnspan=3, padx=5, pady=5, sticky="nsew")
-                self.input_produccion_real.grid(row=4, column=1, columnspan=3, padx=5, pady=5, sticky="nsew")
+                self.label_formulario_produccion_real.grid(row=1, column=1, columnspan=3, padx=5, pady=5, sticky="nsew")
+                self.input_produccion_real.grid(row=2, column=1, columnspan=3, padx=5, pady=5, sticky="nsew")
                 
                 self.label_formulario_piezas_malas.grid_forget()
                 self.input_piezas_malas.grid_forget()
@@ -530,10 +543,12 @@ class View(object):
         self.label_password_icorecto.grid(row=4, column=2)
         # self.label_password_icorecto.grid_forget()
     def habilitar_btn_start(self):
-        self.btn_start.config(state=NORMAL)
+        # self.btn_start.config(state=NORMAL)
+        print('habilitar_btn_start')
 
     def inahabilitar_btn_start(self):
-        self.btn_start.config(state=DISABLED)
+        # self.btn_start.config(state=DISABLED)
+        print('inahabilitar_btn_start')
 
     def selection_changed(self, event):
         self.nombre_operario = self.combo_operario.get()
@@ -545,14 +560,14 @@ class View(object):
             self.input_dni.config(show='*')
 
     def start(self):
-        self.btn_start.grid_forget()
+        # self.btn_start.grid_forget()
         self.btn_azul.config(state=NORMAL)
         self.btn_verde.config(state=NORMAL)
         self.btn_rojo.config(state=NORMAL)
         self.btn_amarillo.config(state=NORMAL)
         self.btn_morado.config(state=NORMAL)
         self.click_btn_start = True
-        self.btn_stop.grid(row=1, column=1, columnspan=4, padx=50, pady=50, sticky="nsew")
+        # self.btn_stop.grid(row=1, column=1, columnspan=4, padx=50, pady=50, sticky="nsew")
 
         self.refrescar_tiempo_transcurrido()
 
@@ -904,8 +919,8 @@ class View(object):
             self.aux_indicador_color_btn = ''
             self.click_btn_stop = False
             self.click_btn_start = False
-            self.btn_stop.grid_forget()
-            self.btn_start.grid(row=1, column=1, columnspan=4, padx=50, pady=50, sticky="nsew")
+            # self.btn_stop.grid_forget()
+            # self.btn_start.grid(row=1, column=1, columnspan=4, padx=50, pady=50, sticky="nsew")
             self.frame_cronometro.config(bg='#00b248')
             self.label_contador.config(bg='#00b248')
             self.click_btn_color = 0
