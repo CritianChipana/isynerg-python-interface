@@ -280,7 +280,9 @@ class View(object):
         self.frame_dashboard_graficos.columnconfigure(1, weight=1)
 
         #GET MAQUINA ID
+        print('777777777777777777777777777777777777777777777')
         self.maquina_id = self.controller.get_maquina_id()
+        print('777777777777777777777777777777777777777777777')
 
         # GRAFICO LINEAL
         self.nombres_lineal = [1,2,3,4,5,6,7]
