@@ -77,10 +77,6 @@ class Controller:
             if actividades:
                 for actividad in actividades:
                     lista_actividades.append(list(actividad))
-                # print(lista_actividades)
-                # print(lista_actividades[0][8])
-                # print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-                # print(datetime.strftime(lista_actividades[0][8], "%d-%m-%Y"))
                 for i in range(len(lista_actividades)-1):
                     for j in range(len(lista_actividades)):
                         # print('* ',i, ' ',j, ' *')
@@ -92,16 +88,7 @@ class Controller:
                                 lista_actividades[i][5] = lista_actividades[i][5] + lista_actividades[j][5]
                                 lista_actividades[i][6] = lista_actividades[i][6] + lista_actividades[j][6]
                                 lista_actividades[i][7] = lista_actividades[i][7] + lista_actividades[j][7]
-                                # print(i, ' ',j)
-                                # print('se elimina la actividad')
                                 lista_actividades[j][8] =  0
-                                # print('activiades despues de eliminar')
-                # # LO QUE SE QUIERE RETORNAR
-                # # ['0%', '20%', '40%', '20%', '80%', '20%', '120%']
-
-                # print('limpiar arreglo')
-                # print(lista_actividades)
-                # print('limpiar arreglo')
 
                 # # LIMPIAR EL ARREGLO DE ACTIVIDADES
                 lista_final = []
@@ -111,17 +98,6 @@ class Controller:
                     if actividad[8] != 0:
                         lista_final.append(actividad)
                         # print('NOSE2')
-
-                # print('????????????????????????????????')
-                # print(lista_actividades)
-                # print('????????????????????????????????')
-                # print(lista_final)
-                # # verde : 2
-                # # amarillo : 3
-                # # morado : 4
-                # # rojo : 5
-                # # producto_Real = 6
-                # #piezas_malas = 7
 
                 #PASAR DE SEGUNDOS A MINUTOS
                 for i in range(len(lista_final)):
@@ -273,21 +249,6 @@ class Controller:
             total_rojo += lista_actividades[i][5]
             total_colores += lista_actividades[i][2] + lista_actividades[i][3] + lista_actividades[i][4] + lista_actividades[i][5]
 
-        # for i in range(len(lista_actividades)):
-        #     total = lista_actividades[i][2] + lista_actividades[i][3] + lista_actividades[i][4] + lista_actividades[i][5] + lista_actividades[i][6] + lista_actividades[i][7]
-            
-        #     lista_para_bashboard.append(round(((lista_actividades[i][2])/(total - (1440 - total_colores)))*100))
-        #     print(7777777777777777777777)
-        #     print((lista_actividades[i][2]))
-        #     print((total - (1440 - total_colores)))
-        #     print(7777777777777777777777)
-
-        # lista_para_bashboard.append((total_verde*100)/1440)
-        # lista_para_bashboard.append((total_amarillo*100)/1440)
-        # lista_para_bashboard.append((total_morado*100)/1440)
-        # lista_para_bashboard.append((total_rojo*100)/1440)
-        # lista_para_bashboard.append(((1440 - total_colores)*100)/1440)
-
         # verde, azul, rojo, amarillo, morado
         lista_para_bashboard.append(total_verde)
         lista_para_bashboard.append((1440 - total_colores))
@@ -295,16 +256,19 @@ class Controller:
         lista_para_bashboard.append(total_amarillo)
         lista_para_bashboard.append(total_morado)
 
-        print('aaaaaaaaaaaaaaaaaaaaaaaa')
-        print(lista_para_bashboard)
-        print('aaaaaaaaaaaaaaaaaaaaaaaa')
-
         for i in range( 5 - len(lista_para_bashboard)):
             lista_para_bashboard.append(0)
 
-        print('aaaaaaaaaaaaaaaaaaaaaaaa2')
-        print(lista_para_bashboard)
-        print('aaaaaaaaaaaaaaaaaaaaaaaa2')
-
         # lista_para_bashboard_reverse = lista_para_bashboard[::-1]
         return lista_para_bashboard
+    
+    def get_maquina_id(self):
+        try:
+            response = self.model.get_maquina_id()
+            if response:
+                return response
+            else:
+                return False
+        except Exception as e:
+            print(e)
+            return False

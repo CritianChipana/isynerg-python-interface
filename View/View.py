@@ -74,7 +74,7 @@ class View(object):
         self.model = Model()
         self.interface()
         # self.hora_inicio = datetime.now()
-        self.INTERVALO_REFRESCO = 500  # En milisegundos
+        self.INTERVALO_REFRESCO = 50  # En milisegundos
 
 
     def interface(self):
@@ -276,6 +276,9 @@ class View(object):
         self.frame_dashboard_graficos.rowconfigure(2, weight=4)
         self.frame_dashboard_graficos.rowconfigure(3, weight=1)
         self.frame_dashboard_graficos.columnconfigure(1, weight=1)
+
+        #GET MAQUINA ID
+        self.maquina_id = self.controller.get_maquina_id()
 
         # GRAFICO LINEAL
         self.nombres_lineal = [1,2,3,4,5,6,7]
@@ -573,84 +576,84 @@ class View(object):
             print('verde')
             if (self.contador_verde == 0):
                 self.inicio_verde = datetime.now()
-            if  self.click_btn_verde > 1:
-                ahora = datetime.strptime('00:00:00', '%H:%M:%S')
-                ahora2 = datetime.strptime(self.aux_contador_verde, '%H:%M:%S')
-                segundos_transcurridos = (datetime.now() - self.inicio_verde + (ahora2 - ahora)).total_seconds()
-                tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
-                self.contador_verde = tiempo_trancurrido
-                return tiempo_trancurrido
-            else:
-                segundos_transcurridos= (datetime.now() - self.inicio_verde).total_seconds()
-                tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
-                self.contador_verde = tiempo_trancurrido
-                return tiempo_trancurrido
+            # if  self.click_btn_verde > 1:
+            #     ahora = datetime.strptime('00:00:00', '%H:%M:%S')
+            #     ahora2 = datetime.strptime(self.aux_contador_verde, '%H:%M:%S')
+            #     segundos_transcurridos = (datetime.now() - self.inicio_verde + (ahora2 - ahora)).total_seconds()
+            #     tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
+            #     self.contador_verde = tiempo_trancurrido
+            #     return tiempo_trancurrido
+            # else:
+            segundos_transcurridos= (datetime.now() - self.inicio_verde).total_seconds()
+            tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
+            self.contador_verde = tiempo_trancurrido
+            return tiempo_trancurrido
         if self.indicador_color_btn == 'azul':
             print('azul')
             if (self.contador_azul == 0):
                 self.inicio_azul = datetime.now()
-            if  self.click_btn_azul > 1:
-                ahora = datetime.strptime('00:00:00', '%H:%M:%S')
-                ahora2 = datetime.strptime(self.aux_contador_azul, '%H:%M:%S')
-                segundos_transcurridos = (datetime.now() - self.inicio_azul + (ahora2 - ahora)).total_seconds()
-                tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
-                self.contador_azul = tiempo_trancurrido
-                return tiempo_trancurrido
-            else:
-                segundos_transcurridos= (datetime.now() - self.inicio_azul).total_seconds()
-                tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
-                self.contador_azul = tiempo_trancurrido
-                return tiempo_trancurrido
+            # if  self.click_btn_azul > 1:
+            #     ahora = datetime.strptime('00:00:00', '%H:%M:%S')
+            #     ahora2 = datetime.strptime(self.aux_contador_azul, '%H:%M:%S')
+            #     segundos_transcurridos = (datetime.now() - self.inicio_azul + (ahora2 - ahora)).total_seconds()
+            #     tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
+            #     self.contador_azul = tiempo_trancurrido
+            #     return tiempo_trancurrido
+            # else:
+            segundos_transcurridos= (datetime.now() - self.inicio_azul).total_seconds()
+            tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
+            self.contador_azul = tiempo_trancurrido
+            return tiempo_trancurrido
         if self.indicador_color_btn == 'rojo':
             print('rojo')
             if (self.contador_rojo == 0):
                 self.inicio_rojo = datetime.now()
-            if  self.click_btn_rojo > 1:
-                ahora = datetime.strptime('00:00:00', '%H:%M:%S')
-                ahora2 = datetime.strptime(self.aux_contador_rojo, '%H:%M:%S')
-                segundos_transcurridos = (datetime.now() - self.inicio_rojo + (ahora2 - ahora)).total_seconds()
-                tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
-                self.contador_rojo = tiempo_trancurrido
-                return tiempo_trancurrido
-            else:
-                segundos_transcurridos= (datetime.now() - self.inicio_rojo).total_seconds()
-                tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
-                self.contador_rojo = tiempo_trancurrido
-                return tiempo_trancurrido
+            # if  self.click_btn_rojo > 1:
+            #     ahora = datetime.strptime('00:00:00', '%H:%M:%S')
+            #     ahora2 = datetime.strptime(self.aux_contador_rojo, '%H:%M:%S')
+            #     segundos_transcurridos = (datetime.now() - self.inicio_rojo + (ahora2 - ahora)).total_seconds()
+            #     tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
+            #     self.contador_rojo = tiempo_trancurrido
+            #     return tiempo_trancurrido
+            # else:
+            segundos_transcurridos= (datetime.now() - self.inicio_rojo).total_seconds()
+            tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
+            self.contador_rojo = tiempo_trancurrido
+            return tiempo_trancurrido
         if self.indicador_color_btn == 'amarillo':
             print('amarillo')
             if (self.contador_amarillo == 0):
                 self.inicio_amarillo = datetime.now()
 
-            if  self.click_btn_amarillo > 1:
-                ahora = datetime.strptime('00:00:00', '%H:%M:%S')
-                ahora2 = datetime.strptime(self.aux_contador_amarillo, '%H:%M:%S')
-                segundos_transcurridos = (datetime.now() - self.inicio_amarillo + (ahora2 - ahora)).total_seconds()
-                tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
-                self.contador_amarillo = tiempo_trancurrido
-                return tiempo_trancurrido
-            else:
-                segundos_transcurridos= (datetime.now() - self.inicio_amarillo).total_seconds()
-                tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
-                self.contador_amarillo = tiempo_trancurrido
-                return tiempo_trancurrido
+            # if  self.click_btn_amarillo > 1:
+            #     ahora = datetime.strptime('00:00:00', '%H:%M:%S')
+            #     ahora2 = datetime.strptime(self.aux_contador_amarillo, '%H:%M:%S')
+            #     segundos_transcurridos = (datetime.now() - self.inicio_amarillo + (ahora2 - ahora)).total_seconds()
+            #     tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
+            #     self.contador_amarillo = tiempo_trancurrido
+            #     return tiempo_trancurrido
+            # else:
+            segundos_transcurridos= (datetime.now() - self.inicio_amarillo).total_seconds()
+            tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
+            self.contador_amarillo = tiempo_trancurrido
+            return tiempo_trancurrido
         if self.indicador_color_btn == 'morado':
             print('morado')
             if (self.contador_morado == 0):
                 self.inicio_morado = datetime.now()
 
-            if  self.click_btn_morado > 1:
-                ahora = datetime.strptime('00:00:00', '%H:%M:%S')
-                ahora2 = datetime.strptime(self.aux_contador_morado, '%H:%M:%S')
-                segundos_transcurridos = (datetime.now() - self.inicio_morado + (ahora2 - ahora)).total_seconds()
-                tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
-                self.contador_morado = tiempo_trancurrido
-                return tiempo_trancurrido
-            else:
-                segundos_transcurridos = (datetime.now() - self.inicio_morado).total_seconds()
-                tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
-                self.contador_morado = tiempo_trancurrido
-                return tiempo_trancurrido
+            # if  self.click_btn_morado > 1:
+            #     ahora = datetime.strptime('00:00:00', '%H:%M:%S')
+            #     ahora2 = datetime.strptime(self.aux_contador_morado, '%H:%M:%S')
+            #     segundos_transcurridos = (datetime.now() - self.inicio_morado + (ahora2 - ahora)).total_seconds()
+            #     tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
+            #     self.contador_morado = tiempo_trancurrido
+            #     return tiempo_trancurrido
+            # else:
+            segundos_transcurridos = (datetime.now() - self.inicio_morado).total_seconds()
+            tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
+            self.contador_morado = tiempo_trancurrido
+            return tiempo_trancurrido
 
     def refrescar_tiempo_transcurrido(self):
         print("Refrescando!")
@@ -663,6 +666,30 @@ class View(object):
             self.raiz.after_cancel(tarea)
             self.mostrar_contador_con_color()
 
+            if self.aux_indicador_color_btn == 'verde':
+                self.frame_formulario.grid(row=1, column=1, padx=10, pady=9, sticky="nsew")
+            else:
+                self.input_produccion_real.insert(self.contador_productos_producidos, 0) 
+                self.input_piezas_malas.insert(self.contador_piezas_malas, 0) 
+                self.frame_login.grid(row=1, column=1, sticky="nsew")
+                # self.frame_dashboard.
+                self.save_activiada_user()
+                self.user = ()
+                #limpiar inputs y contadores
+                self.input_dni.config(state=NORMAL)
+                self.combo_operario.config(state=NORMAL)
+                self.contador_numeros_dni = 0
+                self.contador_productos_producidos = 0
+                self.contador_piezas_malas = 0
+                # eliminar el contenido de los input
+                self.input_dni.delete(0, END)
+                self.input_produccion_real.delete(0, END)
+                self.input_piezas_malas.delete(0, END)
+                # eliminar el contenido del Combobox
+                self.combo_operario.delete(0, END)
+                # mostrar login
+                self.frame_formulario.grid_forget()
+                self.frame_login.grid(row=1, column=1, sticky="nsew")
 
 
 
@@ -734,6 +761,7 @@ class View(object):
                 self.refrescar_tiempo_transcurrido()
                 self.aux_indicador_color_btn = rojo
             if self.click_btn_color == 2:
+                self.click_btn_stop = True
                 self.stop()
                 self.frame_dashboard.grid_forget()
 
@@ -784,31 +812,31 @@ class View(object):
     def mostrar_contador_con_color(self):
         if self.aux_indicador_color_btn == 'verde':
 
-            self.frame_cronometro.config(bg='#00b248')
-            self.label_contador.config(bg='#00b248')
+            # self.frame_cronometro.config(bg='#00b248')
+            # self.label_contador.config(bg='#00b248')
             self.label_contador.config(text=self.contador_verde)
         elif self.aux_indicador_color_btn == 'azul':
 
-            self.frame_cronometro.config(bg='#0052b2')
-            self.label_contador.config(bg='#0052b2')
+            # self.frame_cronometro.config(bg='#0052b2')
+            # self.label_contador.config(bg='#0052b2')
             self.label_contador.config(text=self.contador_azul)
 
         elif self.aux_indicador_color_btn == 'rojo':
 
-            self.frame_cronometro.config(bg='#ff0905')
-            self.label_contador.config(bg='#ff0905')
+            # self.frame_cronometro.config(bg='#ff0905')
+            # self.label_contador.config(bg='#ff0905')
             self.label_contador.config(text=self.contador_rojo)
 
         elif self.aux_indicador_color_btn == 'amarillo':
 
-            self.frame_cronometro.config(bg='#ffca0a')
-            self.label_contador.config(bg='#ffca0a')
+            # self.frame_cronometro.config(bg='#ffca0a')
+            # self.label_contador.config(bg='#ffca0a')
             self.label_contador.config(text=self.contador_amarillo)
 
         elif self.aux_indicador_color_btn == 'morado':
 
-            self.frame_cronometro.config(bg='#7b00cb')
-            self.label_contador.config(bg='#7b00cb')
+            # self.frame_cronometro.config(bg='#7b00cb')
+            # self.label_contador.config(bg='#7b00cb')
             self.label_contador.config(text=self.contador_morado)
 
 
@@ -816,8 +844,6 @@ class View(object):
         print('stop_timer')
         self.click_btn_stop = True
         self.frame_dashboard.grid_forget()
-        self.frame_formulario.grid(row=1, column=1, padx=10, pady=9, sticky="nsew")
-
     
     def save_activiada_user(self):
         if self.contador_verde != 0:
@@ -875,6 +901,7 @@ class View(object):
             self.aux_contador_rojo = ''
             self.aux_contador_amarillo = ''
             self.aux_contador_morado = ''
+            self.aux_indicador_color_btn = ''
             self.click_btn_stop = False
             self.click_btn_start = False
             self.btn_stop.grid_forget()
@@ -978,4 +1005,7 @@ class View(object):
         self.axs_circular.pie(self.tamano_circular, explode=self.explotar_circular, labels=self.nombres_circular ,colors=self.colores_circular, autopct='%1.1f%%', pctdistance=0.6, shadow=False, startangle=90, radius=0.7, labeldistance=0.3)
         self.canvas_circular.draw()
         print('open calidad')
+
+        # self.controller.get_maquina_id()
+
 

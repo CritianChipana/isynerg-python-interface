@@ -66,7 +66,7 @@ class Model:
             return False
     
     def crear_actividad_user(self, user_id, maquina_id, data):
-        sql = "INSERT INTO actividades_usuario (usuario_id, verde, 	amarillo, morado, 	rojo, produccion_real, piezas_malas) VALUES ({}, {}, {}, {}, {}, {}, {})".format(user_id, data['verde'], data['amarillo'], data['morado'], data['rojo'], data['produccion_real'], data['piezas_malas'])
+        sql = "INSERT INTO actividades_usuario (usuario_id, verde, 	amarillo, morado, 	rojo, produccion_real, piezas_malas, maquina_id) VALUES ({}, {}, {}, {}, {}, {}, {}, {})".format(user_id, data['verde'], data['amarillo'], data['morado'], data['rojo'], data['produccion_real'], data['piezas_malas'], maquina_id)
 
         sql2 = "INSERT INTO actividades_maquina (maquina_id, azul) VALUES ({}, {})".format(maquina_id, data['azul'])
         try:
@@ -98,10 +98,17 @@ class Model:
         try:
             self.cursor.execute(sql)
             actividad = self.cursor.fetchall()
-            print('mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm')
-            print(actividad)
-            print('mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm')
             return actividad
+        except Exception as e:
+            print(e)
+            return False
+
+    def get_maquina_id(self):
+        sql = "SELECT maquina_mid FROM maquina"
+        try:
+            self.cursor.execute(sql)
+            maquina_id = self.cursor.fetchone()
+            return maquina_id[0]
         except Exception as e:
             print(e)
             return False
