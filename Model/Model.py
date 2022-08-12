@@ -102,9 +102,13 @@ class Model:
             print(actividad)
             print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
             if actividad:
+                print('99')
                 return actividad
+                print('99')
             else:
+                print('88')
                 return []
+                print('88')
         except Exception as e:
             print(e)
             return False
