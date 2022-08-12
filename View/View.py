@@ -282,6 +282,7 @@ class View(object):
         #GET MAQUINA ID
         print('777777777777777777777777777777777777777777777')
         self.maquina_id = self.controller.get_maquina_id()
+        print(self.maquina_id)
         print('777777777777777777777777777777777777777777777')
 
         # GRAFICO LINEAL
