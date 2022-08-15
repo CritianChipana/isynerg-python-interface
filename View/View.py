@@ -123,14 +123,14 @@ class View(object):
 
 
         #input NOMBRE
-        label_operador = Label(frame_session, text="Nombre:", font=("Arial", 20), bg="white")
+        label_operador = Label(frame_session, text="Nombre:", font=("Arial", 20), bg="white", fg='black')
         label_operador.grid(row=2, column=1, padx=0, sticky="w")
         self.combo_operario = Combobox(frame_session, width=20, font=("Arial", 22), values=self.get_usuarios(), cursor="hand2")
         self.combo_operario.bind("<<ComboboxSelected>>", self.selection_changed)
         self.combo_operario.grid(row=2, column=2, sticky="we", ipadx=0, ipady=5)
 
         # #INPUT CONTRASEÑA
-        self.label_dni = Label(frame_session, text="Contraseña:", font=("Arial", 20), bg="white")
+        self.label_dni = Label(frame_session, text="Contraseña:", font=("Arial", 20), bg="white", fg='black')
         self.label_dni.grid(row=3, column=1, padx=0, sticky="w")
         
         self.input_dni = Entry(frame_session, show="*", width=20, font=("Arial", 22), borderwidth=1, relief="solid")
