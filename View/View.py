@@ -79,7 +79,7 @@ class View(object):
 
     def interface(self):
         self.raiz = Tk()
-        self.raiz.attributes('-fullscreen', True)
+        # self.raiz.attributes('-fullscreen', True)
         self.raiz.geometry(str(self.raiz.winfo_screenwidth()) +'x' +  str(self.raiz.winfo_screenheight()) )
         # self.raiz.config(width="1200", height="700")
         # self.raiz.geometry("1200x800")
