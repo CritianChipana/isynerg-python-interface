@@ -183,21 +183,28 @@ class Controller:
         print('lista de actividad controller')
         print(lista_actividades)
         print('lista de actividad controller')
-        for i in range(len(lista_actividades)):
-            total_colores = lista_actividades[i][2] + lista_actividades[i][3] + lista_actividades[i][4] + lista_actividades[i][5]
-            total = lista_actividades[i][2] + lista_actividades[i][3] + lista_actividades[i][4] + lista_actividades[i][5] + lista_actividades[i][6] + lista_actividades[i][7]
-            
-            lista_para_bashboard.append(round(((lista_actividades[i][2])/(total - (1440 - total_colores)))*100))
-            print(7777777777777777777777)
-            print((lista_actividades[i][2]))
-            print((total - (1440 - total_colores)))
-            print(7777777777777777777777)
+
+        if lista_actividades:
+
+            for i in range(len(lista_actividades)):
+                total_colores = lista_actividades[i][2] + lista_actividades[i][3] + lista_actividades[i][4] + lista_actividades[i][5]
+                total = lista_actividades[i][2] + lista_actividades[i][3] + lista_actividades[i][4] + lista_actividades[i][5] + lista_actividades[i][6] + lista_actividades[i][7]
+                
+                lista_para_bashboard.append(round(((lista_actividades[i][2])/(total - (1440 - total_colores)))*100))
+                print(7777777777777777777777)
+                print((lista_actividades[i][2]))
+                print((total - (1440 - total_colores)))
+                print(7777777777777777777777)
 
         print('aaaaaaaaaaaaaaaaaaaaaaaa')
         print(lista_para_bashboard)
 
-        for i in range( 7 - len(lista_para_bashboard)):
-            lista_para_bashboard.append(0)
+        if lista_actividades:
+            for i in range( 7 - len(lista_para_bashboard)):
+                lista_para_bashboard.append(0)
+        else:
+            for i in range(7):
+                lista_para_bashboard.append(0)
 
         lista_para_bashboard_reverse = lista_para_bashboard[::-1]
         return lista_para_bashboard_reverse
