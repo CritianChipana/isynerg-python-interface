@@ -263,12 +263,13 @@ class Controller:
         total_rojo = 0
         total_colores = 0
 
-        for i in range(len(lista_actividades)):
-            total_verde += lista_actividades[i][2]
-            total_amarillo += lista_actividades[i][3]
-            total_morado += lista_actividades[i][4]
-            total_rojo += lista_actividades[i][5]
-            total_colores += lista_actividades[i][2] + lista_actividades[i][3] + lista_actividades[i][4] + lista_actividades[i][5]
+        if lista_actividades:
+            for i in range(len(lista_actividades)):
+                total_verde += lista_actividades[i][2]
+                total_amarillo += lista_actividades[i][3]
+                total_morado += lista_actividades[i][4]
+                total_rojo += lista_actividades[i][5]
+                total_colores += lista_actividades[i][2] + lista_actividades[i][3] + lista_actividades[i][4] + lista_actividades[i][5]
 
         # verde, azul, rojo, amarillo, morado
         lista_para_bashboard.append(total_verde)
