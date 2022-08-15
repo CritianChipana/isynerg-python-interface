@@ -125,7 +125,7 @@ class View(object):
         #input NOMBRE
         label_operador = Label(frame_session, text="Nombre:", font=("Arial", 20), bg="white", fg='black')
         label_operador.grid(row=2, column=1, padx=0, sticky="w")
-        self.combo_operario = Combobox(frame_session, width=20, font=("Arial", 22), values=self.get_usuarios(), cursor="hand2")
+        self.combo_operario = Combobox(frame_session, width=20, font=("Arial", 22), values=self.get_usuarios(), cursor="hand2", bg="white", fg='black')
         self.combo_operario.bind("<<ComboboxSelected>>", self.selection_changed)
         self.combo_operario.grid(row=2, column=2, sticky="we", ipadx=0, ipady=5)
 
@@ -133,7 +133,7 @@ class View(object):
         self.label_dni = Label(frame_session, text="Contraseña:", font=("Arial", 20), bg="white", fg='black')
         self.label_dni.grid(row=3, column=1, padx=0, sticky="w")
         
-        self.input_dni = Entry(frame_session, show="*", width=20, font=("Arial", 22), borderwidth=1, relief="solid")
+        self.input_dni = Entry(frame_session, show="*", width=20, font=("Arial", 22), borderwidth=1, relief="solid", bg='white', fg='black')
         self.input_dni.grid(row=3, column=2, sticky="we", ipadx=0, ipady=5)
 
         # #INPUT PASSWORD INCORRECTO
@@ -153,29 +153,29 @@ class View(object):
         frame_calculadora.columnconfigure(2, weight=1)
         frame_calculadora.columnconfigure(3, weight=1)
 
-        btn_uno = Button(frame_calculadora, text="7", command=lambda:self.escribir_numeros(7), padx=23, pady=1, font=("Arial", 12))
+        btn_uno = Button(frame_calculadora, text="7", command=lambda:self.escribir_numeros(7), padx=23, pady=1, font=("Arial", 16), bg="gray", fg='black')
         btn_uno.grid(row=1, column=1, padx=5, pady=5, sticky="nsew")
-        btn_dos = Button(frame_calculadora, text="8", command=lambda:self.escribir_numeros(8),padx=23, pady=1, font=("Arial", 12))
+        btn_dos = Button(frame_calculadora, text="8", command=lambda:self.escribir_numeros(8),padx=23, pady=1, font=("Arial", 16), bg="gray", fg='black')
         btn_dos.grid(row=1, column=2, padx=5, pady=5, sticky="nsew")
-        btn_tres = Button(frame_calculadora, text="9", command=lambda:self.escribir_numeros(9), padx=23, pady=1, font=("Arial", 12))
+        btn_tres = Button(frame_calculadora, text="9", command=lambda:self.escribir_numeros(9), padx=23, pady=1, font=("Arial", 16), bg="gray", fg='black')
         btn_tres.grid(row=1, column=3, padx=5, pady=5, sticky="nsew")
-        btn_cuatro = Button(frame_calculadora, text="4", command=lambda:self.escribir_numeros(4), padx=23, pady=1, font=("Arial", 12))
+        btn_cuatro = Button(frame_calculadora, text="4", command=lambda:self.escribir_numeros(4), padx=23, pady=1, font=("Arial", 16), bg="gray", fg='black')
         btn_cuatro.grid(row=2, column=1, padx=5, pady=5, sticky="nsew")
-        btn_cinco = Button(frame_calculadora, text="5", command=lambda:self.escribir_numeros(5), padx=23, pady=1, font=("Arial", 12))
+        btn_cinco = Button(frame_calculadora, text="5", command=lambda:self.escribir_numeros(5), padx=23, pady=1, font=("Arial", 16), bg="gray", fg='black')
         btn_cinco.grid(row=2, column=2, padx=5, pady=5, sticky="nsew")
-        btn_seis = Button(frame_calculadora, text="6", command=lambda:self.escribir_numeros(6), padx=23, pady=1, font=("Arial", 12))
+        btn_seis = Button(frame_calculadora, text="6", command=lambda:self.escribir_numeros(6), padx=23, pady=1, font=("Arial", 16), bg="gray", fg='black')
         btn_seis.grid(row=2, column=3, padx=5, pady=5, sticky="nsew")
-        btn_siete = Button(frame_calculadora, text="1", command=lambda:self.escribir_numeros(1), padx=23, pady=1, font=("Arial", 12))
+        btn_siete = Button(frame_calculadora, text="1", command=lambda:self.escribir_numeros(1), padx=23, pady=1, font=("Arial", 16), bg="gray", fg='black')
         btn_siete.grid(row=3, column=1, padx=5, pady=5, sticky="nsew")
-        btn_ocho = Button(frame_calculadora, text="2", command=lambda:self.escribir_numeros(2), padx=23, pady=1, font=("Arial", 12))
+        btn_ocho = Button(frame_calculadora, text="2", command=lambda:self.escribir_numeros(2), padx=23, pady=1, font=("Arial", 16), bg="gray", fg='black')
         btn_ocho.grid(row=3, column=2, padx=5, pady=5, sticky="nsew")
-        btn_nueve = Button(frame_calculadora, text="3", command=lambda:self.escribir_numeros(3), padx=23, pady=1, font=("Arial", 12))
+        btn_nueve = Button(frame_calculadora, text="3", command=lambda:self.escribir_numeros(3), padx=23, pady=1, font=("Arial", 16), bg="gray", fg='black')
         btn_nueve.grid(row=3, column=3, padx=5, pady=5, sticky="nsew")
-        btn_cero = Button(frame_calculadora, text="0", command=lambda:self.escribir_numeros(0), padx=23, pady=1, font=("Arial", 12))
+        btn_cero = Button(frame_calculadora, text="0", command=lambda:self.escribir_numeros(0), padx=23, pady=1, font=("Arial", 16), bg="gray", fg='black')
         btn_cero.grid(row=4, column=1, padx=5, pady=5, sticky="nsew")
-        btn_punto = Button(frame_calculadora, text="←", command=lambda:self.borrar_numero(), padx=20, pady=1, font=("Arial", 12, "bold"))
+        btn_punto = Button(frame_calculadora, text="←", command=lambda:self.borrar_numero(), padx=20, pady=1, font=("Arial", 16, "bold"), bg="gray", fg='black')
         btn_punto.grid(row=4, column=2, padx=5, pady=5, sticky="nsew")
-        btn_igual = Button(frame_calculadora, text="✓", command=lambda:self.login(), padx=20, pady=1, font=("Arial", 12, "bold"), fg="white", bg="#097eeb")
+        btn_igual = Button(frame_calculadora, text="✓", command=lambda:self.login(), padx=20, pady=1, font=("Arial", 16, "bold"), fg="white", bg="#097eeb")
         btn_igual.grid(row=4, column=3, padx=5, pady=5, sticky="nsew")
 
         # CRONOMETRO
@@ -318,37 +318,37 @@ class View(object):
         self.canvas_circular.draw()
 
         #FRAME LEYENDA
-        self.frame_dashboard_graficos_leyenda = Frame(self.frame_dashboard_graficos, padx=0, pady=0, bg="white")
+        self.frame_dashboard_graficos_leyenda = Frame(self.frame_dashboard_graficos, padx=0, pady=0, bg="white", fg='black')
         self.frame_dashboard_graficos_leyenda.grid(row=3, column=1, padx=10, pady=9, sticky="nsew")
 
         self.label_color_leyenda_verde = Label(self.frame_dashboard_graficos_leyenda, text="", padx=5, pady=3, font=("Arial", 6, "bold"), bg="#00b248", fg="white")
         self.label_color_leyenda_verde.grid(row=1, column=1, padx=5, pady=3, sticky="nsew")
 
-        self.label_letra_leyenda_verde = Label(self.frame_dashboard_graficos_leyenda, text="Q Utilizada", padx=5, pady=5, font=("Arial", 6, "bold"),  bg="white")
+        self.label_letra_leyenda_verde = Label(self.frame_dashboard_graficos_leyenda, text="Q Utilizada", padx=5, pady=5, font=("Arial", 6, "bold"),  bg="white", fg='black')
         self.label_letra_leyenda_verde.grid(row=1, column=2, padx=5, pady=5, sticky="nsew")
 
         self.label_color_leyenda_azul = Label(self.frame_dashboard_graficos_leyenda, text="", padx=5, pady=5, font=("Arial", 6, "bold"), bg="#0052b2", fg="white")
         self.label_color_leyenda_azul.grid(row=1, column=3, padx=5, pady=5, sticky="nsew")
 
-        self.label_letra_leyenda_azul = Label(self.frame_dashboard_graficos_leyenda, text="Q Ociosa", padx=5, pady=5, font=("Arial", 6, "bold"),  bg="white")
+        self.label_letra_leyenda_azul = Label(self.frame_dashboard_graficos_leyenda, text="Q Ociosa", padx=5, pady=5, font=("Arial", 6, "bold"),  bg="white", fg='black')
         self.label_letra_leyenda_azul.grid(row=1, column=4, padx=5, pady=5, sticky="nsew")
 
         self.label_color_leyenda_rojo = Label(self.frame_dashboard_graficos_leyenda, text="", padx=5, pady=5, font=("Arial", 6, "bold"), bg="#ff0905", fg="white")
         self.label_color_leyenda_rojo.grid(row=1, column=5, padx=5, pady=5, sticky="nsew")
 
-        self.label_letra_leyenda_rojo = Label(self.frame_dashboard_graficos_leyenda, text="Paradas MTTO", padx=5, pady=5, font=("Arial", 6, "bold"),  bg="white")
+        self.label_letra_leyenda_rojo = Label(self.frame_dashboard_graficos_leyenda, text="Paradas MTTO", padx=5, pady=5, font=("Arial", 6, "bold"),  bg="white", fg='black')
         self.label_letra_leyenda_rojo.grid(row=1, column=6, padx=5, pady=5, sticky="nsew")
 
         self.label_color_leyenda_amarillo = Label(self.frame_dashboard_graficos_leyenda, text="", padx=5, pady=5, font=("Arial", 6, "bold"), bg="#ffca0a", fg="white")
         self.label_color_leyenda_amarillo.grid(row=1, column=7, padx=5, pady=5, sticky="nsew")
 
-        self.label_letra_leyenda_amarillo = Label(self.frame_dashboard_graficos_leyenda, text="Paradas LOG", padx=5, pady=5, font=("Arial", 6, "bold"),  bg="white")
+        self.label_letra_leyenda_amarillo = Label(self.frame_dashboard_graficos_leyenda, text="Paradas LOG", padx=5, pady=5, font=("Arial", 6, "bold"),  bg="white", fg='black')
         self.label_letra_leyenda_amarillo.grid(row=1, column=8, padx=5, pady=5, sticky="nsew")
 
         self.label_color_leyenda_morado = Label(self.frame_dashboard_graficos_leyenda, text="", padx=5, pady=5, font=("Arial", 6, "bold"), bg="#7b00cb", fg="white")
         self.label_color_leyenda_morado.grid(row=1, column=9, padx=5, pady=5, sticky="nsew")
 
-        self.label_letra_leyenda_morado = Label(self.frame_dashboard_graficos_leyenda, text="Parada RR", padx=5, pady=5, font=("Arial", 6, "bold"),  bg="white")
+        self.label_letra_leyenda_morado = Label(self.frame_dashboard_graficos_leyenda, text="Parada RR", padx=5, pady=5, font=("Arial", 6, "bold"),  bg="white", fg='black')
         self.label_letra_leyenda_morado.grid(row=1, column=10, padx=5, pady=5, sticky="nsew")
 
     def interface_formulario(self):
@@ -366,16 +366,16 @@ class View(object):
         self.frame_formulario.columnconfigure(2, weight=1)
         self.frame_formulario.columnconfigure(3, weight=1)
 
-        self.label_formulario_produccion_real = Label(self.frame_formulario, text="Pruduccion real", padx=5, pady=5, font=("Arial", 24, "bold"),  bg="white")
+        self.label_formulario_produccion_real = Label(self.frame_formulario, text="Pruduccion real", padx=5, pady=5, font=("Arial", 24, "bold"),  bg="white", fg='black')
         self.label_formulario_produccion_real.grid(row=1, column=1, columnspan=3, padx=5, pady=5, sticky="nsew")
 
-        self.input_produccion_real = Entry(self.frame_formulario, width=10, font=("Arial", 24, "bold"),  borderwidth=1, relief="solid")
+        self.input_produccion_real = Entry(self.frame_formulario, width=10, font=("Arial", 24, "bold"),  borderwidth=1, relief="solid", bg="white", fg='black')
         self.input_produccion_real.grid(row=2, column=1, columnspan=3, padx=5, pady=5, sticky="nsew")
 
-        self.label_formulario_piezas_malas = Label(self.frame_formulario, text="Piezas Malas", padx=5, pady=5, font=("Arial", 24, "bold"),  bg="white")
+        self.label_formulario_piezas_malas = Label(self.frame_formulario, text="Piezas Malas", padx=5, pady=5, font=("Arial", 24, "bold"),  bg="white", fg='black')
         # self.label_formulario_piezas_malas.grid(row=3, column=1, columnspan=3, padx=5, pady=5, sticky="nsew")
 
-        self.input_piezas_malas = Entry(self.frame_formulario, width=10, font=("Arial", 24, "bold"),  borderwidth=1, relief="solid")
+        self.input_piezas_malas = Entry(self.frame_formulario, width=10, font=("Arial", 24, "bold"),  borderwidth=1, relief="solid", bg="white", fg='black')
         # self.input_piezas_malas.grid(row=4, column=1, columnspan=3, padx=5, pady=5, sticky="nsew")
 
         btn_uno = Button(self.frame_formulario, text="7", command=lambda:self.escribir_numeros_produccion_total(7), padx=23, pady=1, font=("Arial", 12))
