@@ -79,8 +79,8 @@ class View(object):
 
     def interface(self):
         self.raiz = Tk()
-        # self.raiz.attributes('-fullscreen', True)
-        self.raiz.geometry(str(self.raiz.winfo_screenwidth()) +'x' +  str(self.raiz.winfo_screenheight()) )
+        self.raiz.attributes('-fullscreen', True)
+        # self.raiz.geometry(str(self.raiz.winfo_screenwidth()) +'x' +  str(self.raiz.winfo_screenheight()) )
         # self.raiz.config(width="1200", height="700")
         # self.raiz.geometry("1200x800")
         self.raiz.config(bg="blue")
@@ -125,7 +125,7 @@ class View(object):
         #input NOMBRE
         label_operador = Label(frame_session, text="Nombre:", font=("Arial", 20), bg="white", fg='black')
         label_operador.grid(row=2, column=1, padx=0, sticky="w")
-        self.combo_operario = Combobox(frame_session, width=20, font=("Arial", 22), values=self.get_usuarios(), cursor="hand2", bg="white", fg='black')
+        self.combo_operario = Combobox(frame_session, width=20, font=("Arial", 22), values=self.get_usuarios(), cursor="hand2")
         self.combo_operario.bind("<<ComboboxSelected>>", self.selection_changed)
         self.combo_operario.grid(row=2, column=2, sticky="we", ipadx=0, ipady=5)
 
@@ -318,7 +318,7 @@ class View(object):
         self.canvas_circular.draw()
 
         #FRAME LEYENDA
-        self.frame_dashboard_graficos_leyenda = Frame(self.frame_dashboard_graficos, padx=0, pady=0, bg="white", fg='black')
+        self.frame_dashboard_graficos_leyenda = Frame(self.frame_dashboard_graficos, padx=0, pady=0, bg="white")
         self.frame_dashboard_graficos_leyenda.grid(row=3, column=1, padx=10, pady=9, sticky="nsew")
 
         self.label_color_leyenda_verde = Label(self.frame_dashboard_graficos_leyenda, text="", padx=5, pady=3, font=("Arial", 6, "bold"), bg="#00b248", fg="white")
