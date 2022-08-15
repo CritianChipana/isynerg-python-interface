@@ -126,14 +126,19 @@ class Controller:
         lista_actividades = self.get_actividad_user_siete_ultimos_dias(maquina_id)
         print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
         print(lista_actividades)
-        print(len(lista_actividades))
+        # print(len(lista_actividades))
         print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
 
-        for i in range(len(lista_actividades)):
-            lista_para_bashboard.append(round((lista_actividades[i][6]/self.produccion_teorica)*100))
+        if lista_actividades:
+            for i in range(len(lista_actividades)):
+                lista_para_bashboard.append(round((lista_actividades[i][6]/self.produccion_teorica)*100))
 
-        for i in range( 7 - len(lista_para_bashboard)):
-            lista_para_bashboard.append(0)
+        if lista_actividades:
+            for i in range( 7 - len(lista_para_bashboard)):
+                lista_para_bashboard.append(0)
+        else: 
+            for i in range(7):
+                lista_para_bashboard.append(0)
         # print('rendimiento')
         print(lista_para_bashboard)
         lista_para_bashboard_inverso = lista_para_bashboard[::-1]
@@ -147,11 +152,18 @@ class Controller:
         lista_para_bashboard = []
         lista_actividades = self.get_actividad_user_siete_ultimos_dias(maquina_id)
 
-        for i in range(len(lista_actividades)):
-            lista_para_bashboard.append(round(((lista_actividades[i][6]/(lista_actividades[i][6] + lista_actividades[i][7]))*100)))
+        if lista_actividades:
+            for i in range(len(lista_actividades)):
+                lista_para_bashboard.append(round(((lista_actividades[i][6]/(lista_actividades[i][6] + lista_actividades[i][7]))*100)))
 
-        for i in range( 7 - len(lista_para_bashboard)):
-            lista_para_bashboard.append(0)
+        if lista_actividades:
+
+            for i in range( 7 - len(lista_para_bashboard)):
+                lista_para_bashboard.append(0)
+
+        else: 
+            for i in range(7):
+                lista_para_bashboard.append(0)
 
         lista_para_bashboard_reverse = lista_para_bashboard[::-1]
         return lista_para_bashboard_reverse
