@@ -22,7 +22,7 @@ class View(object):
     arreglo_usuarios = []
     user = ()
     maquina_id = 1
-    indicador_color_btn = "verde"
+    indicador_color_btn = "azul"
     aux_indicador_color_btn = ""
 
     # hora_inicio = datetime.now()
@@ -176,6 +176,7 @@ class View(object):
         btn_punto = Button(frame_calculadora, text="←", command=lambda:self.borrar_numero(), padx=20, pady=1, font=("Arial", 18, "bold"), bg="#D0C9C0", fg='black', activebackground="#EFEAD8")
         btn_punto.grid(row=4, column=2, padx=5, pady=5, sticky="nsew")
         btn_igual = Button(frame_calculadora, text="✓", command=lambda:self.login(), padx=20, pady=1, font=("Arial", 18, "bold"), fg="white", bg="#00b248", activebackground="#58e576")
+        # btn_igual = Button(frame_calculadora, text="✓", command=lambda:self.iniciar_contador_azul(), padx=20, pady=1, font=("Arial", 18, "bold"), fg="white", bg="#00b248", activebackground="#58e576")
         btn_igual.grid(row=4, column=3, padx=5, pady=5, sticky="nsew")
 
         # CRONOMETRO
@@ -186,7 +187,9 @@ class View(object):
         self.interface_contador()
         self.interface_dashboard()
         self.interface_formulario()
-
+        # self.calcular_azul()
+        self.refrescar_tiempo_transcurrido()
+        
         self.frame_padre.mainloop()
 
     def interface_contador(self):
@@ -196,43 +199,57 @@ class View(object):
         self.frame_contador.grid(row=1, column=2, sticky="nsew")
         # frame_contador.grid(row=1, column=2, sticky=W+E+N+S)
         self.frame_contador.rowconfigure(1, weight=1)
+        self.frame_contador.rowconfigure(2, weight=1)
+        self.frame_contador.rowconfigure(3, weight=1)
+        self.frame_contador.rowconfigure(4, weight=1)
+        self.frame_contador.rowconfigure(5, weight=1)
         self.frame_contador.columnconfigure(1, weight=1)
         self.frame_contador.columnconfigure(2, weight=1)
 
         ##* FRAME CONTADOR
-        self.frame_cronometro = Frame(self.frame_contador, padx=0, pady=0, bg="#00b248")
-        self.frame_cronometro.grid(row=1, column=1, rowspan=5, padx=10, pady=10, sticky="nsew")
+        self.frame_cronometro = Frame(self.frame_contador, padx=0, pady=0, bg="#0052b2")
+        self.frame_cronometro.grid(row=1, column=1, rowspan=4, pady=10, sticky="nsew")
         self.frame_cronometro.columnconfigure(1, weight=1)
         self.frame_cronometro.rowconfigure(1, weight=1)
+        self.frame_cronometro.rowconfigure(2, weight=1)
+        self.frame_cronometro.rowconfigure(3, weight=1)
 
-        self.label_contador = Label(self.frame_cronometro, text="00:00:00", font=("Arial", 100),fg="white", bg="#00b248")
-        self.label_contador.grid(row=1, column=1, rowspan=5, padx=50, sticky="nsew")
+        self.label_contador = Label(self.frame_cronometro, text="00:00:00", font=("Arial", 90),fg="white", bg="#0052b2")
+        self.label_contador.grid(row=1, column=1, rowspan=3, padx=50, sticky="nsew")
 
         # FRAME BTN CONTADOR
-        self.frame_btn_cronometro = Frame(self.frame_contador, padx=0, pady=0, bg="white")
-        self.frame_btn_cronometro.grid(row=1, column=2, rowspan=5, padx=10, pady=10, sticky="nsew")
+        self.frame_btn_cronometro = Frame(self.frame_contador, padx=0, pady=0, bg="pink")
+        self.frame_btn_cronometro.grid(row=1, column=2, rowspan=5, pady=10, sticky="nsew")
 
         self.frame_btn_cronometro.rowconfigure(1, weight=1)
         self.frame_btn_cronometro.rowconfigure(2, weight=1)
         self.frame_btn_cronometro.rowconfigure(3, weight=1)
-        self.frame_btn_cronometro.rowconfigure(4, weight=1)
-        self.frame_btn_cronometro.rowconfigure(5, weight=1)
         self.frame_btn_cronometro.columnconfigure(1, weight=1)
+
         #BTN_COLORES:
-        self.btn_azul = Button(self.frame_btn_cronometro, text="", command=lambda:self.open_azul('azul'), padx=30, pady=10, fg="white", bg="#0052b2", font=("Arial", 20))
-        self.btn_azul.grid(row=1, column=1, padx=10, pady=10)
+        self.btn_azul = Button(self.frame_btn_cronometro, text="", command=lambda:self.open_azul('azul'), padx=70, pady=50, fg="white", bg="#0052b2", font=("Arial", 20))
+        self.btn_azul.grid(row=1, column=1 )
 
-        self.btn_verde = Button(self.frame_btn_cronometro, text="", command=lambda:self.open_verde('verde'), padx=30, pady=10, fg="white", bg="#00b248", font=("Arial", 20))
-        self.btn_verde.grid(row=2, column=1, padx=10, pady=10)
+        self.btn_verde = Button(self.frame_btn_cronometro, text="", command=lambda:self.open_verde('verde'), padx=70, pady=50, fg="white", bg="#00b248", font=("Arial", 20))
+        self.btn_verde.grid(row=2, column=1)
 
-        self.btn_rojo = Button(self.frame_btn_cronometro, text="", command=lambda:self.open_rojo('rojo'), padx=30, pady=10, fg="white", bg="#ff0905", font=("Arial", 20))
-        self.btn_rojo.grid(row=3, column=1, padx=10, pady=10)
+        self.btn_rojo = Button(self.frame_btn_cronometro, text="", command=lambda:self.open_rojo('rojo'), padx=70, pady=50, fg="white", bg="#ff0905", font=("Arial", 20))
+        self.btn_rojo.grid(row=3, column=1)
 
-        self.btn_amarillo = Button(self.frame_btn_cronometro, text="", command=lambda:self.open_amarillo('amarillo'), padx=30, pady=10, fg="white", bg="#ffca0a", font=("Arial", 20))
-        self.btn_amarillo.grid(row=4, column=1, padx=10, pady=10)
+        # FRAME BTN INFERIOR CONTADOR
+        self.frame_btn_inferior_cronometro = Frame(self.frame_contador, padx=0, pady=0, bg="black")
+        self.frame_btn_inferior_cronometro.grid(row=5, column=1, rowspan=1, sticky="nsew")
 
-        self.btn_morado = Button(self.frame_btn_cronometro, text="", command=lambda:self.open_morado('morado'), padx=30, pady=10, fg="white", bg="#7b00cb", font=("Arial", 20))
-        self.btn_morado.grid(row=5, column=1, padx=10, pady=10)
+        self.frame_btn_inferior_cronometro.rowconfigure(1, weight=1)
+        self.frame_btn_inferior_cronometro.columnconfigure(1, weight=1)
+        self.frame_btn_inferior_cronometro.columnconfigure(2, weight=1)
+        
+        self.btn_morado = Button(self.frame_btn_inferior_cronometro, text="", command=lambda:self.open_morado('morado'), padx=70, pady=50, fg="white", bg="#7b00cb", font=("Arial", 20))
+        self.btn_morado.grid(row=1, column=1)
+
+        self.btn_amarillo = Button(self.frame_btn_inferior_cronometro, text="", command=lambda:self.open_amarillo('amarillo'), padx=70, pady=50, fg="white", bg="#ffca0a", font=("Arial", 20))
+        self.btn_amarillo.grid(row=1, column=2)
+
 
     def interface_dashboard(self):
         self.frame_dashboard = Frame( self.frame_padre, padx=0, pady=0, bg="white")
@@ -403,7 +420,7 @@ class View(object):
         btn_cero.grid(row=8, column=1, padx=5, pady=5, sticky="nsew")
         btn_punto = Button(self.frame_formulario, text="←", command=lambda:self.borrar_numero_produccion_real(), padx=20, pady=1, font=("Arial", 18), bg="#D0C9C0", fg='black', activebackground="#EFEAD8")
         btn_punto.grid(row=8, column=2, padx=5, pady=5, sticky="nsew")
-        btn_igual = Button(self.frame_formulario, text="next", command=lambda:self.change_input_produccion_a_piezas(), padx=20, pady=1, font=("Arial", 12, "bold"), fg="white", bg="#00b248", activebackground="#58e576")
+        btn_igual = Button(self.frame_formulario, text="Guardar", command=lambda:self.change_input_produccion_a_piezas(), padx=20, pady=1, font=("Arial", 12, "bold"), fg="white", bg="#00b248", activebackground="#58e576")
         btn_igual.grid(row=8, column=3, padx=5, pady=5, sticky="nsew")
 
 ############################################################### INTERFECE ############################################################################
@@ -506,10 +523,10 @@ class View(object):
                     #MOSTRAR EK DASHBOARD
                     self.frame_login.grid_forget()
                     self.frame_dashboard.grid(row=1, column=1, sticky="nsew")
-                    print('start_timer -> ' + 'verde')
-                    self.frame_cronometro.config(bg='#00b248')
-                    self.label_contador.config(bg='#00b248')
-                    self.indicador_color_btn = 'verde'
+                    print('start_timer -> ' + 'azul')
+                    self.frame_cronometro.config(bg='#0052b2')
+                    self.label_contador.config(bg='#0052b2')
+                    self.indicador_color_btn = 'azul'
                 else:
                     self.show_label_error('Digite un DNI válido')
             else:
@@ -527,10 +544,10 @@ class View(object):
                 #MOSTRAR EK DASHBOARD
                 self.frame_login.grid_forget()
                 self.frame_dashboard.grid(row=1, column=1, sticky="nsew")
-                print('start_timer -> ' + 'verde')
-                self.frame_cronometro.config(bg='#00b248')
-                self.label_contador.config(bg='#00b248')
-                self.indicador_color_btn = 'verde'
+                print('start_timer -> ' + 'azul')
+                self.frame_cronometro.config(bg='#0052b2')
+                self.label_contador.config(bg='#0052b2')
+                self.indicador_color_btn = 'azul'
                 # self.controller.set_user(self.user)
                 # self.controller.show_frame("Menu")
                 print('login')
@@ -611,19 +628,20 @@ class View(object):
             return tiempo_trancurrido
         if self.indicador_color_btn == 'azul':
             print('azul')
-            if (self.contador_azul == 0):
-                self.inicio_azul = datetime.now()
-            # if  self.click_btn_azul > 1:
-            #     ahora = datetime.strptime('00:00:00', '%H:%M:%S')
-            #     ahora2 = datetime.strptime(self.aux_contador_azul, '%H:%M:%S')
-            #     segundos_transcurridos = (datetime.now() - self.inicio_azul + (ahora2 - ahora)).total_seconds()
-            #     tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
-            #     self.contador_azul = tiempo_trancurrido
-            #     return tiempo_trancurrido
-            # else:
-            segundos_transcurridos= (datetime.now() - self.inicio_azul).total_seconds()
-            tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
-            self.contador_azul = tiempo_trancurrido
+            tiempo_trancurrido = self.calcular_azul()
+            # if (self.contador_azul == 0):
+            #     self.inicio_azul = datetime.now()
+            # # if  self.click_btn_azul > 1:
+            # #     ahora = datetime.strptime('00:00:00', '%H:%M:%S')
+            # #     ahora2 = datetime.strptime(self.aux_contador_azul, '%H:%M:%S')
+            # #     segundos_transcurridos = (datetime.now() - self.inicio_azul + (ahora2 - ahora)).total_seconds()
+            # #     tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
+            # #     self.contador_azul = tiempo_trancurrido
+            # #     return tiempo_trancurrido
+            # # else:
+            # segundos_transcurridos= (datetime.now() - self.inicio_azul).total_seconds()
+            # tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
+            # self.contador_azul = tiempo_trancurrido
             return tiempo_trancurrido
         if self.indicador_color_btn == 'rojo':
             print('rojo')
@@ -916,7 +934,7 @@ class View(object):
             self.click_btn_rojo = 0
             self.click_btn_amarillo = 0
             self.click_btn_morado = 0
-            self.indicador_color_btn = 'verde'
+            self.indicador_color_btn = 'azul'
             self.aux_contador_verde = ''
             self.aux_contador_azul = ''
             self.aux_contador_rojo = ''
@@ -927,8 +945,8 @@ class View(object):
             self.click_btn_start = False
             # self.btn_stop.grid_forget()
             # self.btn_start.grid(row=1, column=1, columnspan=4, padx=50, pady=50, sticky="nsew")
-            self.frame_cronometro.config(bg='#00b248')
-            self.label_contador.config(bg='#00b248')
+            self.frame_cronometro.config(bg='#0052b2')
+            self.label_contador.config(bg='#0052b2')
             self.click_btn_color = 0
             self.frame_login.grid(row=1, column=1, sticky="nsew")
             self.click_siguiente = True
@@ -1082,3 +1100,47 @@ class View(object):
         # self.controller.get_maquina_id()
 
 
+    def calcular_azul(self):
+        if self.contador_verde != 0:
+            segundos_transcurridos_verde = (datetime.strptime(self.contador_verde, '%H:%M:%S') - datetime.strptime('00:00:00', '%H:%M:%S')).total_seconds()
+        else:
+            segundos_transcurridos_verde = 0
+        
+        # if self.contador_azul != 0:
+        #     segundos_transcurridos_azul = (datetime.strptime(self.contador_azul, '%H:%M:%S') - datetime.strptime('00:00:00', '%H:%M:%S')).total_seconds()
+        # else:
+        #     segundos_transcurridos_azul = 0
+
+        if self.contador_rojo != 0:
+            segundos_transcurridos_rojo = (datetime.strptime(self.contador_rojo, '%H:%M:%S') - datetime.strptime('00:00:00', '%H:%M:%S')).total_seconds()
+        else:
+            segundos_transcurridos_rojo = 0
+        
+        if self.contador_morado != 0:
+            segundos_transcurridos_morado = (datetime.strptime(self.contador_morado, '%H:%M:%S') - datetime.strptime('00:00:00', '%H:%M:%S')).total_seconds()
+        else:
+            segundos_transcurridos_morado = 0
+
+        if self.contador_amarillo != 0:
+            segundos_transcurridos_amarillo = (datetime.strptime(self.contador_amarillo, '%H:%M:%S') - datetime.strptime('00:00:00', '%H:%M:%S')).total_seconds()
+        else:
+            segundos_transcurridos_amarillo = 0
+
+        segundos_total_colores = segundos_transcurridos_verde + segundos_transcurridos_rojo + segundos_transcurridos_morado + segundos_transcurridos_amarillo
+
+        hora_actual = (datetime.now().time().strftime("%H:%M:%S"))
+        aux_segundos_transcurridos_azul = int((datetime.strptime(hora_actual, '%H:%M:%S') - datetime.strptime('00:00:00', '%H:%M:%S')).total_seconds())
+        segundos_transcurridos_azul = (aux_segundos_transcurridos_azul - segundos_total_colores)
+        marcador_azul = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos_azul))
+        # self.label_contador.config(text=marcador_azul)
+
+        return marcador_azul
+
+        # tarea = self.raiz.after(500, self.calcular_azul)
+        # print('hola ' + tarea)
+
+
+    def iniciar_contador_azul(self):
+        print('a')
+        response =  self.controller.get_actividades_usuario_por_fecha()
+        print(response)

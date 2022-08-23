@@ -1,5 +1,6 @@
 from decouple import config
 import pymysql
+from datetime import datetime
 
 
 class Model:
@@ -119,6 +120,18 @@ class Model:
             self.cursor.execute(sql)
             maquina_id = self.cursor.fetchone()
             return maquina_id[0]
+        except Exception as e:
+            print(e)
+            return False
+
+    def get_actividades_usuario_por_fecha(self):
+        hoy =  datetime.now().date()
+        sql = "SELECT * FROM actividades_usuario WHERE created_at = {}".format(hoy)
+        try:
+            self.cursor.execute(sql)
+            actividades_user_hoy = self.cursor.fetchall()
+            print(actividades_user_hoy)
+            return actividades_user_hoy
         except Exception as e:
             print(e)
             return False

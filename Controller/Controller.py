@@ -294,3 +294,16 @@ class Controller:
         except Exception as e:
             print(e)
             return False
+
+    def get_actividades_usuario_por_fecha(self):
+        try:
+            actividades_user_hoy = self.model.get_actividades_usuario_por_fecha()
+
+            if actividades_user_hoy:
+                return actividades_user_hoy
+            else:
+                return False
+        except Exception as e:
+            print(e)
+            return False
+
