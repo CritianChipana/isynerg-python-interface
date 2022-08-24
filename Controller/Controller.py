@@ -299,8 +299,22 @@ class Controller:
         try:
             actividades_user_hoy = self.model.get_actividades_usuario_por_fecha()
 
+            total_verde = 0
+            total_amarillo = 0
+            total_morado = 0
+            total_rojo = 0
+            total_colores = 0
+
             if actividades_user_hoy:
-                return actividades_user_hoy
+
+                for i in range(len(actividades_user_hoy)):
+                    # total_verde += actividades_user_hoy[i][2]
+                    # total_amarillo += actividades_user_hoy[i][3]
+                    # total_morado += actividades_user_hoy[i][4]
+                    # total_rojo += actividades_user_hoy[i][5]
+                    total_colores += actividades_user_hoy[i][2] + actividades_user_hoy[i][3] + actividades_user_hoy[i][4] + actividades_user_hoy[i][5]
+
+                return total_colores
             else:
                 return False
         except Exception as e:
