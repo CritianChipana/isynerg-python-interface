@@ -154,7 +154,10 @@ class Controller:
 
         if lista_actividades:
             for i in range(len(lista_actividades)):
-                lista_para_bashboard.append(round(((lista_actividades[i][6]/(lista_actividades[i][6] + lista_actividades[i][7]))*100)))
+                if (lista_actividades[i][6] == 0 and lista_actividades[i][7]==0):
+                    lista_para_bashboard.append(0)
+                else:
+                    lista_para_bashboard.append(round(((lista_actividades[i][6]/(lista_actividades[i][6] + lista_actividades[i][7]))*100)))
 
         if lista_actividades:
 
@@ -177,7 +180,11 @@ class Controller:
         for i in range(len(lista_actividades)):
             total_colores = lista_actividades[i][2] + lista_actividades[i][3] + lista_actividades[i][4] + lista_actividades[i][5]
             total = lista_actividades[i][2] + lista_actividades[i][3] + lista_actividades[i][4] + lista_actividades[i][5] + lista_actividades[i][6] + lista_actividades[i][7]
-            lista_para_bashboard.append(round(((1440 - total_colores)/(total))*100))
+
+            if total==0:
+                lista_para_bashboard.append(0)
+            else :
+                lista_para_bashboard.append(round(((1440 - total_colores)/(total))*100))
 
         for i in range( 7 - len(lista_para_bashboard)):
             lista_para_bashboard.append(0)
@@ -201,8 +208,11 @@ class Controller:
             for i in range(len(lista_actividades)):
                 total_colores = lista_actividades[i][2] + lista_actividades[i][3] + lista_actividades[i][4] + lista_actividades[i][5]
                 total = lista_actividades[i][2] + lista_actividades[i][3] + lista_actividades[i][4] + lista_actividades[i][5] + lista_actividades[i][6] + lista_actividades[i][7]
-                
-                lista_para_bashboard.append(round(((lista_actividades[i][2])/(total - (1440 - total_colores)))*100))
+
+                if (total - (1440 - total_colores)) == 0:
+                    lista_para_bashboard.append(0)
+                else:
+                    lista_para_bashboard.append(round(((lista_actividades[i][2])/(total - (1440 - total_colores)))*100))
                 print(7777777777777777777777)
                 print((lista_actividades[i][2]))
                 print((total - (1440 - total_colores)))

@@ -768,9 +768,11 @@ class View(object):
         nueva_hora = self.obtener_tiempo_transcurrido_formateado()
         print(nueva_hora)
 
-        if (datetime.now().time().strftime("%H:%M:%S") == '00:00:00'):
+        if (datetime.now().time().strftime("%H:%M:%S") == '23:59:59'):
+            if(self.indicador_color_btn == 'verde'):
+                self.save_actividad_verde_terminando_el_dia_automaticamente()
+            else:
                 self.stop()
-
 
         
         tarea = self.raiz.after(500, self.refrescar_tiempo_transcurrido)
@@ -1219,6 +1221,32 @@ class View(object):
                 print('Error al guardar la actividad de usuario')
             # self.raiz.after_(self.refrescar_tiempo_transcurrido)
 
+    def save_actividad_verde_terminando_el_dia_automaticamente(self):
+        if self.contador_verde != 0:
+            segundos_transcurridos_verde = (datetime.strptime(self.contador_verde, '%H:%M:%S') - datetime.strptime('00:00:00', '%H:%M:%S')).total_seconds()
+        else:
+            segundos_transcurridos_verde = 0
+
+        
+        if int(segundos_transcurridos_verde) != 0:
+            data = {
+                'verde': int(segundos_transcurridos_verde),
+                'azul': 0,
+                'amarillo': 0,
+                'rojo': 0,
+                'morado': 0,
+                'produccion_real' : 0,
+                'piezas_malas' :0
+            }
+
+            print(data)
+            response =  self.controller.crear_actividad_user(self.user[0], self.maquina_id, data)
+            if response:
+                self.label_contador.config(text="00:00:00")
+                self.contador_verde = 0
+            else :
+                print('Error al guardar la actividad de usuario')
+            # self.raiz.after_(self.refrescar_tiempo_transcurrido)
 
     def open_oee(self):
         # grafica lineal
