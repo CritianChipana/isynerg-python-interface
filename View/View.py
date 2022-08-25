@@ -6,7 +6,7 @@ import datetime
 from datetime import datetime, date
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-
+from tkinter import messagebox
 
 from Controller.Controller import Controller
 from Model.Model import Model
@@ -24,6 +24,8 @@ class View(object):
     maquina_id = 1
     indicador_color_btn = "azul"
     aux_indicador_color_btn = ""
+    indicar_color_btn_anterior = 0
+    no_tiene_rol_permitido = False
 
     # hora_inicio = datetime.now()
     inicio_verde = datetime.now()
@@ -472,7 +474,7 @@ class View(object):
 
             if len(self.input_piezas_malas.get()) > 0:
                 print('guardar actividad')
-                self.save_activiada_user_verde()
+                self.save_activiada_user_produccion_y_piezas()
                 # # limpiar usuario
                 # self.user = ()
                 #limpiar inputs y contadores
@@ -490,7 +492,8 @@ class View(object):
                 # mostrar login
                 self.frame_formulario.grid_forget()
                 self.frame_login.grid(row=1, column=1, sticky="nsew")
-
+                #bandera para mostrar formulario
+                self.indicar_color_btn_anterior = 0
                 # MOSTRAR FORMULARIO AGAIN
                 self.label_formulario_produccion_real.grid(row=1, column=1, columnspan=3, padx=5, pady=5, sticky="nsew")
                 self.input_produccion_real.grid(row=2, column=1, columnspan=3, padx=5, pady=5, sticky="nsew")
@@ -510,16 +513,37 @@ class View(object):
         password = self.input_dni.get()
         nombre = self.combo_operario.get()
         self.nombre_operario = self.combo_operario.get()
-        if self.nombre_operario == 'CON DNI':
-            if len(password) > 0:
-                usuario_con_dni = self.controller.crear_usuario_by_dni(password)
-                print('666666666666666666666')
-                print(usuario_con_dni)
-                print('666666666666666666666')
-                if usuario_con_dni:
-                    self.user = usuario_con_dni
+
+        if self.no_tiene_rol_permitido:
+            if self.nombre_operario == 'CON DNI':
+                if len(password) > 0:
+                    usuario_con_dni = self.controller.crear_usuario_by_dni(password)
+                    print('666666666666666666666')
+                    print(usuario_con_dni)
+                    print('666666666666666666666')
+                    if usuario_con_dni:
+                        self.user = usuario_con_dni
+                        self.hide_label_error()
+                        self.controller.create_session(self.user[0])
+                        self.habilitar_btn_start()
+                        self.input_dni.config(state=DISABLED)
+                        self.combo_operario.config(state=DISABLED)
+
+                        #MOSTRAR EK DASHBOARD
+                        self.frame_login.grid_forget()
+                        self.frame_dashboard.grid(row=1, column=1, sticky="nsew")
+                        self.no_tiene_rol_permitido = False
+
+                    else:
+                        self.show_label_error('Digite un DNI válido')
+                else:
+                    self.show_label_error('Digite un DNI válido')
+            else:
+                self.user = self.controller.login(nombre,password)
+                if self.user != False:
                     self.hide_label_error()
                     self.controller.create_session(self.user[0])
+
                     self.habilitar_btn_start()
                     self.input_dni.config(state=DISABLED)
                     self.combo_operario.config(state=DISABLED)
@@ -527,38 +551,58 @@ class View(object):
                     #MOSTRAR EK DASHBOARD
                     self.frame_login.grid_forget()
                     self.frame_dashboard.grid(row=1, column=1, sticky="nsew")
+                    self.no_tiene_rol_permitido = False
+
+                else:
+                    self.show_label_error('La contraseña es incoreccta')
+            print(self.user)
+        else: 
+            if self.nombre_operario == 'CON DNI':
+                if len(password) > 0:
+                    usuario_con_dni = self.controller.crear_usuario_by_dni(password)
+                    print('666666666666666666666')
+                    print(usuario_con_dni)
+                    print('666666666666666666666')
+                    if usuario_con_dni:
+                        self.user = usuario_con_dni
+                        self.hide_label_error()
+                        self.controller.create_session(self.user[0])
+                        self.habilitar_btn_start()
+                        self.input_dni.config(state=DISABLED)
+                        self.combo_operario.config(state=DISABLED)
+
+                        #MOSTRAR EK DASHBOARD
+                        self.frame_login.grid_forget()
+                        self.frame_dashboard.grid(row=1, column=1, sticky="nsew")
+                        print('start_timer -> ' + 'azul')
+                        self.frame_cronometro.config(bg='#0052b2')
+                        self.label_contador.config(bg='#0052b2')
+                        self.indicador_color_btn = 'azul'
+                    else:
+                        self.show_label_error('Digite un DNI válido')
+                else:
+                    self.show_label_error('Digite un DNI válido')
+            else:
+                self.user = self.controller.login(nombre,password)
+                if self.user != False:
+                    self.hide_label_error()
+                    self.controller.create_session(self.user[0])
+
+                    self.habilitar_btn_start()
+                    self.input_dni.config(state=DISABLED)
+                    self.combo_operario.config(state=DISABLED)
+
+                    #MOSTRAR EK DASHBOARD
+                    self.frame_login.grid_forget()
+                    self.frame_dashboard.grid(row=1, column=1, sticky="nsew")
+
                     print('start_timer -> ' + 'azul')
                     self.frame_cronometro.config(bg='#0052b2')
                     self.label_contador.config(bg='#0052b2')
                     self.indicador_color_btn = 'azul'
                 else:
-                    self.show_label_error('Digite un DNI válido')
-            else:
-                self.show_label_error('Digite un DNI válido')
-        else:
-            self.user = self.controller.login(nombre,password)
-            if self.user != False:
-                self.hide_label_error()
-                self.controller.create_session(self.user[0])
-
-                self.habilitar_btn_start()
-                self.input_dni.config(state=DISABLED)
-                self.combo_operario.config(state=DISABLED)
-
-                #MOSTRAR EK DASHBOARD
-                self.frame_login.grid_forget()
-                self.frame_dashboard.grid(row=1, column=1, sticky="nsew")
-                print('start_timer -> ' + 'azul')
-                self.frame_cronometro.config(bg='#0052b2')
-                self.label_contador.config(bg='#0052b2')
-                self.indicador_color_btn = 'azul'
-                # self.controller.set_user(self.user)
-                # self.controller.show_frame("Menu")
-                print('login')
-            else:
-                self.show_label_error('La contraseña es incoreccta')
-            
-        print(self.user)
+                    self.show_label_error('La contraseña es incoreccta')
+            print(self.user)
 
     def show_label_error(self, msg):
         self.label_password_icorecto.config(text=msg)
@@ -616,20 +660,16 @@ class View(object):
         print( 'click_btn_color: ' + str(self.click_btn_color))
         print( 'Indicador de color: ' + self.indicador_color_btn)
         print('indicador aux de color: ' + self.aux_indicador_color_btn)
+        print('indicar_color_btn_anterior: ' + str(self.indicar_color_btn_anterior))
         print('====================================================')
-
+        print('user: ' + str(self.user))
+        print('====================================================')
+        self.mostrar_contador_con_color()
         if self.indicador_color_btn == 'verde' and self.user != ():
             print('verde')
             if (self.contador_verde == 0):
                 self.inicio_verde = datetime.now()
-            # if  self.click_btn_verde > 1:
-            #     ahora = datetime.strptime('00:00:00', '%H:%M:%S')
-            #     ahora2 = datetime.strptime(self.aux_contador_verde, '%H:%M:%S')
-            #     segundos_transcurridos = (datetime.now() - self.inicio_verde + (ahora2 - ahora)).total_seconds()
-            #     tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
-            #     self.contador_verde = tiempo_trancurrido
-            #     return tiempo_trancurrido
-            # else:
+
             segundos_transcurridos= (datetime.now() - self.inicio_verde).total_seconds()
             tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
             self.contador_verde = tiempo_trancurrido
@@ -642,39 +682,19 @@ class View(object):
         if self.indicador_color_btn == 'azul' or self.user == ():
             print('azul')
             tiempo_trancurrido = self.calcular_azul()
-            # if (self.contador_azul == 0):
-            #     self.inicio_azul = datetime.now()
-            # # if  self.click_btn_azul > 1:
-            # #     ahora = datetime.strptime('00:00:00', '%H:%M:%S')
-            # #     ahora2 = datetime.strptime(self.aux_contador_azul, '%H:%M:%S')
-            # #     segundos_transcurridos = (datetime.now() - self.inicio_azul + (ahora2 - ahora)).total_seconds()
-            # #     tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
-            # #     self.contador_azul = tiempo_trancurrido
-            # #     return tiempo_trancurrido
-            # # else:
-            # segundos_transcurridos= (datetime.now() - self.inicio_azul).total_seconds()
-            # tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
-            # self.contador_azul = tiempo_trancurrido
+
 
             self.label_contador.grid_forget()
-
             self.label_contador_azul.grid(row=1, column=1, rowspan=3, padx=50, sticky="nsew")
             self.label_contador_azul.config(text=tiempo_trancurrido)
             # return tiempo_trancurrido
 
-        # if self.indicador_color_btn == 'rojo'  and self.user != ():
-        if self.indicador_color_btn == 'rojo':
+        if self.indicador_color_btn == 'rojo'  and self.user != ():
+        # if self.indicador_color_btn == 'rojo':
             print('rojo')
             if (self.contador_rojo == 0):
                 self.inicio_rojo = datetime.now()
-            # if  self.click_btn_rojo > 1:
-            #     ahora = datetime.strptime('00:00:00', '%H:%M:%S')
-            #     ahora2 = datetime.strptime(self.aux_contador_rojo, '%H:%M:%S')
-            #     segundos_transcurridos = (datetime.now() - self.inicio_rojo + (ahora2 - ahora)).total_seconds()
-            #     tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
-            #     self.contador_rojo = tiempo_trancurrido
-            #     return tiempo_trancurrido
-            # else:
+
             segundos_transcurridos= (datetime.now() - self.inicio_rojo).total_seconds()
             tiempo_trancurrido = self.segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
             self.contador_rojo = tiempo_trancurrido
@@ -739,26 +759,23 @@ class View(object):
         print("Refrescando!")
         nueva_hora = self.obtener_tiempo_transcurrido_formateado()
         print(nueva_hora)
-        # if(self.indicador_color_btn == 'azul'):
-        #     self.label_contador.grid_forget()
-        #     self.label_contador_azul.grid(row=1, column=1, rowspan=3, padx=50, sticky="nsew")
-        #     self.label_contador_azul.config(text=nueva_hora)
-        # else: 
-        #     self.label_contador_azul.grid_forget()
-        #     self.label_contador.config(text=nueva_hora)
+
+        if (datetime.now().time().strftime("%H:%M:%S") == '09:47:00'):
+            self.stop()
+
 
         
         tarea = self.raiz.after(500, self.refrescar_tiempo_transcurrido)
         if self.click_btn_stop == True :
             # self.raiz.after_cancel(tarea)
-            # self.mostrar_contador_con_color()
+            self.mostrar_contador_con_color()
 
             if self.aux_indicador_color_btn == 'verde':
                 self.frame_formulario.grid(row=1, column=1, padx=10, pady=9, sticky="nsew")
             else:
                 self.input_produccion_real.insert(self.contador_productos_producidos, 0) 
                 self.input_piezas_malas.insert(self.contador_piezas_malas, 0) 
-                self.frame_login.grid(row=1, column=1, sticky="nsew")
+                # self.frame_login.grid(row=1, column=1, sticky="nsew")
                 # self.frame_dashboard.
                 self.save_activiada_user()
                 # self.user = ()
@@ -775,8 +792,15 @@ class View(object):
                 # eliminar el contenido del Combobox
                 self.combo_operario.delete(0, END)
                 # mostrar login
-                self.frame_formulario.grid_forget()
-                self.frame_login.grid(row=1, column=1, sticky="nsew")
+                if self.indicar_color_btn_anterior == 1:
+                    self.frame_formulario.grid(row=1, column=1, sticky="nsew")
+                    self.frame_login.grid_forget()
+                else :
+                    self.frame_formulario.grid_forget()
+                    self.frame_login.grid(row=1, column=1, sticky="nsew")
+
+                # self.frame_formulario.grid_forget()
+                # self.frame_login.grid(row=1, column=1, sticky="nsew")
 
 
 
@@ -791,51 +815,81 @@ class View(object):
 
         print('start_timer -> ' + verde)
 
-        # if self.indicador_color_btn != 'azul' and self.user == ():
-        #     print('##################')
-        #     self.label_contador_azul.grid_forget()
-        #     self.label_contador.grid(row=1, column=1, rowspan=3, padx=50, sticky="nsew")
-        #     self.label_contador.config(text='00:00:00')
-
-        # if self.user == () or self.click_btn_color == 0:
         self.frame_cronometro.config(bg='#00b248')
         self.label_contador.config(bg='#00b248')
 
-        self.indicador_color_btn = verde
 
         if self.user != ():
+            if (self.user[7] == 'OPERARIO' and verde == 'verde'):
 
-            self.click_btn_color = self.click_btn_color + 1
-
-            if self.click_btn_color == 1:
-                # self.refrescar_tiempo_transcurrido()
-                self.aux_indicador_color_btn = verde
-            if self.click_btn_color == 2:
+                self.click_btn_color = self.click_btn_color + 1
+                self.indicar_color_btn_anterior = 1
                 self.stop()
+                self.aux_indicador_color_btn = verde
+                self.indicador_color_btn = verde
+                # self.frame_dashboard.grid_forget()
+
+                if self.click_btn_color == 0:
+                    self.aux_indicador_color_btn =  verde
+
+            else: 
+                messagebox.showinfo(message="Registrese con el cargo responsable del cambio de operacion(OPERARIO)", title="ERROR")
+                print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+                print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+                print('que se registre un usuari')
+                self.no_tiene_rol_permitido = True
                 self.frame_dashboard.grid_forget()
+                self.frame_login.grid(row=1, column=1, sticky="nsew")
+                self.input_dni.config(state=NORMAL)
+                self.combo_operario.config(state=NORMAL)
+                self.input_dni.delete(0, END)
+                self.combo_operario.delete(0, END)
     
     def open_azul(self, azul):
 
         # #open dashboard
-        self.frame_login.grid_forget()
-        self.frame_dashboard.grid(row=1, column=1, sticky="nsew")
 
         print('start_timer -> ' + azul)
-        # if self.user == () or self.click_btn_color == 0:
-        self.frame_cronometro.config(bg='#0052b2')
-        self.label_contador.config(bg='#0052b2')
+        if self.user == ():
+            self.frame_cronometro.config(bg='#0052b2')
+            self.label_contador.config(bg='#0052b2')
+            self.frame_login.grid_forget()
+            self.frame_dashboard.grid(row=1, column=1, sticky="nsew")
         
-        self.indicador_color_btn = azul
-
+# # logistica, recursos humanos, empresa, role
         if self.user != ():
-            self.click_btn_color = self.click_btn_color + 1
-            if self.click_btn_color == 1:
-                # self.refrescar_tiempo_transcurrido()
+            if (self.user[7] == 'MANTENIMIENTO' and self.aux_indicador_color_btn == 'rojo') or (self.user[7] == 'OPERARIO' and self.aux_indicador_color_btn == 'verde')  or (self.user[7] == 'LOGISTICA' and self.aux_indicador_color_btn == 'amarillo') or (self.user[7] == 'RECURSOSHUMANOS' and self.aux_indicador_color_btn == 'morado') or self.aux_indicador_color_btn == '' or  self.aux_indicador_color_btn == 'azul':
+
+                self.indicador_color_btn = azul
+
+                self.click_btn_color = self.click_btn_color + 1
+
                 self.aux_indicador_color_btn = azul
-            if self.click_btn_color == 2:
                 self.stop()
-                # self.mostrar_contador_con_color()
                 self.frame_dashboard.grid_forget()
+                self.btn_azul.grid(row=1, column=1 )
+                self.btn_verde.grid(row=2, column=1)
+                self.btn_rojo.grid(row=3, column=1)
+                self.btn_morado.grid(row=1, column=1)
+                self.btn_amarillo.grid(row=1, column=2)
+
+                
+                if self.click_btn_color == 0:
+                    self.aux_indicador_color_btn =  self.indicador_color_btn
+            else: 
+                messagebox.showinfo(message="Registrese con el cargo responsable del cambio de operacion", title="ERROR")
+                print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+                print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+                print('que se registre un usuario de mantenimiento')
+                print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+                self.no_tiene_rol_permitido = True
+                self.frame_dashboard.grid_forget()
+                self.frame_login.grid(row=1, column=1, sticky="nsew")
+                self.input_dni.config(state=NORMAL)
+                self.combo_operario.config(state=NORMAL)
+                self.input_dni.delete(0, END)
+                self.combo_operario.delete(0, END)
+
 
     
     def open_rojo(self, rojo):
@@ -856,16 +910,45 @@ class View(object):
         self.label_contador.config(bg='#ff0905')
             # self.label_contador.config(text='00:00:00')
 
-        self.indicador_color_btn = rojo
 
         if self.user != ():
-            self.click_btn_color = self.click_btn_color + 1
-            if self.click_btn_color == 1:
-                # self.refrescar_tiempo_transcurrido()
+            if (self.user[7] == 'MANTENIMIENTO' and rojo == 'rojo'):
+                self.click_btn_color = self.click_btn_color + 1
+                
+                self.indicador_color_btn = rojo
+
                 self.aux_indicador_color_btn = rojo
-            if self.click_btn_color == 2:
                 self.stop()
+
+                self.frame_login.grid_forget()
+                self.frame_dashboard.grid(row=1, column=1, sticky="nsew")
+                # self.btn_azul.grid_forget()
+                self.btn_verde.grid_forget()
+                self.btn_rojo.grid_forget()
+                self.btn_morado.grid_forget()
+                self.btn_amarillo.grid_forget()
+
+                if self.click_btn_color == 0:
+                    self.aux_indicador_color_btn =  rojo
+                if self.click_btn_color == 1:
+                    # self.refrescar_tiempo_transcurrido()
+                    # self.aux_indicador_color_btn = rojo
+                    # self.stop()
+                    print('uno')
+                    # self.frame_dashboard.grid_forget()
+    
+            else: 
+                messagebox.showinfo(message="Registrese con el cargo responsable del cambio de operacion(MANTENIMIENTO)", title="ERROR")
+                print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+                print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+                print('que se registre un usuari')
+                self.no_tiene_rol_permitido = True
                 self.frame_dashboard.grid_forget()
+                self.frame_login.grid(row=1, column=1, sticky="nsew")
+                self.input_dni.config(state=NORMAL)
+                self.combo_operario.config(state=NORMAL)
+                self.input_dni.delete(0, END)
+                self.combo_operario.delete(0, END)
 
     
     def open_amarillo(self, amarillo):
@@ -884,16 +967,49 @@ class View(object):
         self.frame_cronometro.config(bg='#ffca0a')
         self.label_contador.config(bg='#ffca0a')
 
-        self.indicador_color_btn = amarillo
 
         if self.user != ():
-            self.click_btn_color = self.click_btn_color + 1
-            if self.click_btn_color == 1:
-                # self.refrescar_tiempo_transcurrido()
+            if (self.user[7] == 'LOGISTICA' and amarillo == 'amarillo'):
+
+                self.click_btn_color = self.click_btn_color + 1
+                self.indicador_color_btn = amarillo
+
                 self.aux_indicador_color_btn = amarillo
-            if self.click_btn_color == 2:
                 self.stop()
+                # # # # # # # # # # # # # # # # # # # # # # # # # # # # # self.frame_dashboard.grid_forget()
+
+                self.frame_login.grid_forget()
+                self.frame_dashboard.grid(row=1, column=1, sticky="nsew")
+
+                self.btn_verde.grid_forget()
+                self.btn_rojo.grid_forget()
+                self.btn_morado.grid_forget()
+                self.btn_amarillo.grid_forget()
+
+                if self.click_btn_color == 0:
+                    self.aux_indicador_color_btn =  self.indicador_color_btn
+                if self.click_btn_color == 1:
+                    # self.refrescar_tiempo_transcurrido()
+                    print('uno')
+
+                    # self.aux_indicador_color_btn = amarillo
+                    # # self.stop()
+                    # self.frame_dashboard.grid_forget()
+                if self.click_btn_color == 2:
+                    self.stop()
                 self.frame_dashboard.grid_forget()
+            else: 
+                messagebox.showinfo(message="Registrese con el cargo responsable del cambio de operacion(LOGISTICA)", title="ERROR")
+                print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+                print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+                print('que se registre un usuari')
+                self.no_tiene_rol_permitido = True
+                self.frame_dashboard.grid_forget()
+                self.frame_login.grid(row=1, column=1, sticky="nsew")
+                self.input_dni.config(state=NORMAL)
+                self.combo_operario.config(state=NORMAL)
+                self.input_dni.delete(0, END)
+                self.combo_operario.delete(0, END)
 
     def open_morado(self, morado):
         if self.user == ():
@@ -910,46 +1026,79 @@ class View(object):
         self.frame_cronometro.config(bg='#7b00cb')
         self.label_contador.config(bg='#7b00cb')
 
-        self.indicador_color_btn = morado
+
+        
 
         if self.user != ():
-            self.click_btn_color = self.click_btn_color + 1
-            if self.click_btn_color == 1:
-                # self.refrescar_tiempo_transcurrido()
+            if (self.user[7] == 'RECURSOSHUMANOS' and morado == 'morado'):
+                self.click_btn_color = self.click_btn_color + 1
+                self.indicador_color_btn = morado
+
                 self.aux_indicador_color_btn = morado
-            if self.click_btn_color == 2:
                 self.stop()
+
+                self.frame_login.grid_forget()
+                self.frame_dashboard.grid(row=1, column=1, sticky="nsew")
+
+                self.btn_verde.grid_forget()
+                self.btn_rojo.grid_forget()
+                self.btn_morado.grid_forget()
+                self.btn_amarillo.grid_forget()
+
+                if self.click_btn_color == 0:
+                    self.aux_indicador_color_btn =  self.indicador_color_btn
+                if self.click_btn_color == 1:
+                    # self.refrescar_tiempo_transcurrido()
+                    print('uno')
+
+                    # self.aux_indicador_color_btn = morado
+                    # # self.stop()
+                    # self.frame_dashboard.grid_forget()
+                if self.click_btn_color == 2:
+                    self.stop()
+                    self.frame_dashboard.grid_forget()
+            else: 
+                messagebox.showinfo(message="Registrese con el cargo responsable del cambio de operacion(RECURSOS HUMANOS)", title="ERROR")
+                print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+                print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+                print('que se registre un usuari')
+                self.no_tiene_rol_permitido = True
                 self.frame_dashboard.grid_forget()
+                self.frame_login.grid(row=1, column=1, sticky="nsew")
+                self.input_dni.config(state=NORMAL)
+                self.combo_operario.config(state=NORMAL)
+                self.input_dni.delete(0, END)
+                self.combo_operario.delete(0, END)
 
     def mostrar_contador_con_color(self):
-        if self.aux_indicador_color_btn == 'verde':
+        if self.indicador_color_btn == 'verde':
 
-            # self.frame_cronometro.config(bg='#00b248')
-            # self.label_contador.config(bg='#00b248')
-            self.label_contador.config(text=self.contador_verde)
-        elif self.aux_indicador_color_btn == 'azul':
+            self.frame_cronometro.config(bg='#00b248')
+            self.label_contador.config(bg='#00b248')
+            # self.label_contador.config(text=self.contador_verde)
+        elif self.indicador_color_btn == 'azul':
 
-            # self.frame_cronometro.config(bg='#0052b2')
-            # self.label_contador.config(bg='#0052b2')
-            self.label_contador.config(text=self.contador_azul)
+            self.frame_cronometro.config(bg='#0052b2')
+            self.label_contador.config(bg='#0052b2')
+            # self.label_contador.config(text=self.contador_azul)
 
-        elif self.aux_indicador_color_btn == 'rojo':
+        elif self.indicador_color_btn == 'rojo':
 
-            # self.frame_cronometro.config(bg='#ff0905')
-            # self.label_contador.config(bg='#ff0905')
-            self.label_contador.config(text=self.contador_rojo)
+            self.frame_cronometro.config(bg='#ff0905')
+            self.label_contador.config(bg='#ff0905')
+            # self.label_contador.config(text=self.contador_rojo)
 
-        elif self.aux_indicador_color_btn == 'amarillo':
+        elif self.indicador_color_btn == 'amarillo':
 
-            # self.frame_cronometro.config(bg='#ffca0a')
-            # self.label_contador.config(bg='#ffca0a')
-            self.label_contador.config(text=self.contador_amarillo)
+            self.frame_cronometro.config(bg='#ffca0a')
+            self.label_contador.config(bg='#ffca0a')
+            # self.label_contador.config(text=self.contador_amarillo)
 
-        elif self.aux_indicador_color_btn == 'morado':
+        elif self.indicador_color_btn == 'morado':
 
-            # self.frame_cronometro.config(bg='#7b00cb')
-            # self.label_contador.config(bg='#7b00cb')
-            self.label_contador.config(text=self.contador_morado)
+            self.frame_cronometro.config(bg='#7b00cb')
+            self.label_contador.config(bg='#7b00cb')
+            # self.label_contador.config(text=self.contador_morado)
 
 
     def stop(self):
@@ -997,6 +1146,7 @@ class View(object):
         response =  self.controller.crear_actividad_user(self.user[0], self.maquina_id, data)
         if response:
             self.label_contador.config(text="00:00:00")
+            print('5555555555555555')
             self.contador_verde = 0
             self.contador_azul = 0
             self.contador_rojo = 0
@@ -1007,35 +1157,37 @@ class View(object):
             self.click_btn_rojo = 0
             self.click_btn_amarillo = 0
             self.click_btn_morado = 0
-            self.indicador_color_btn = 'azul'
+            # # self.indicador_color_btn = 'azul'
             self.aux_contador_verde = ''
             self.aux_contador_azul = ''
             self.aux_contador_rojo = ''
             self.aux_contador_amarillo = ''
             self.aux_contador_morado = ''
-            self.aux_indicador_color_btn = ''
+            self.aux_indicador_color_btn = self.aux_indicador_color_btn
             self.click_btn_stop = False
             self.click_btn_start = False
             # self.btn_stop.grid_forget()
             # self.btn_start.grid(row=1, column=1, columnspan=4, padx=50, pady=50, sticky="nsew")
-            self.frame_cronometro.config(bg='#0052b2')
-            self.label_contador.config(bg='#0052b2')
+            # # self.frame_cronometro.config(bg='#0052b2')
+            # # self.label_contador.config(bg='#0052b2')
             self.click_btn_color = 0
-            self.frame_login.grid(row=1, column=1, sticky="nsew")
+            self.indicar_color_btn_anterior = self.indicar_color_btn_anterior
+            if self.indicar_color_btn_anterior == 1:
+                self.frame_formulario.grid(row=1, column=1, sticky="nsew")
+                self.frame_login.grid_forget()
+            else :
+                self.frame_formulario.grid_forget()
+                self.frame_login.grid(row=1, column=1, sticky="nsew")
             self.click_siguiente = True
 
         else :
             print('Error al guardar la actividad de usuario')
         # self.raiz.after_(self.refrescar_tiempo_transcurrido)
 
-    def save_activiada_user_verde(self):
-            if self.contador_verde != 0:
-                segundos_transcurridos_verde = (datetime.strptime(self.contador_verde, '%H:%M:%S') - datetime.strptime('00:00:00', '%H:%M:%S')).total_seconds()
-            else:
-                segundos_transcurridos_verde = 0
-
+    def save_activiada_user_produccion_y_piezas(self):
+        
             data = {
-                'verde': int(segundos_transcurridos_verde),
+                'verde': int(0),
                 'azul': int(0),
                 'amarillo': int(0),
                 'rojo': int(0),
@@ -1047,69 +1199,7 @@ class View(object):
             print(data)
             response =  self.controller.crear_actividad_user(self.user[0], self.maquina_id, data)
             if response:
-
-                if self.indicador_color_btn == 'azul':
-                    self.label_contador.config(text="00:00:00")
-                    self.contador_verde = 0
-                    # self.contador_azul = 0
-                    self.contador_rojo = 0
-                    self.contador_amarillo = 0
-                    self.contador_morado = 0
-                    self.click_btn_verde = 0
-                    self.click_btn_azul = 0
-                    self.click_btn_rojo = 0
-                    self.click_btn_amarillo = 0
-                    self.click_btn_morado = 0
-                    self.indicador_color_btn = 'azul'
-                    self.aux_contador_verde = ''
-                    self.aux_contador_azul = ''
-                    self.aux_contador_rojo = ''
-                    self.aux_contador_amarillo = ''
-                    self.aux_contador_morado = ''
-                    self.aux_indicador_color_btn = ''
-                    self.click_btn_stop = False
-                    self.click_btn_start = False
-                    # self.btn_stop.grid_forget()
-                    # self.btn_start.grid(row=1, column=1, columnspan=4, padx=50, pady=50, sticky="nsew")
-                    self.frame_cronometro.config(bg='#0052b2')
-                    self.label_contador.config(bg='#0052b2')
-                    self.click_btn_color = 0
-                    self.frame_login.grid(row=1, column=1, sticky="nsew")
-                    self.click_siguiente = True
-                else:
-                    # self.label_contador.config(text="00:00:00")
-                    self.contador_verde = 0
-                    self.contador_rojo = self.contador_rojo
-                    self.contador_amarillo = self.contador_amarillo
-                    self.contador_morado = self.contador_morado
-                    # self.click_btn_verde = self.click_btn_verde
-                    # self.click_btn_azul = self.click_btn_azul
-                    # self.click_btn_rojo = self.click_btn_rojo
-                    # self.click_btn_amarillo = self.click_btn_amarillo
-                    # self.click_btn_morado = self.click_btn_morado
-                    self.indicador_color_btn = self.indicador_color_btn
-                    # self.aux_contador_verde = self.aux_contador_verde
-                    # self.aux_contador_azul = self.aux_contador_azul 
-                    # self.aux_contador_rojo = self.aux_contador_rojo
-                    # self.aux_contador_amarillo = self.aux_contador_amarillo
-                    # self.aux_contador_morado = self.aux_contador_morado
-
-                    self.aux_indicador_color_btn = self.indicador_color_btn
-                    self.click_btn_stop = False 
-                    # self.click_btn_start = self.click_btn_start 
-
-
-
-                    # self.frame_cronometro.config(bg='#0052b2')
-                    # self.label_contador.config(bg='#0052b2')
-                    self.click_btn_color = 2
-                    self.frame_login.grid(row=1, column=1, sticky="nsew")
-                    self.click_siguiente = True
-                    # if self.indicador_color_btn == 'azul':
-                    #     print('a')
-                    # else:
-                    #     print('a')
-
+                print('se guardo las piesas')
             else :
                 print('Error al guardar la actividad de usuario')
             # self.raiz.after_(self.refrescar_tiempo_transcurrido)
@@ -1264,13 +1354,6 @@ class View(object):
             segundos_transcurridos_verde = (datetime.strptime(self.contador_verde, '%H:%M:%S') - datetime.strptime('00:00:00', '%H:%M:%S')).total_seconds()
         else:
             segundos_transcurridos_verde = 0
-        
-        # # if self.contador_azul != 0:
-        # #     segundos_transcurridos_azul = (datetime.strptime(self.contador_azul, '%H:%M:%S') - datetime.strptime('00:00:00', '%H:%M:%S')).total_seconds()
-        # # else:
-        # #     segundos_transcurridos_azul = 0
-        # print('contador azul: ' + str(self.contador_azul))
-
 
         if self.contador_rojo != 0:
             segundos_transcurridos_rojo = (datetime.strptime(self.contador_rojo, '%H:%M:%S') - datetime.strptime('00:00:00', '%H:%M:%S')).total_seconds()
