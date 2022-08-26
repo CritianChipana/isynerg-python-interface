@@ -135,7 +135,7 @@ class View(object):
         #input NOMBRE
         label_operador = Label(frame_session, text="Nombre:", font=("Arial", 18), bg="white", fg='black')
         label_operador.grid(row=2, column=1, padx=0, sticky="w")
-        self.combo_operario = Combobox(frame_session, width=18, font=("Arial", 20), values=self.get_usuarios(), cursor="hand2")
+        self.combo_operario = Combobox(frame_session, width=18, font=("Arial", 30), values=self.get_usuarios(), cursor="hand2", state='readonly')
         self.combo_operario.bind("<<ComboboxSelected>>", self.selection_changed)
         self.combo_operario.grid(row=2, column=2, sticky="we", ipadx=0, ipady=5)
 
