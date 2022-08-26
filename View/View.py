@@ -232,7 +232,7 @@ class View(object):
         # self.label_contador_azul.grid(row=1, column=1, rowspan=3, padx=50, sticky="nsew")
 
         # FRAME BTN CONTADOR
-        self.frame_btn_cronometro = Frame(self.frame_contador, padx=0, pady=0, bg="pink")
+        self.frame_btn_cronometro = Frame(self.frame_contador, padx=0, pady=0, bg="white")
         self.frame_btn_cronometro.grid(row=1, column=2, rowspan=5, pady=10, sticky="nsew")
 
         self.frame_btn_cronometro.rowconfigure(1, weight=1)
@@ -251,7 +251,7 @@ class View(object):
         self.btn_rojo.grid(row=3, column=1)
 
         # FRAME BTN INFERIOR CONTADOR
-        self.frame_btn_inferior_cronometro = Frame(self.frame_contador, padx=0, pady=0, bg="black")
+        self.frame_btn_inferior_cronometro = Frame(self.frame_contador, padx=0, pady=0, bg="white")
         self.frame_btn_inferior_cronometro.grid(row=5, column=1, rowspan=1, sticky="nsew")
 
         self.frame_btn_inferior_cronometro.rowconfigure(1, weight=1)
