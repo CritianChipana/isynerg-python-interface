@@ -206,8 +206,8 @@ class View(object):
     def interface_contador(self):
         # SEGUNDA COLUMNA
         # frame contador
-        self.frame_contador = Frame( self.frame_padre, padx=8, pady=0, bg="white")
-        self.frame_contador.grid(row=1, column=2, sticky="nsew")
+        self.frame_contador = Frame( self.frame_padre, padx=0, pady=0, bg="white")
+        self.frame_contador.grid(row=1, column=2, sticky="nsew", padx=8)
         # frame_contador.grid(row=1, column=2, sticky=W+E+N+S)
         self.frame_contador.rowconfigure(1, weight=1)
         self.frame_contador.rowconfigure(2, weight=1)
@@ -1057,7 +1057,7 @@ class View(object):
         label_message.grid(row=1, column=1, padx=5, pady=5, columnspan=3, sticky="nsew")
         label_message = Label(self.miFrame, text=mensaje, font=("Arial", 24), bg='#F5EDDC', fg='black')
         label_message.grid(row=2, column=1, padx=5, pady=5, columnspan=3, sticky="nsew")
-        btn_acept = Button(self.miFrame, text="Aceptar", padx=23, pady=1, font=("Arial", 32), command=lambda:self.click_cerrar(), bg='#0052b2', fg='white', )
+        btn_acept = Button(self.miFrame, text="Aceptar", padx=23, pady=1, font=("Arial", 32), command=lambda:self.click_cerrar(), bg='#0052b2', fg='white', activebackground="#557ee5")
         btn_acept.grid(row=3, column=2, padx=5, columnspan=1, rowspan=2, pady=5, sticky="nsew")
 
     def click_cerrar(self):
