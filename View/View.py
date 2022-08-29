@@ -225,7 +225,7 @@ class View(object):
         self.frame_cronometro.rowconfigure(2, weight=1)
         self.frame_cronometro.rowconfigure(3, weight=1)
 
-        self.label_contador = Label(self.frame_cronometro, text="00:00:00", font=("Arial", 90),fg="white", bg="#0052b2")
+        self.label_contador = Label(self.frame_cronometro, text="00:00:00", font=("Arial", 80),fg="white", bg="#0052b2")
         self.label_contador.grid(row=1, column=1, rowspan=3, padx=50, sticky="nsew")
 
         self.label_contador_azul = Label(self.frame_cronometro, text="00:00:00", font=("Arial", 90),fg="white", bg="#0052b2")
@@ -322,7 +322,6 @@ class View(object):
         # self.tamano_lineal = ['0%', '20%', '40%', '20%', '80%', '20%', '12%']
         self.tamano_lineal = self.controller.dashboard_capacidad_oee(self.maquina_id)
         fig, self.axs_lineal = plt.subplots(dpi=80, figsize=(3,3), sharey=True)
-        fig.suptitle('OEE')
         self.axs_lineal.plot(self.nombres_lineal, self.tamano_lineal, color='m')
         self.canvas_lineal = FigureCanvasTkAgg(fig, master=self.frame_dashboard_graficos)
         self.canvas_lineal.get_tk_widget().grid(row=1, column=1, sticky="nsew")
