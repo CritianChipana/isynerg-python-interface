@@ -206,7 +206,7 @@ class View(object):
     def interface_contador(self):
         # SEGUNDA COLUMNA
         # frame contador
-        self.frame_contador = Frame( self.frame_padre, padx=0, pady=0, bg="white")
+        self.frame_contador = Frame( self.frame_padre, padx=8, pady=0, bg="white")
         self.frame_contador.grid(row=1, column=2, sticky="nsew")
         # frame_contador.grid(row=1, column=2, sticky=W+E+N+S)
         self.frame_contador.rowconfigure(1, weight=1)
