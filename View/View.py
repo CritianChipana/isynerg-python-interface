@@ -82,8 +82,8 @@ class View(object):
 
     def interface(self):
         self.raiz = Tk()
-        # self.raiz.attributes('-fullscreen', True)
-        self.raiz.geometry(str(self.raiz.winfo_screenwidth()) +'x' +  str(self.raiz.winfo_screenheight()) )
+        self.raiz.attributes('-fullscreen', True)
+        # self.raiz.geometry(str(self.raiz.winfo_screenwidth()) +'x' +  str(self.raiz.winfo_screenheight()) )
         # self.raiz.config(width="1200", height="700")
         # self.raiz.geometry("1200x800")
         self.raiz.config(bg="blue")
@@ -135,7 +135,7 @@ class View(object):
         #input NOMBRE
         label_operador = Label(frame_session, text="Nombre:", font=("Arial", 18), bg="white", fg='black')
         label_operador.grid(row=2, column=1, padx=0, sticky="w")
-        self.combo_operario = Combobox(frame_session, width=18, font=("Arial", 30), values=self.get_usuarios(), cursor="hand2", state='readonly')
+        self.combo_operario = Combobox(frame_session, width=14, font=("Arial", 18), values=self.get_usuarios(), cursor="hand2", state='readonly')
         self.combo_operario.bind("<<ComboboxSelected>>", self.selection_changed)
         self.combo_operario.grid(row=2, column=2, sticky="we", ipadx=0, ipady=5)
 
@@ -143,7 +143,7 @@ class View(object):
         self.label_dni = Label(frame_session, text="Contraseña:", font=("Arial", 18), bg="white", fg='black')
         self.label_dni.grid(row=3, column=1, padx=0, sticky="w")
         
-        self.input_dni = Entry(frame_session, show="*", width=18, font=("Arial", 20), borderwidth=1, relief="solid", bg='white', fg='black')
+        self.input_dni = Entry(frame_session, show="*", width=14, font=("Arial", 18), borderwidth=1, relief="solid", bg='white', fg='black')
         self.input_dni.grid(row=3, column=2, sticky="we", ipadx=0, ipady=5)
 
         # #INPUT PASSWORD INCORRECTO
