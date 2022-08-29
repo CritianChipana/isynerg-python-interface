@@ -241,13 +241,13 @@ class View(object):
         self.frame_btn_cronometro.columnconfigure(1, weight=1)
 
         #BTN_COLORES:
-        self.btn_azul = Button(self.frame_btn_cronometro, text="", command=lambda:self.open_azul('azul'), padx=70, pady=50, fg="white", bg="#0052b2", font=("Arial", 20))
+        self.btn_azul = Button(self.frame_btn_cronometro, text="", command=lambda:self.open_azul('azul'), padx=70, pady=50, fg="white", bg="#0052b2", font=("Arial", 20), activebackground="#557ee5")
         self.btn_azul.grid(row=1, column=1 )
 
-        self.btn_verde = Button(self.frame_btn_cronometro, text="", command=lambda:self.open_verde('verde'), padx=70, pady=50, fg="white", bg="#00b248", font=("Arial", 20))
+        self.btn_verde = Button(self.frame_btn_cronometro, text="", command=lambda:self.open_verde('verde'), padx=70, pady=50, fg="white", bg="#00b248", font=("Arial", 20), activebackground="#58e576")
         self.btn_verde.grid(row=2, column=1)
 
-        self.btn_rojo = Button(self.frame_btn_cronometro, text="", command=lambda:self.open_rojo('rojo'), padx=70, pady=50, fg="white", bg="#ff0905", font=("Arial", 20))
+        self.btn_rojo = Button(self.frame_btn_cronometro, text="", command=lambda:self.open_rojo('rojo'), padx=70, pady=50, fg="white", bg="#ff0905", font=("Arial", 20), activebackground="#ff5c39")
         self.btn_rojo.grid(row=3, column=1)
 
         # FRAME BTN INFERIOR CONTADOR
@@ -258,10 +258,10 @@ class View(object):
         self.frame_btn_inferior_cronometro.columnconfigure(1, weight=1)
         self.frame_btn_inferior_cronometro.columnconfigure(2, weight=1)
         
-        self.btn_morado = Button(self.frame_btn_inferior_cronometro, text="", command=lambda:self.open_morado('morado'), padx=70, pady=50, fg="white", bg="#7b00cb", font=("Arial", 20))
+        self.btn_morado = Button(self.frame_btn_inferior_cronometro, text="", command=lambda:self.open_morado('morado'), padx=70, pady=50, fg="white", bg="#7b00cb", font=("Arial", 20), activebackground="#b147ff")
         self.btn_morado.grid(row=1, column=1)
 
-        self.btn_amarillo = Button(self.frame_btn_inferior_cronometro, text="", command=lambda:self.open_amarillo('amarillo'), padx=70, pady=50, fg="white", bg="#ffca0a", font=("Arial", 20))
+        self.btn_amarillo = Button(self.frame_btn_inferior_cronometro, text="", command=lambda:self.open_amarillo('amarillo'), padx=70, pady=50, fg="white", bg="#ffca0a", font=("Arial", 20), activebackground="#fffd53")
         self.btn_amarillo.grid(row=1, column=2)
 
 
