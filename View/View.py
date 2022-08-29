@@ -228,7 +228,7 @@ class View(object):
         self.label_contador = Label(self.frame_cronometro, text="00:00:00", font=("Arial", 80),fg="white", bg="#0052b2")
         self.label_contador.grid(row=1, column=1, rowspan=3, padx=50, sticky="nsew")
 
-        self.label_contador_azul = Label(self.frame_cronometro, text="00:00:00", font=("Arial", 90),fg="white", bg="#0052b2")
+        self.label_contador_azul = Label(self.frame_cronometro, text="00:00:00", font=("Arial", 80),fg="white", bg="#0052b2")
         # self.label_contador_azul.grid(row=1, column=1, rowspan=3, padx=50, sticky="nsew")
 
         # FRAME BTN CONTADOR
