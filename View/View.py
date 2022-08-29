@@ -437,6 +437,21 @@ class View(object):
         btn_igual = Button(self.frame_formulario, text="Guardar", command=lambda:self.change_input_produccion_a_piezas(), padx=20, pady=1, font=("Arial", 12, "bold"), fg="white", bg="#00b248", activebackground="#58e576")
         btn_igual.grid(row=8, column=3, padx=5, pady=5, sticky="nsew")
 
+
+        # Prototipo de interface alerta
+        self.miFrame = Frame(self.raiz, borderwidth=1, bg='#F5EDDC')
+        self.miFrame.rowconfigure(1, weight=1)
+        self.miFrame.rowconfigure(2, weight=1)
+        self.miFrame.rowconfigure(3, weight=1)
+        self.miFrame.rowconfigure(4, weight=1)
+        self.miFrame.rowconfigure(5, weight=1)
+        self.miFrame.rowconfigure(6, weight=1)
+        self.miFrame.rowconfigure(7, weight=1)
+        self.miFrame.columnconfigure(1, weight=1)
+        self.miFrame.columnconfigure(2, weight=1)
+        self.miFrame.columnconfigure(3, weight=1)
+
+
 ############################################################### INTERFECE ############################################################################
 
     def escribir_numeros(self, numero):
@@ -848,7 +863,8 @@ class View(object):
                         self.aux_indicador_color_btn =  verde
 
                 else: 
-                    messagebox.showinfo(message="Registrese con el cargo responsable del cambio de operacion(OPERARIO)", title="ERROR")
+                    self.click('Error', 'Registrese con el cargo responsable del cambio de operacion(OPERARIO)')
+                    # messagebox.showinfo(message="Registrese con el cargo responsable del cambio de operacion(OPERARIO)", title="ERROR")
                     print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
                     print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
                     print('que se registre un usuari')
@@ -892,7 +908,8 @@ class View(object):
                 if self.click_btn_color == 0:
                     self.aux_indicador_color_btn =  self.indicador_color_btn
             else: 
-                messagebox.showinfo(message="Registrese con el cargo responsable del cambio de operacion", title="ERROR")
+                self.click('Error', 'Registrese con el cargo responsable del cambio de operacion')
+                # messagebox.showinfo(message="Registrese con el cargo responsable del cambio de operacion", title="ERROR")
                 print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
                 print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
                 print('que se registre un usuario de mantenimiento')
@@ -953,7 +970,8 @@ class View(object):
                     # self.frame_dashboard.grid_forget()
     
             else: 
-                messagebox.showinfo(message="Registrese con el cargo responsable del cambio de operacion(MANTENIMIENTO)", title="ERROR")
+                self.click('Error', 'Registrese con el cargo responsable del cambio de operacion(MANTENIMIENTO)')
+                # messagebox.showinfo(message="Registrese con el cargo responsable del cambio de operacion(MANTENIMIENTO)", title="ERROR")
                 print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
                 print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
                 print('que se registre un usuari')
@@ -1014,7 +1032,8 @@ class View(object):
                     self.stop()
                 self.frame_dashboard.grid_forget()
             else: 
-                messagebox.showinfo(message="Registrese con el cargo responsable del cambio de operacion(LOGISTICA)", title="ERROR")
+                self.click('Error', 'Registrese con el cargo responsable del cambio de operacion(LOGISTICA)')
+                # messagebox.showinfo(message="Registrese con el cargo responsable del cambio de operacion(LOGISTICA)", title="ERROR")
                 print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
                 print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
                 print('que se registre un usuari')
@@ -1025,6 +1044,25 @@ class View(object):
                 self.combo_operario.config(state=NORMAL)
                 self.input_dni.delete(0, END)
                 self.combo_operario.delete(0, END)
+
+    def click(self,titulo, mensaje):
+        # self.raiz.geometry(str(self.raiz.winfo_screenwidth()) +'x' +  str(self.raiz.winfo_screenheight()) )
+
+        # self.miFrame.config(bg="red")
+        self.miFrame.config(cursor="hand2")
+        self.miFrame.place(x=0, y=0, height=self.raiz.winfo_screenheight(), width=self.raiz.winfo_screenwidth())
+        # self.miFrame.place(x=(self.raiz.winfo_screenwidth()/2 - 300), y=(self.raiz.winfo_screenheight()/2 - 150), height=300, width=600)
+
+        label_message = Label(self.miFrame, text=titulo, font=("Arial", 28 ), bg='#F5EDDC', fg='red')
+        label_message.grid(row=1, column=1, padx=5, pady=5, columnspan=3, sticky="nsew")
+        label_message = Label(self.miFrame, text=mensaje, font=("Arial", 24), bg='#F5EDDC', fg='black')
+        label_message.grid(row=2, column=1, padx=5, pady=5, columnspan=3, sticky="nsew")
+        btn_acept = Button(self.miFrame, text="Aceptar", padx=23, pady=1, font=("Arial", 32), command=lambda:self.click_cerrar(), bg='#0052b2', fg='white', )
+        btn_acept.grid(row=3, column=2, padx=5, columnspan=1, rowspan=2, pady=5, sticky="nsew")
+
+    def click_cerrar(self):
+        self.miFrame.place_forget()
+
 
     def open_morado(self, morado):
         if self.user == ():
@@ -1073,7 +1111,8 @@ class View(object):
                     self.stop()
                     self.frame_dashboard.grid_forget()
             else: 
-                messagebox.showinfo(message="Registrese con el cargo responsable del cambio de operacion(RECURSOS HUMANOS)", title="ERROR")
+                self.click('Error', 'Registrese con el cargo responsable del cambio de operacion(RECURSOS HUMANOS)')
+                # messagebox.showinfo(message="Registrese con el cargo responsable del cambio de operacion(RECURSOS HUMANOS)", title="ERROR")
                 print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
                 print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
                 print('que se registre un usuari')

@@ -15,12 +15,10 @@
 #     segundos_transcurridos= (datetime.now() - hora_inicio).total_seconds()
 #     return segundos_a_segundos_minutos_y_horas(int(segundos_transcurridos))
 
-
 # def refrescar_tiempo_transcurrido():
 #     print("Refrescando!")
 #     variable_hora_actual.set(obtener_tiempo_transcurrido_formateado())
 #     raiz.after(INTERVALO_REFRESCO, refrescar_tiempo_transcurrido)
-
 
 # raiz = tk.Tk()
 # variable_hora_actual = tk.StringVar(raiz, value=obtener_tiempo_transcurrido_formateado())
@@ -33,3 +31,19 @@
 # refrescar_tiempo_transcurrido()
 # app.pack()
 # app.mainloop()
+
+from tkinter import *
+from tkinter import messagebox
+
+ws = Tk()
+ws.title('Python Guides')
+ws.geometry('400x300')
+
+def clicked():
+    messagebox.showinfo('sample 1', 'this is a message')
+    messagebox.showinfo('sample 2', 'this is a message')
+    messagebox.showinfo('sample 3', 'this is the message                                                                     ')
+
+Button(ws, text='Click here', padx=10, pady=5, command=clicked).pack(pady=20)
+
+ws.mainloop()
