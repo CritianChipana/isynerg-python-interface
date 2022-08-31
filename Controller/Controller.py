@@ -20,9 +20,9 @@ class Controller:
             print(e)
             return False
 
-    def login(self, nombre, password):
+    def login(self, dni, password):
         try:
-            user = self.model.login(nombre, password)
+            user = self.model.login(dni, password)
             return user
         except Exception as e:
             print(e)

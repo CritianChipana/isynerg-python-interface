@@ -35,15 +35,21 @@
 from tkinter import *
 from tkinter import messagebox
 
+def nameFocusIn(event):
+    name.configure(background="green")
+
+def nameFocusout(event):
+    name.configure(background="white")
+
 ws = Tk()
 ws.title('Python Guides')
 ws.geometry('400x300')
 
-def clicked():
-    messagebox.showinfo('sample 1', 'this is a message')
-    messagebox.showinfo('sample 2', 'this is a message')
-    messagebox.showinfo('sample 3', 'this is the message                                                                     ')
-
-Button(ws, text='Click here', padx=10, pady=5, command=clicked).pack(pady=20)
+name =Entry(ws)
+name.grid(row=0, column=0)
+password = Entry(ws)
+password.grid(row=1, column=0)
+name.bind("<FocusIn>", nameFocusIn)
+name.bind("<FocusOut>", nameFocusout)
 
 ws.mainloop()

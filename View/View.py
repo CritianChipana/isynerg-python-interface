@@ -28,6 +28,10 @@ class View(object):
     no_tiene_rol_permitido = False
     termino_el_dia = False
 
+    contador_password = 0
+    focus_dni = False
+    focus_contraseña = False
+
     # hora_inicio = datetime.now()
     inicio_verde = datetime.now()
     inicio_azul = datetime.now()
@@ -133,11 +137,16 @@ class View(object):
 
 
         #input NOMBRE
-        label_operador = Label(frame_session, text="Nombre:", font=("Arial", 18), bg="white", fg='black')
+        label_operador = Label(frame_session, text="DNI:", font=("Arial", 18), bg="white", fg='black')
         label_operador.grid(row=2, column=1, padx=0, sticky="w")
-        self.combo_operario = Combobox(frame_session, width=14, font=("Arial", 18), values=self.get_usuarios(), cursor="hand2", state='readonly')
-        self.combo_operario.bind("<<ComboboxSelected>>", self.selection_changed)
-        self.combo_operario.grid(row=2, column=2, sticky="we", ipadx=0, ipady=5)
+        # self.combo_operario = Combobox(frame_session, width=14, font=("Arial", 18), values=self.get_usuarios(), cursor="hand2", state='DISABLED')
+        # self.combo_operario.bind("<<ComboboxSelected>>", self.selection_changed)
+        # self.combo_operario.grid(row=2, column=2, sticky="we", ipadx=0, ipady=5)
+
+        self.input_passord = Entry(frame_session, width=14, font=("Arial", 18), borderwidth=1, relief="solid", bg='white', fg='black')
+        self.input_passord.grid(row=2, column=2, sticky="we", ipadx=0, ipady=5)
+        self.input_passord.bind("<FocusIn>", self.nameFocusInDni)
+        self.input_passord.bind("<FocusOut>", self.nameFocusOutDni)
 
         # #INPUT CONTRASEÑA
         self.label_dni = Label(frame_session, text="Contraseña:", font=("Arial", 18), bg="white", fg='black')
@@ -145,7 +154,8 @@ class View(object):
         
         self.input_dni = Entry(frame_session, show="*", width=14, font=("Arial", 18), borderwidth=1, relief="solid", bg='white', fg='black')
         self.input_dni.grid(row=3, column=2, sticky="we", ipadx=0, ipady=5)
-
+        self.input_dni.bind("<FocusIn>", self.nameFocusInPasswod)
+        self.input_dni.bind("<FocusOut>", self.nameFocusOutPPassword)
         # #INPUT PASSWORD INCORRECTO
         self.label_password_icorecto = Label(frame_session, text="", fg='red', font=("Arial", 13), bg="white")
         self.label_password_icorecto.grid(row=4, column=2, sticky="new")
@@ -453,15 +463,37 @@ class View(object):
 
 ############################################################### INTERFECE ############################################################################
 
+    def nameFocusInDni(self,event):
+        self.focus_dni = True
+
+    def nameFocusOutDni(self,event):
+        self.focus_dni = False
+    
+    def nameFocusInPasswod(self,event):
+        self.focus_contraseña = True
+
+    def nameFocusOutPPassword(self, event):
+        self.focus_contraseña = False
+
     def escribir_numeros(self, numero):
-        self.contador_numeros_dni = self.contador_numeros_dni + 1
-        self.input_dni.insert(self.contador_numeros_dni, numero)
+        if self.focus_dni:
+            self.contador_numeros_dni = self.contador_numeros_dni + 1
+            self.input_passord.insert(self.contador_numeros_dni, numero)
+        else:
+            self.contador_password = self.contador_password + 1
+            self.input_dni.insert(self.contador_password, numero)
 
     def borrar_numero(self):
-        tiene_numero = self.input_dni.get()
-        if len(tiene_numero) > 0:
-            self.input_dni.delete(len(tiene_numero)-1, END)
-            self.contador_numeros_dni = self.contador_numeros_dni - 1
+        if self.focus_dni:
+            tiene_numero = self.input_passord.get()
+            if len(tiene_numero) > 0:
+                self.input_passord.delete(len(tiene_numero)-1, END)
+                self.contador_numeros_dni = self.contador_numeros_dni - 1
+        else:
+            tiene_numero = self.input_dni.get()
+            if len(tiene_numero) > 0:
+                self.input_dni.delete(len(tiene_numero)-1, END)
+                self.contador_password = self.contador_password - 1
     
     def escribir_numeros_produccion_total(self, numero):
         if self.click_siguiente:
@@ -501,7 +533,6 @@ class View(object):
                 # self.user = ()
                 #limpiar inputs y contadores
                 self.input_dni.config(state=NORMAL)
-                self.combo_operario.config(state=NORMAL)
                 self.contador_numeros_dni = 0
                 self.contador_productos_producidos = 0
                 self.contador_piezas_malas = 0
@@ -510,7 +541,6 @@ class View(object):
                 self.input_produccion_real.delete(0, END)
                 self.input_piezas_malas.delete(0, END)
                 # eliminar el contenido del Combobox
-                self.combo_operario.delete(0, END)
                 # mostrar login
                 self.frame_formulario.grid_forget()
                 self.frame_login.grid(row=1, column=1, sticky="nsew")
@@ -533,97 +563,44 @@ class View(object):
     
     def login(self):
         password = self.input_dni.get()
-        nombre = self.combo_operario.get()
-        self.nombre_operario = self.combo_operario.get()
+        dni = self.input_passord.get()
 
         if self.no_tiene_rol_permitido:
-            if self.nombre_operario == 'CON DNI':
-                if len(password) > 0:
-                    usuario_con_dni = self.controller.crear_usuario_by_dni(password)
-                    print('666666666666666666666')
-                    print(usuario_con_dni)
-                    print('666666666666666666666')
-                    if usuario_con_dni:
-                        self.user = usuario_con_dni
-                        self.hide_label_error()
-                        self.controller.create_session(self.user[0])
-                        self.habilitar_btn_start()
-                        self.input_dni.config(state=DISABLED)
-                        self.combo_operario.config(state=DISABLED)
+            self.user = self.controller.login(dni,password)
+            if self.user != False:
+                self.hide_label_error()
+                self.controller.create_session(self.user[0])
 
-                        #MOSTRAR EK DASHBOARD
-                        self.frame_login.grid_forget()
-                        self.frame_dashboard.grid(row=1, column=1, sticky="nsew")
-                        self.no_tiene_rol_permitido = False
+                self.habilitar_btn_start()
+                self.input_dni.config(state=DISABLED)
 
-                    else:
-                        self.show_label_error('Digite un DNI válido')
-                else:
-                    self.show_label_error('Digite un DNI válido')
+                #MOSTRAR EK DASHBOARD
+                self.frame_login.grid_forget()
+                self.frame_dashboard.grid(row=1, column=1, sticky="nsew")
+                self.no_tiene_rol_permitido = False
+
             else:
-                self.user = self.controller.login(nombre,password)
-                if self.user != False:
-                    self.hide_label_error()
-                    self.controller.create_session(self.user[0])
-
-                    self.habilitar_btn_start()
-                    self.input_dni.config(state=DISABLED)
-                    self.combo_operario.config(state=DISABLED)
-
-                    #MOSTRAR EK DASHBOARD
-                    self.frame_login.grid_forget()
-                    self.frame_dashboard.grid(row=1, column=1, sticky="nsew")
-                    self.no_tiene_rol_permitido = False
-
-                else:
-                    self.show_label_error('La contraseña es incoreccta')
+                self.show_label_error('La contraseña es incoreccta')
             print(self.user)
         else: 
-            if self.nombre_operario == 'CON DNI':
-                if len(password) > 0:
-                    usuario_con_dni = self.controller.crear_usuario_by_dni(password)
-                    print('666666666666666666666')
-                    print(usuario_con_dni)
-                    print('666666666666666666666')
-                    if usuario_con_dni:
-                        self.user = usuario_con_dni
-                        self.hide_label_error()
-                        self.controller.create_session(self.user[0])
-                        self.habilitar_btn_start()
-                        self.input_dni.config(state=DISABLED)
-                        self.combo_operario.config(state=DISABLED)
+            self.user = self.controller.login(dni,password)
+            if self.user != False:
+                self.hide_label_error()
+                self.controller.create_session(self.user[0])
 
-                        #MOSTRAR EK DASHBOARD
-                        self.frame_login.grid_forget()
-                        self.frame_dashboard.grid(row=1, column=1, sticky="nsew")
-                        print('start_timer -> ' + 'azul')
-                        self.frame_cronometro.config(bg='#0052b2')
-                        self.label_contador.config(bg='#0052b2')
-                        self.indicador_color_btn = 'azul'
-                    else:
-                        self.show_label_error('Digite un DNI válido')
-                else:
-                    self.show_label_error('Digite un DNI válido')
+                self.habilitar_btn_start()
+                self.input_dni.config(state=DISABLED)
+
+                #MOSTRAR EK DASHBOARD
+                self.frame_login.grid_forget()
+                self.frame_dashboard.grid(row=1, column=1, sticky="nsew")
+
+                print('start_timer -> ' + 'azul')
+                self.frame_cronometro.config(bg='#0052b2')
+                self.label_contador.config(bg='#0052b2')
+                self.indicador_color_btn = 'azul'
             else:
-                self.user = self.controller.login(nombre,password)
-                if self.user != False:
-                    self.hide_label_error()
-                    self.controller.create_session(self.user[0])
-
-                    self.habilitar_btn_start()
-                    self.input_dni.config(state=DISABLED)
-                    self.combo_operario.config(state=DISABLED)
-
-                    #MOSTRAR EK DASHBOARD
-                    self.frame_login.grid_forget()
-                    self.frame_dashboard.grid(row=1, column=1, sticky="nsew")
-
-                    print('start_timer -> ' + 'azul')
-                    self.frame_cronometro.config(bg='#0052b2')
-                    self.label_contador.config(bg='#0052b2')
-                    self.indicador_color_btn = 'azul'
-                else:
-                    self.show_label_error('La contraseña es incoreccta')
+                self.show_label_error('La contraseña es incoreccta')
             print(self.user)
 
     def show_label_error(self, msg):
@@ -643,14 +620,14 @@ class View(object):
         # self.btn_start.config(state=DISABLED)
         print('inahabilitar_btn_start')
 
-    def selection_changed(self, event):
-        self.nombre_operario = self.combo_operario.get()
-        if self.nombre_operario == 'CON DNI':
-            self.label_dni.config(text="DNI")
-            self.input_dni.config(show='')
-        else:
-            self.label_dni.config(text="Contraseña")
-            self.input_dni.config(show='*')
+    # def selection_changed(self, event):
+    #     self.nombre_operario = self.combo_operario.get()
+    #     if self.nombre_operario == 'CON DNI':
+    #         self.label_dni.config(text="DNI")
+    #         self.input_dni.config(show='')
+    #     else:
+    #         self.label_dni.config(text="Contraseña")
+    #         self.input_dni.config(show='*')
 
     def start(self):
         # self.btn_start.grid_forget()
@@ -806,7 +783,6 @@ class View(object):
                 # self.user = ()
                 #limpiar inputs y contadores
                 self.input_dni.config(state=NORMAL)
-                self.combo_operario.config(state=NORMAL)
                 self.contador_numeros_dni = 0
                 self.contador_productos_producidos = 0
                 self.contador_piezas_malas = 0
@@ -814,8 +790,8 @@ class View(object):
                 self.input_dni.delete(0, END)
                 self.input_produccion_real.delete(0, END)
                 self.input_piezas_malas.delete(0, END)
-                # eliminar el contenido del Combobox
-                self.combo_operario.delete(0, END)
+                # eliminar el contenido del input password
+                self.input_passord.delete(0, END)
 
                 # mostrar login
                 if self.indicar_color_btn_anterior == 1:
@@ -828,7 +804,16 @@ class View(object):
                 # self.frame_formulario.grid_forget()
                 # self.frame_login.grid(row=1, column=1, sticky="nsew")
 
-
+    def motrar_login(self):
+        print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+        print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+        print('que se registre un usuari')
+        self.no_tiene_rol_permitido = True
+        self.frame_dashboard.grid_forget()
+        self.frame_login.grid(row=1, column=1, sticky="nsew")
+        self.input_dni.config(state=NORMAL)
+        self.input_dni.delete(0, END)
+        self.input_passord.delete(0, END)
 
     def open_verde(self, verde):
         # open login
@@ -864,17 +849,7 @@ class View(object):
                 else: 
                     self.click('Error', 'Registrese con el cargo responsable del cambio de operacion(OPERARIO)')
                     # messagebox.showinfo(message="Registrese con el cargo responsable del cambio de operacion(OPERARIO)", title="ERROR")
-                    print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-                    print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-                    print('que se registre un usuari')
-                    self.no_tiene_rol_permitido = True
-                    self.frame_dashboard.grid_forget()
-                    self.frame_login.grid(row=1, column=1, sticky="nsew")
-                    self.input_dni.config(state=NORMAL)
-                    self.combo_operario.config(state=NORMAL)
-                    self.input_dni.delete(0, END)
-                    self.combo_operario.delete(0, END)
-    
+                    self.motrar_login()
     def open_azul(self, azul):
 
         # #open dashboard
@@ -909,17 +884,8 @@ class View(object):
             else: 
                 self.click('Error', 'Registrese con el cargo responsable del cambio de operacion')
                 # messagebox.showinfo(message="Registrese con el cargo responsable del cambio de operacion", title="ERROR")
-                print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-                print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-                print('que se registre un usuario de mantenimiento')
-                print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-                self.no_tiene_rol_permitido = True
-                self.frame_dashboard.grid_forget()
-                self.frame_login.grid(row=1, column=1, sticky="nsew")
-                self.input_dni.config(state=NORMAL)
-                self.combo_operario.config(state=NORMAL)
-                self.input_dni.delete(0, END)
-                self.combo_operario.delete(0, END)
+                self.motrar_login()
+
 
 
     
@@ -971,16 +937,8 @@ class View(object):
             else: 
                 self.click('Error', 'Registrese con el cargo responsable del cambio de operacion(MANTENIMIENTO)')
                 # messagebox.showinfo(message="Registrese con el cargo responsable del cambio de operacion(MANTENIMIENTO)", title="ERROR")
-                print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-                print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-                print('que se registre un usuari')
-                self.no_tiene_rol_permitido = True
-                self.frame_dashboard.grid_forget()
-                self.frame_login.grid(row=1, column=1, sticky="nsew")
-                self.input_dni.config(state=NORMAL)
-                self.combo_operario.config(state=NORMAL)
-                self.input_dni.delete(0, END)
-                self.combo_operario.delete(0, END)
+                self.motrar_login()
+
 
     
     def open_amarillo(self, amarillo):
@@ -1033,16 +991,8 @@ class View(object):
             else: 
                 self.click('Error', 'Registrese con el cargo responsable del cambio de operacion(LOGISTICA)')
                 # messagebox.showinfo(message="Registrese con el cargo responsable del cambio de operacion(LOGISTICA)", title="ERROR")
-                print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-                print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-                print('que se registre un usuari')
-                self.no_tiene_rol_permitido = True
-                self.frame_dashboard.grid_forget()
-                self.frame_login.grid(row=1, column=1, sticky="nsew")
-                self.input_dni.config(state=NORMAL)
-                self.combo_operario.config(state=NORMAL)
-                self.input_dni.delete(0, END)
-                self.combo_operario.delete(0, END)
+                self.motrar_login()
+
 
     def click(self,titulo, mensaje):
         # self.raiz.geometry(str(self.raiz.winfo_screenwidth()) +'x' +  str(self.raiz.winfo_screenheight()) )
@@ -1112,16 +1062,8 @@ class View(object):
             else: 
                 self.click('Error', 'Registrese con el cargo responsable del cambio de operacion(RECURSOS HUMANOS)')
                 # messagebox.showinfo(message="Registrese con el cargo responsable del cambio de operacion(RECURSOS HUMANOS)", title="ERROR")
-                print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-                print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-                print('que se registre un usuari')
-                self.no_tiene_rol_permitido = True
-                self.frame_dashboard.grid_forget()
-                self.frame_login.grid(row=1, column=1, sticky="nsew")
-                self.input_dni.config(state=NORMAL)
-                self.combo_operario.config(state=NORMAL)
-                self.input_dni.delete(0, END)
-                self.combo_operario.delete(0, END)
+                self.motrar_login()
+
 
     def mostrar_contador_con_color(self):
         if self.indicador_color_btn == 'verde':

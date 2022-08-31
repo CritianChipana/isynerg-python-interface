@@ -29,7 +29,7 @@ class Model:
 
 
     def login(self, nombre, password):
-        sql = "SELECT * FROM usuarios WHERE nombre = '{}' AND password = '{}'".format(nombre, password)
+        sql = "SELECT * FROM usuarios WHERE dni = '{}' AND password = '{}'".format(nombre, password)
         try:
             self.cursor.execute(sql)
             user = self.cursor.fetchone()
