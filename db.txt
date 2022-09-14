@@ -1,57 +1,12 @@
-################################################## COMANDO PARA INSTALACION ########################################
-Actualizar 
-sudo apt-get update
-sudo apt update
 
-Verificar si existe python sino instalar
-python3 --version
+-- Base de datos: `isynerg`
+--
 
-Installer pip3
-sudo apt install python3-pip
+-- --------------------------------------------------------
 
-para Python3, installer tkinter:
-1	sudo apt-get install python3-tk
-
-Installer git
-1.	sudo apt install git
-installer MATPLOTLIB EN PYTHON3
-sudo apt-get install python3-matplotlib
-
-pip3 install python-decouple
-pip3 install python-dotenv
-pip3 install pymysql
- 
-**** installer mysql ***
-•	sudo apt install mysql-server
-•	sudo systemctl status mysql
-•	sudo mysql_secure_installation
-	OPCIONES EN ESTA SECUENCIA:
-	1: N
-	2: CONTRASEÑA
-	3: REPITA CONTRASEÑA
-	4: Y
-	5: Y
-	6: Y
-	7: Y
-•	sudo mysql
-•	SELECT user,authentication_string,plugin,host FROM mysql.user;
-•	ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'TUA_PASSWORD';
-•	FLUSH PRIVILEGES;
-•	SELECT user,authentication_string,plugin,host FROM mysql.user;
-•	exit;
-•	mysql -u root -p
-
-
-****** crear a bd y las tablas ***
-•	show databases;
-
-•	create database miprueba;
-•	use miprueba;
-•	show tables;
-•	agregarmos el código sql para las tablas (fin)
-
-
-################################################ query bd #########################################################
+--
+-- Estructura de tabla para la tabla `actividades_maquina`
+--
 
 CREATE TABLE `actividades_maquina` (
   `id` int(11) NOT NULL,
@@ -60,14 +15,6 @@ CREATE TABLE `actividades_maquina` (
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `actividades_maquina`
---
-
-INSERT INTO `actividades_maquina` (`id`, `maquina_id`, `azul`, `created_at`, `updated_at`) VALUES
-(1, 1, 100, '2022-08-04 16:54:02', '2022-08-04 16:54:02'),
-(471, 1, 10, '2022-08-29 15:56:36', '2022-08-29 15:56:36');
 
 -- --------------------------------------------------------
 
@@ -88,13 +35,6 @@ CREATE TABLE `actividades_usuario` (
   `updated_at` timestamp NULL DEFAULT current_timestamp(),
   `maquina_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `actividades_usuario`
---
-
-INSERT INTO `actividades_usuario` (`id`, `usuario_id`, `verde`, `amarillo`, `morado`, `rojo`, `produccion_real`, `piezas_malas`, `created_at`, `updated_at`, `maquina_id`) VALUES
-(480, 2, 0, 0, 0, 0, 0, 0, '2022-08-29 15:56:36', '2022-08-29 15:56:36', 1);
 
 -- --------------------------------------------------------
 
@@ -157,13 +97,6 @@ CREATE TABLE `session` (
   `updated_at` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Volcado de datos para la tabla `session`
---
-
-INSERT INTO `session` (`id`, `usuario_id`, `fecha`, `created_at`, `updated_at`) VALUES
-(412, 16, '2022-08-29 15:56:49', '2022-08-29 15:56:49', '2022-08-29 15:56:49');
-
 -- --------------------------------------------------------
 
 --
@@ -186,11 +119,10 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `nombre`, `password`, `dni`, `isAdmin`, `created_at`, `updated_at`, `cargo`) VALUES
-(1, 'cristian', '123456', '74309887', 1, '2022-07-26 14:52:17', '2022-07-26 14:52:17', 'OPERARIO'),
-(2, 'Mantenimiento', '123456', '7456123', 1, '2022-07-26 15:16:39', '2022-07-26 15:16:39', 'MANTENIMIENTO'),
-(16, 'operario', '123456', NULL, NULL, '2022-08-24 23:12:33', '2022-08-24 23:12:33', 'OPERARIO'),
-(17, 'logistica', '123456', NULL, NULL, '2022-08-24 23:12:33', '2022-08-24 23:12:33', 'LOGISTICA'),
-(18, 'RRHH', '123456', NULL, NULL, '2022-08-24 23:12:58', '2022-08-24 23:12:58', 'RECURSOSHUMANOS');
+(2, 'Mantenimiento', '123456', '222', 1, '2022-07-26 15:16:39', '2022-07-26 15:16:39', 'MANTENIMIENTO'),
+(16, 'operario', '123456', '333', NULL, '2022-08-24 23:12:33', '2022-08-24 23:12:33', 'OPERARIO'),
+(17, 'logistica', '123456', '444', NULL, '2022-08-24 23:12:33', '2022-08-24 23:12:33', 'LOGISTICA'),
+(18, 'RRHH', '123456', '555', NULL, '2022-08-24 23:12:58', '2022-08-24 23:12:58', 'RECURSOSHUMANOS');
 
 --
 -- Índices para tablas volcadas
@@ -240,13 +172,13 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `actividades_maquina`
 --
 ALTER TABLE `actividades_maquina`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=472;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=543;
 
 --
 -- AUTO_INCREMENT de la tabla `actividades_usuario`
 --
 ALTER TABLE `actividades_usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=481;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=552;
 
 --
 -- AUTO_INCREMENT de la tabla `maquina`
@@ -264,7 +196,7 @@ ALTER TABLE `semana_operaciones_maquina`
 -- AUTO_INCREMENT de la tabla `session`
 --
 ALTER TABLE `session`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=413;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=456;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
