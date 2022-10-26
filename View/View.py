@@ -1001,7 +1001,7 @@ class View(object):
                     # self.frame_dashboard.grid_forget()
                 if self.click_btn_color == 2:
                     self.stop()
-                self.frame_dashboard.grid_forget()
+                    self.frame_dashboard.grid_forget()
             else: 
                 self.click('Error', 'Registrese con el cargo responsable del cambio de operacion(LOGISTICA)')
                 # messagebox.showinfo(message="Registrese con el cargo responsable del cambio de operacion(LOGISTICA)", title="ERROR")
