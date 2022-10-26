@@ -155,7 +155,7 @@ def crearUsuarios():
     """
 
     try:
-        #cursor.execute(sql)
+        cursor.execute(sql)
         cursor.execute(actividades_maquina)
         cursor.execute(sql_actividades_usuario)
         cursor.execute(sql_maquina)
